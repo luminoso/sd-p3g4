@@ -19,8 +19,30 @@ public class Coach extends Thread {
     
     @Override
     public void run() {
-        
+        // TODO: Replace true by terminating condition
+        while(true) {
+            switch(state) {
+                case WAIT_FOR_REFEREE_COMMAND:
+                    callContestants();
+                    break;
+                case ASSEMBLE_TEAM:
+                    informReferee();
+                    break;
+                case WATCH_TRIAL:
+                    reviewNotes();
+                    break;
+            }
+        }
     }
+
+    // TODO: Implement
+    private void callContestants() {}
+
+    // TODO: Implement
+    private void informReferee() {}
+
+    // TODO: Implement
+    private void reviewNotes() {}
     
     public enum CoachState {
         WAIT_FOR_REFEREE_COMMAND (1, "WFRC"),

@@ -22,8 +22,34 @@ public class Contestant extends Thread {
     
     @Override
     public void run() {
-        
+        // TODO: Replace true by terminating condition
+        while(true) {
+            switch(state) {
+                case SEAT_AT_THE_BENCH:
+                    followCoachAdvice();
+                    break;
+                case STAND_IN_POSITION:
+                    getReady();
+                    break;
+                case DO_YOUR_BEST:
+                    pullTheRope();
+                    seatDown();
+                    break;
+            }
+        }
     }
+
+    // TODO: Implement
+    private void followCoachAdvice() {}
+
+    // TODO: Implement
+    private void getReady() {}
+
+    // TODO: Implement
+    private void pullTheRope() {}
+
+    // TODO: Implement
+    private void seatDown() {}
     
     public enum ContestantState {
         SEAT_AT_THE_BENCH (1, "STB"),
