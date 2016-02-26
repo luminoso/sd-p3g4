@@ -4,10 +4,10 @@ package Active;
  *
  * @author Eduardo Sousa
  */
-public class Coach {
-    
-    
-    
+public class Coach extends Thread {
+    public Coach(String name) {
+        super(name);
+    }
     
     
     public enum CoachState {

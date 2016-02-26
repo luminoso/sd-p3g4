@@ -4,7 +4,10 @@ package Active;
  *
  * @author Eduardo Sousa
  */
-public class Referee {
+public class Referee extends Thread {
+    public Referee(String name) {
+        super(name);
+    }
     
     
     public enum RefereeState {
