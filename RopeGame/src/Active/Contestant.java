@@ -5,10 +5,25 @@ package Active;
  * @author Eduardo Sousa
  */
 public class Contestant extends Thread {
-    public Contestant(String name) {
+    private ContestantState state;  // Contestant state
+    private int team;               // Contestant team
+    private int id;                 // Contestant identification in team
+    private int strength;           // Contestant strength
+    
+    public Contestant(String name, int team, int id, int strength) {
         super(name);
+        
+        this.state = ContestantState.SEAT_AT_THE_BENCH;
+        
+        this.team = team;
+        this.id = id;
+        this.strength = strength;
     }
     
+    @Override
+    public void run() {
+        
+    }
     
     public enum ContestantState {
         SEAT_AT_THE_BENCH (1, "STB"),

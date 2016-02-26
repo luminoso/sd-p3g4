@@ -5,10 +5,22 @@ package Active;
  * @author Eduardo Sousa
  */
 public class Coach extends Thread {
-    public Coach(String name) {
+    private CoachState state;   // Coach state
+    private int team;           // Coach team
+    
+    
+    public Coach(String name, int team) {
         super(name);
+        
+        this.state = CoachState.WAIT_FOR_REFEREE_COMMAND;
+        
+        this.team = team;
     }
     
+    @Override
+    public void run() {
+        
+    }
     
     public enum CoachState {
         WAIT_FOR_REFEREE_COMMAND (1, "WFRC"),

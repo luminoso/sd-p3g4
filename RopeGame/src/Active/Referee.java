@@ -5,10 +5,18 @@ package Active;
  * @author Eduardo Sousa
  */
 public class Referee extends Thread {
+    private RefereeState state;     // Referee state
+    
     public Referee(String name) {
         super(name);
+        
+        this.state = RefereeState.START_OF_THE_MATCH;
     }
     
+    @Override
+    public void run() {
+        
+    }
     
     public enum RefereeState {
         START_OF_THE_MATCH (1, "SOM"),
