@@ -11,7 +11,13 @@ public class RefereeSite {
     private int[] gamePoints, trialPoints;
     private int gameRound, trialRound;
 
-    public static RefereeSite getInstance() {
+    /**
+     * The method returns the RefereeSite object. The method is thread-safe and
+     * uses the implicit monitor of the class.
+     * 
+     * @return RefereeSite object to be used.
+     */
+    public static synchronized RefereeSite getInstance() {
         if(instance == null) {
             instance = new RefereeSite();
         }
@@ -19,6 +25,9 @@ public class RefereeSite {
         return instance;
     }
     
+    /**
+     * Private constructor to be used in singleton.
+     */
     private RefereeSite() {
         this.gameRound = 0;
         this.trialRound = 0;
@@ -27,34 +36,74 @@ public class RefereeSite {
         this.gamePoints = new int[2];
     }
 
+    /**
+     * The method returns the game round number.
+     * 
+     * @return Game round number.
+     */
     public int getGameRound() {
         return gameRound;
     }
 
+    /**
+     * The method returns the trial round number.
+     * 
+     * @return Trial round number.
+     */
     public int getTrialRound() {
         return trialRound;
     }
 
+    /**
+     * The method returns the game points in the form of an array.
+     * 
+     * @return Game points.
+     */
     public int[] getGamePoints() {
         return gamePoints;
     }
 
+    /**
+     * The method returns the trial points in the form of an array.
+     * 
+     * @return Trial points.
+     */
     public int[] getTrialPoints() {
         return trialPoints;
     }
 
+    /**
+     * The method allows to set the value of the number of game rounds played.
+     * 
+     * @param gameRound Number of game rounds.
+     */
     public void setGameRound(int gameRound) {
         this.gameRound = gameRound;
     }
 
+    /**
+     * The method allows to set the value of the number of trial rounds played.
+     * 
+     * @param trialRound Number of trial rounds.
+     */
     public void setTrialRound(int trialRound) {
         this.trialRound = trialRound;
     }
 
+    /**
+     * The method allows to set the game points for both team.
+     * 
+     * @param gamePoints Game points of both teams.
+     */
     public void setGamePoints(int[] gamePoints) {
         this.gamePoints = gamePoints;
     }
 
+    /**
+     * The method allows to set the trial points for both team.
+     * 
+     * @param trialPoints Trial points of both teams.
+     */
     public void setTrialPoints(int[] trialPoints) {
         this.trialPoints = trialPoints;
     }

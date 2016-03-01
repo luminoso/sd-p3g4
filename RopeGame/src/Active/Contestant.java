@@ -69,6 +69,8 @@ public class Contestant extends Thread {
 
     // TODO: Implement
     private void followCoachAdvice() {
+        
+        state = ContestantState.STAND_IN_POSITION;
     }
 
     // TODO: Implement
