@@ -20,6 +20,30 @@ public class Contestant extends Thread {
         this.id = id;
         this.strength = strength;
     }
+
+    public ContestantState getContestantState() {
+        return state;
+    }
+
+    public void setContestantState(ContestantState state) {
+        this.state = state;
+    }
+
+    public int getContestantTeam() {
+        return team;
+    }
+
+    public int getContestantId() {
+        return id;
+    }
+
+    public int getContestantStrength() {
+        return strength;
+    }
+    
+    public void setContestantStrength(int strength) {
+        this.strength = strength;
+    }
     
     @Override
     public void run() {

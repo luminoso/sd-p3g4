@@ -13,6 +13,14 @@ public class Referee extends Thread {
         
         this.state = RefereeState.START_OF_THE_MATCH;
     }
+
+    public RefereeState getRefereeState() {
+        return state;
+    }
+
+    public void setRefereeState(RefereeState state) {
+        this.state = state;
+    }
     
     @Override
     public void run() {

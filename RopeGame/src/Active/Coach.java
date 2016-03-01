@@ -6,9 +6,8 @@ package Active;
  * @author Guilherme Cardoso
  */
 public class Coach extends Thread {
-    private CoachState state;   // Coach state
-    private int team;           // Coach team
-    
+    private CoachState state;           // Coach state
+    private int team;                   // Coach team
     
     public Coach(String name, int team) {
         super(name);
@@ -16,6 +15,18 @@ public class Coach extends Thread {
         this.state = CoachState.WAIT_FOR_REFEREE_COMMAND;
         
         this.team = team;
+    }
+
+    public CoachState getCoachState() {
+        return state;
+    }
+
+    public void setCoachState(CoachState state) {
+        this.state = state;
+    }
+    
+    public int getCoachTeam() {
+        return team;
     }
     
     @Override

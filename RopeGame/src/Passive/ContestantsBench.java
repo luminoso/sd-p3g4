@@ -11,8 +11,8 @@ import java.util.List;
  */
 public class ContestantsBench {
     
-    private List<Contestant> bench = new ArrayList<>();
-    private int team;
+    private List<Contestant> bench = new ArrayList<>();         //
+    private int team;                                           //
   
     // create and initialize(?)
     public ContestantsBench(int benchSize, int team, int strengthFactor) {
