@@ -1,5 +1,8 @@
 package Active;
 
+import Passive.ContestantsBench;
+import Passive.Playground;
+
 /**
  *
  * @author Eduardo Sousa
@@ -65,7 +68,8 @@ public class Contestant extends Thread {
     }
 
     // TODO: Implement
-    private void followCoachAdvice() {}
+    private void followCoachAdvice() {
+    }
 
     // TODO: Implement
     private void getReady() {}

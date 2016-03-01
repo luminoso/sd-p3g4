@@ -10,63 +10,47 @@ import java.util.List;
  * @author Guilherme Cardoso
  */
 public class Playground {
-
+    private static Playground instance;
+    
     private int flagPosition;
-    private List<Contestant> teamA = new ArrayList<>();
-    private List<Contestant> teamB = new ArrayList<>();
+    private List<Contestant>[] teams;
     
-   
-    public void addContestantToTeamA(Contestant contestant){
-        teamA.add(contestant);
-    }
-    
-    public void addContestanToTeamB(Contestant contestant){
-        teamB.add(contestant);
-    }
-    
-    public Contestant getContestantTeamA(int id){
+    public static Playground getInstance() {
+        if(instance == null) {
+            instance = new Playground();
+        }
         
-        for(Contestant contestant : teamA){
-            if(contestant.getId() == id){
-                teamA.remove(contestant);
+        return instance;
+    }
+    
+    private Playground() {
+        this.flagPosition = 0;
+        
+        this.teams = new List[2];
+        this.teams[0] = new ArrayList<>();
+        this.teams[1] = new ArrayList<>();
+    }
+    
+    public void addContestantToTeam(int teamId, Contestant contestant){
+        this.teams[teamId-1].add(contestant);
+    }
+    
+    public Contestant getContestantFromTeam(int teamId, int contestantId){
+        for(Contestant contestant : this.teams[teamId-1]){
+            if(contestant.getId() == contestantId){
+                this.teams[teamId-1].remove(contestant);
                 return contestant;
             }
         }
-        //throw new ContestantNotFoundException();
-        return null;
-    }
-    
-    public Contestant getContestantTeamB(int id){
         
-        for(Contestant contestant : teamB){
-            if(contestant.getId() == id){
-                teamB.remove(contestant);
-                return contestant;
-            }
-        }
-        return null;
-    }
-    
-    public Contestant getContestantTeamA(){
-        if(!teamA.isEmpty()){
-            Contestant contestant = teamA.get(teamA.size());
-            teamA.remove(teamA.size());
-            return contestant;
-        }
-        return null;
-    }
-    
-    public Contestant getContestantTeamB(){
-        if(!teamB.isEmpty()){
-            Contestant contestant = teamB.get(teamB.size() - 1);
-            teamB.remove(teamB.size() - 1);
-            return contestant;
-        }
         return null;
     }
     
     public int getFlagPosition(){
         return this.flagPosition;
     }
-    
+
+    public void setFlagPosition(int flagPosition) {
+        this.flagPosition = flagPosition;
+    }
 }
