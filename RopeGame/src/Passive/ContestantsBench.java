@@ -19,7 +19,7 @@ public class ContestantsBench {
         
         for(int i = 0; i < benchSize; i++)
             bench.add(new Contestant(GenerateName(), team, i, (int) (Math.random()*strengthFactor)));
- 
+        
     }
     
     public void addContestant(Contestant contestant){
@@ -38,13 +38,22 @@ public class ContestantsBench {
         return null;
     }
     
+    public Contestant getContestant(){
+        if(!bench.isEmpty()){
+            Contestant contestant = bench.get(bench.size() - 1);
+            bench.remove(bench.size() - 1);
+            return contestant;
+        }
+        return null;
+    }
+
     private String GenerateName() {
         String[] FirstName = {"James", "John", "Robert", "Michael", "William"};
         String[] LastName = {"Smith", "Johnson", "Williams", "Brown", "Jones"};
         
         String name = FirstName[(int)(Math.random() * FirstName.length)] + " " + LastName[(int)(Math.random() * LastName.length)];
-    
+        
         return name;
     }
-    
+
 }

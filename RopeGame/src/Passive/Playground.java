@@ -2,6 +2,7 @@ package Passive;
 
 import Active.Contestant;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -10,8 +11,8 @@ import java.util.ArrayList;
 public class Playground {
 
     private int flagPosition;
-    private ArrayList<Contestant> teamA = new ArrayList<>();
-    private ArrayList<Contestant> teamB = new ArrayList<>();
+    private List<Contestant> teamA = new ArrayList<>();
+    private List<Contestant> teamB = new ArrayList<>();
     
    
     public void addContestantToTeamA(Contestant contestant){
@@ -56,8 +57,8 @@ public class Playground {
     
     public Contestant getContestantTeamB(){
         if(!teamB.isEmpty()){
-            Contestant contestant = teamB.get(teamB.size());
-            teamB.remove(teamB.size());
+            Contestant contestant = teamB.get(teamB.size() - 1);
+            teamB.remove(teamB.size() - 1);
             return contestant;
         }
         return null;
