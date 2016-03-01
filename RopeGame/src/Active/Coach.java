@@ -3,6 +3,7 @@ package Active;
 /**
  *
  * @author Eduardo Sousa
+ * @author Guilherme Cardoso
  */
 public class Coach extends Thread {
     private CoachState state;   // Coach state

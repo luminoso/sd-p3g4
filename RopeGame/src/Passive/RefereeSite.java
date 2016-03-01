@@ -3,6 +3,7 @@ package Passive;
 /**
  *
  * @author Eduardo Sousa
+ * @author Guilherme Cardoso
  */
 public class RefereeSite {
     private int matchRound, trialRound, matchPoints, trialPoints;

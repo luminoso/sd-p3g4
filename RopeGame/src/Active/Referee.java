@@ -3,6 +3,7 @@ package Active;
 /**
  *
  * @author Eduardo Sousa
+ * @author Guilherme Cardoso
  */
 public class Referee extends Thread {
     private RefereeState state;     // Referee state

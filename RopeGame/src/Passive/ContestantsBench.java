@@ -7,6 +7,7 @@ import java.util.List;
 /**
  *
  * @author Eduardo Sousa
+ * @author Guilherme Cardoso
  */
 public class ContestantsBench {
     

@@ -3,6 +3,7 @@ package Active;
 /**
  *
  * @author Eduardo Sousa
+ * @author Guilherme Cardoso
  */
 public class Contestant extends Thread {
     private ContestantState state;  // Contestant state
