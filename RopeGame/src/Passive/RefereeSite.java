@@ -1,5 +1,8 @@
 package Passive;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  *
  * @author Eduardo Sousa
@@ -7,6 +10,8 @@ package Passive;
  */
 public class RefereeSite {
     private static RefereeSite instance;
+    
+    private Lock lock;
     
     private int[] gamePoints, trialPoints;
     private int gameRound, trialRound;
@@ -29,6 +34,8 @@ public class RefereeSite {
      * Private constructor to be used in singleton.
      */
     private RefereeSite() {
+        this.lock = new ReentrantLock();
+        
         this.gameRound = 0;
         this.trialRound = 0;
     
@@ -42,7 +49,13 @@ public class RefereeSite {
      * @return Game round number.
      */
     public int getGameRound() {
-        return gameRound;
+        lock.lock();
+        
+        try {
+            return gameRound;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -51,7 +64,13 @@ public class RefereeSite {
      * @return Trial round number.
      */
     public int getTrialRound() {
-        return trialRound;
+        lock.lock();
+        
+        try {
+            return trialRound;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -60,7 +79,13 @@ public class RefereeSite {
      * @return Game points.
      */
     public int[] getGamePoints() {
-        return gamePoints;
+        lock.lock();
+        
+        try {
+            return gamePoints;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -69,7 +94,13 @@ public class RefereeSite {
      * @return Trial points.
      */
     public int[] getTrialPoints() {
-        return trialPoints;
+        lock.lock();
+        
+        try {
+            return trialPoints;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -78,7 +109,13 @@ public class RefereeSite {
      * @param gameRound Number of game rounds.
      */
     public void setGameRound(int gameRound) {
-        this.gameRound = gameRound;
+        lock.lock();
+        
+        try {
+            this.gameRound = gameRound;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -87,7 +124,13 @@ public class RefereeSite {
      * @param trialRound Number of trial rounds.
      */
     public void setTrialRound(int trialRound) {
-        this.trialRound = trialRound;
+        lock.lock();
+        
+        try {
+            this.trialRound = trialRound;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -96,7 +139,13 @@ public class RefereeSite {
      * @param gamePoints Game points of both teams.
      */
     public void setGamePoints(int[] gamePoints) {
-        this.gamePoints = gamePoints;
+        lock.lock();
+        
+        try {
+            this.gamePoints = gamePoints;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -105,6 +154,12 @@ public class RefereeSite {
      * @param trialPoints Trial points of both teams.
      */
     public void setTrialPoints(int[] trialPoints) {
-        this.trialPoints = trialPoints;
+        lock.lock();
+        
+        try {
+            this.trialPoints = trialPoints;
+        } finally {
+            lock.unlock();
+        }
     }
 }
