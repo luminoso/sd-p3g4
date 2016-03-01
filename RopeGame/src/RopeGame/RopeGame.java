@@ -1,11 +1,11 @@
-package Main;
+package RopeGame;
 
 /**
  *
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class Main {
+public class RopeGame {
     public static void main(String[] args) {
         
     }
