@@ -2,6 +2,8 @@ package Passive;
 
 import Active.Contestant;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -77,4 +79,30 @@ public class ContestantsBench {
         
         return null;
     }
+
+    public List<Contestant> getBench() {
+        return bench;
+    }
+    
+    // sort contestants bench by strength
+    public void sort() {
+        Collections.sort(this.bench);
+    }
+
+    // return IDs in a array
+    public int[] getIDs() {
+        int[] ids = new int[bench.size()];
+        
+        for(int i = 0; i < bench.size(); i++){
+            ids[i] = bench.get(i).getContestantId();
+        }
+        
+        return ids;
+    }
+
+    // set the selected contestants for the next game
+    public void setSelectedContestants(int[] selectedContestants) {
+        this.selectedContestants = selectedContestants;
+    }
+    
 }

@@ -1,5 +1,9 @@
 package Active;
 
+import Passive.ContestantsBench;
+import java.util.Collections;
+import java.util.List;
+
 /**
  *
  * @author Eduardo Sousa
@@ -48,7 +52,21 @@ public class Coach extends Thread {
     }
 
     // TODO: Implement
-    private void callContestants() {}
+    private void callContestants() {
+        // Basic strategy. Calls for the strongest players
+        
+        // get team players
+        ContestantsBench bench = ContestantsBench.getInstance(this.team);
+        
+        // Arrange players by stregth
+        bench.sort();
+        
+        // choose the 3 strongest
+        int[] contestantsids = bench.getIDs();
+        
+        // add to selectedContestants
+        bench.setSelectedContestants(contestantsids);    
+    }
 
     // TODO: Implement
     private void informReferee() {}

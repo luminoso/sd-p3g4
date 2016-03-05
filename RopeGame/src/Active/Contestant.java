@@ -8,7 +8,7 @@ import Passive.Playground;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class Contestant extends Thread {
+public class Contestant extends Thread implements Comparable<Contestant>{
     private ContestantState state;  // Contestant state
     private int team;               // Contestant team
     private int id;                 // Contestant identification in team
@@ -103,4 +103,15 @@ public class Contestant extends Thread {
             return state;
         }
     }
+
+    public int getStrength() {
+        return strength;
+    }
+    
+    // compare contestants by strength
+    @Override
+    public int compareTo(Contestant o) {
+        return o.getStrength() - this.strength;
+    }
+    
 }
