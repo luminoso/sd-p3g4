@@ -81,6 +81,10 @@ public class Contestant extends Thread implements Comparable<Contestant>{
 
     // TODO: Implement
     private void seatDown() {}
+
+    public void setStrength(int strength) {
+        this.strength = strength;
+    }
     
     public enum ContestantState {
         SEAT_AT_THE_BENCH (1, "STB"),

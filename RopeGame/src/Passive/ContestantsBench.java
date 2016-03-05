@@ -71,8 +71,7 @@ public class ContestantsBench {
      */
     public Contestant getContestant(int id){
         for(Contestant contestant : bench){
-            if(contestant.getId() == id){
-                bench.remove(contestant);
+            if(contestant.getContestantId() == id){
                 return contestant;
             }
         }
@@ -103,6 +102,10 @@ public class ContestantsBench {
     // set the selected contestants for the next game
     public void setSelectedContestants(int[] selectedContestants) {
         this.selectedContestants = selectedContestants;
+    }
+
+    public int[] getSelectedContestants() {
+        return selectedContestants;
     }
     
 }

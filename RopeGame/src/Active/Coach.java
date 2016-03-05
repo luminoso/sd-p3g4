@@ -71,8 +71,16 @@ public class Coach extends Thread {
     // TODO: Implement
     private void informReferee() {}
 
-    // TODO: Implement
-    private void reviewNotes() {}
+    // downgrade players strength
+    private void reviewNotes() {
+        ContestantsBench bench = ContestantsBench.getInstance(this.team);
+        int[] contestantsids = bench.getSelectedContestants();
+        
+        for(int i = 0; i < 3; i++){
+            Contestant contestant = bench.getContestant(contestantsids[i]);
+            contestant.setStrength(contestant.getStrength() - 1);
+        }
+    }
     
     public enum CoachState {
         WAIT_FOR_REFEREE_COMMAND (1, "WFRC"),
