@@ -108,14 +108,22 @@ public class Contestant extends Thread implements Comparable<Contestant>{
         }
     }
 
+    /**
+     * This method returns the contestant strength
+     * @return strength value
+     */
     public int getStrength() {
         return strength;
     }
     
-    // compare contestants by strength
+    /**
+     * Compares this contestant strength to another contestant strength
+     * @param contestant Contestant to compare to
+     * @return Strength difference
+     */
     @Override
-    public int compareTo(Contestant o) {
-        return o.getStrength() - this.strength;
+    public int compareTo(Contestant contestant) {
+        return contestant.getStrength() - this.strength;
     }
     
 }

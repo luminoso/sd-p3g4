@@ -71,7 +71,8 @@ public class ContestantsBench {
      */
     public Contestant getContestant(int id){
         for(Contestant contestant : bench){
-            if(contestant.getContestantId() == id){
+            if(contestant.getId() == id){
+                bench.remove(contestant);
                 return contestant;
             }
         }
@@ -79,16 +80,25 @@ public class ContestantsBench {
         return null;
     }
 
+    /**
+     * This method returns the bench which contains the Contestants
+     * @return List of the contestants in the bench
+     */
     public List<Contestant> getBench() {
         return bench;
     }
     
-    // sort contestants bench by strength
+    /**
+     * Sorts the bench by Contestants strength 
+     */
     public void sort() {
         Collections.sort(this.bench);
     }
 
-    // return IDs in a array
+    /**
+     * Get players ID present at the bench by Contestant ID
+     * @return Integer array of contestants IDs
+     */
     public int[] getIDs() {
         int[] ids = new int[bench.size()];
         
@@ -99,11 +109,20 @@ public class ContestantsBench {
         return ids;
     }
 
-    // set the selected contestants for the next game
+    /**
+     * Set selected contestants array.
+     * This arrays should be filled with the IDs of the players for the next round.
+     * 
+     * @param selectedContestants
+     */
     public void setSelectedContestants(int[] selectedContestants) {
         this.selectedContestants = selectedContestants;
     }
-
+    
+    /**
+     * Gets the selected contestants array
+     * @return Integer array of the selected contestants for the round
+     */
     public int[] getSelectedContestants() {
         return selectedContestants;
     }

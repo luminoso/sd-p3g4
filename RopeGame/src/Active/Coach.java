@@ -51,27 +51,26 @@ public class Coach extends Thread {
         }
     }
 
-    // TODO: Implement
+    /**
+     * The coach decides which players are selected for next round
+     * and updates selectedContestants array at the Bench
+     */
     private void callContestants() {
         // Basic strategy. Calls for the strongest players
         
-        // get team players
         ContestantsBench bench = ContestantsBench.getInstance(this.team);
-        
-        // Arrange players by stregth
-        bench.sort();
-        
-        // choose the 3 strongest
-        int[] contestantsids = bench.getIDs();
-        
-        // add to selectedContestants
-        bench.setSelectedContestants(contestantsids);    
+        bench.sort();                                   // Arrange players by stregth
+        int[] contestantsids = bench.getIDs();          // choose the 3 strongest
+        bench.setSelectedContestants(contestantsids);   // add to selectedContestants
     }
 
     // TODO: Implement
     private void informReferee() {}
 
-    // downgrade players strength
+    /**
+     * The coach updates his players which have played and game and
+     * updates their strength
+     */
     private void reviewNotes() {
         ContestantsBench bench = ContestantsBench.getInstance(this.team);
         int[] contestantsids = bench.getSelectedContestants();
