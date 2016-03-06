@@ -2,6 +2,7 @@ package Active;
 
 import Passive.ContestantsBench;
 import Passive.Playground;
+import java.util.Arrays;
 
 /**
  *
@@ -67,20 +68,43 @@ public class Contestant extends Thread implements Comparable<Contestant>{
         }
     }
 
-    // TODO: Implement
+    /**
+     * Contestant checks if is selected to the game. 
+     * If so, goes to the playground.
+     */
     private void followCoachAdvice() {
+        ContestantsBench bench = ContestantsBench.getInstance(this.team);
+        int[] selectedContestants = bench.getSelectedContestants();
         
-        state = ContestantState.STAND_IN_POSITION;
+        if(Arrays.asList(selectedContestants).contains(this.id)){
+            Playground playground = Playground.getInstance();
+            playground.addContestantToTeam(this.team, this);
+            state = ContestantState.STAND_IN_POSITION;
+        } else {
+            state = ContestantState.SEAT_AT_THE_BENCH;
+        }
+        
     }
-
-    // TODO: Implement
+    
+    // TODO: Implement	
     private void getReady() {}
-
+ 
     // TODO: Implement
     private void pullTheRope() {}
 
-    // TODO: Implement
-    private void seatDown() {}
+    /**
+     * If contestant was playing moves to his bench and changes his 
+     * state to seat at the bench
+     */
+    private void seatDown() {
+
+        if(this.state == ContestantState.DO_YOUR_BEST){
+            ContestantsBench bench = ContestantsBench.getInstance(this.team);
+            bench.addContestant(this);
+            this.state = ContestantState.SEAT_AT_THE_BENCH;
+        }
+    
+    }
 
     public void setStrength(int strength) {
         this.strength = strength;
