@@ -3,6 +3,8 @@ package Active;
 import Passive.ContestantsBench;
 import Passive.Playground;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -87,10 +89,28 @@ public class Contestant extends Thread implements Comparable<Contestant>{
     }
     
     // TODO: Implement	
-    private void getReady() {}
+    private void getReady() {
+        
+        if(this.state == ContestantState.STAND_IN_POSITION){
+            this.state = ContestantState.DO_YOUR_BEST;
+        }
+            
+    
+    }
  
     // TODO: Implement
-    private void pullTheRope() {}
+    private void pullTheRope() {
+        
+        if(this.state == ContestantState.DO_YOUR_BEST){
+            try {
+                Thread.sleep((long) (Math.random()*3000));
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Contestant.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    
+    
+    }
 
     /**
      * If contestant was playing moves to his bench and changes his 
