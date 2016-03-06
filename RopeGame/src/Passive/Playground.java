@@ -13,6 +13,7 @@ public class Playground {
     private static Playground instance;
     
     private int flagPosition;
+    private int lastFlagPosition;
     private List<Contestant>[] teams;
     
     /**
@@ -84,6 +85,15 @@ public class Playground {
      * @param flagPosition Position of the flag.
      */
     public void setFlagPosition(int flagPosition) {
+        this.lastFlagPosition = this.flagPosition;
         this.flagPosition = flagPosition;
+    }
+
+    /**
+     * The method gets the flag position in the begging of the match/trial
+     * @return 
+     */
+    public int getLastFlagPosition() {
+        return lastFlagPosition;
     }
 }
