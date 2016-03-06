@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
 
 /**
  *
@@ -13,6 +14,8 @@ import java.util.List;
  */
 public class ContestantsBench {
     private static final ContestantsBench[] instances = new ContestantsBench[2];    // Doubleton containing the two teams benches
+    
+    private Lock lock;
     
     private List<Contestant> bench;                                                 // Structure that contains the players in the bench
     private int[] selectedContestants;                                              // Selected contestants to play the trial
@@ -59,24 +62,34 @@ public class ContestantsBench {
      * @param contestant Contestant that belongs to the team and needs to be 
      * added to the bench.
      */
-    public void addContestant(Contestant contestant){
-        bench.add(contestant);
+    public void addContestant(Contestant contestant) {
+        lock.lock();
+        try {
+            bench.add(contestant);
+        } finally {
+            lock.unlock();
+        }
     }
-    
+
     /**
      * The method removes a contestant from the bench.
-     * 
+     *
      * @param id Contestant identifier.
      * @return Contestant that needed to be removed.
      */
-    public Contestant getContestant(int id){
-        for(Contestant contestant : bench){
-            if(contestant.getId() == id){
-                bench.remove(contestant);
-                return contestant;
+    public Contestant getContestant(int id) {
+        lock.lock();
+        try {
+            for (Contestant contestant : bench) {
+                if (contestant.getId() == id) {
+                    bench.remove(contestant);
+                    return contestant;
+                }
             }
+        } finally {
+            lock.unlock();
         }
-        
+
         return null;
     }
 
@@ -85,14 +98,24 @@ public class ContestantsBench {
      * @return List of the contestants in the bench
      */
     public List<Contestant> getBench() {
-        return bench;
+        lock.lock();
+        try {
+            return bench;
+        } finally {
+            lock.unlock();
+        }
     }
     
     /**
      * Sorts the bench by Contestants strength 
      */
     public void sort() {
-        Collections.sort(this.bench);
+        lock.lock();
+        try {
+            Collections.sort(this.bench);
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -102,8 +125,13 @@ public class ContestantsBench {
     public int[] getIDs() {
         int[] ids = new int[bench.size()];
         
-        for(int i = 0; i < bench.size(); i++){
-            ids[i] = bench.get(i).getContestantId();
+        lock.lock();
+        try {
+            for (int i = 0; i < bench.size(); i++) {
+                ids[i] = bench.get(i).getContestantId();
+            }
+        } finally {
+            lock.unlock();
         }
         
         return ids;
@@ -116,7 +144,12 @@ public class ContestantsBench {
      * @param selectedContestants
      */
     public void setSelectedContestants(int[] selectedContestants) {
-        this.selectedContestants = selectedContestants;
+        lock.lock();
+        try {
+            this.selectedContestants = selectedContestants;
+        } finally {
+            lock.unlock();
+        }
     }
     
     /**
@@ -124,7 +157,12 @@ public class ContestantsBench {
      * @return Integer array of the selected contestants for the round
      */
     public int[] getSelectedContestants() {
-        return selectedContestants;
+        lock.lock();
+        try {
+            return selectedContestants;
+        } finally {
+            lock.unlock();
+        }
     }
     
 }
