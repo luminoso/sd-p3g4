@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  *
@@ -42,6 +43,7 @@ public class ContestantsBench {
      * @param team Team identifier.
      */
     private ContestantsBench(int team) {
+        this.lock = new ReentrantLock();
         this.team = team;
         this.bench = new ArrayList<>();
         this.selectedContestants = new int[3];
@@ -81,7 +83,7 @@ public class ContestantsBench {
         lock.lock();
         try {
             for (Contestant contestant : bench) {
-                if (contestant.getId() == id) {
+                if (contestant.getContestantId() == id) {
                     bench.remove(contestant);
                     return contestant;
                 }
