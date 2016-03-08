@@ -20,6 +20,8 @@ public class Playground {
     private Condition teamsInPosition;
     private Condition finishedPulling;
     private Condition resultAssert;
+    private boolean assertedResult;
+    private boolean trialStarted;
     private int pullCounter;
     private int flagPosition;
     private int lastFlagPosition;
@@ -66,7 +68,7 @@ public class Playground {
         try {
             this.teams[teamId-1].add(contestant);
             
-            if(isTeamInPlace(teamId)) {
+            if(isTeamInPlace(teamId-1)) {
                 this.teamsInPosition.signalAll();
             }
             
@@ -199,18 +201,18 @@ public class Playground {
     }
 
     private boolean wasTrialStarted() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.trialStarted;
     }
 
     private boolean isTeamInPlace(int teamId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.teams[teamId].size() == 3;
     }
 
     private boolean isResultAsserted() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.assertedResult;
     }
 
     private boolean haveAllPulled() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.pullCounter == (this.teams[0].size() + this.teams[1].size());
     }
 }
