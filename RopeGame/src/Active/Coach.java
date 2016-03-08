@@ -1,38 +1,68 @@
 package Active;
 
+import Others.CoachStrategy;
 import Passive.ContestantsBench;
-import java.util.Collections;
+import Passive.RefereeSite;
 import java.util.List;
 
 /**
- *
+ * General Description:
+ * 
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
 public class Coach extends Thread {
     private CoachState state;           // Coach state
     private int team;                   // Coach team
+    private CoachStrategy strategy;     // Team picking strategy
     
-    public Coach(String name, int team) {
+    /**
+     * 
+     * @param name
+     * @param team 
+     * @param strategy 
+     */
+    public Coach(String name, int team, CoachStrategy strategy) {
+        // Giving name to thread
         super(name);
         
+        // Initial state
         this.state = CoachState.WAIT_FOR_REFEREE_COMMAND;
         
+        // Team assignement
         this.team = team;
+        
+        // Team picking strategy
+        this.strategy = strategy;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public CoachState getCoachState() {
         return state;
     }
 
+    /**
+     * 
+     * @param state 
+     */
     public void setCoachState(CoachState state) {
         this.state = state;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public int getCoachTeam() {
         return team;
     }
     
+    /**
+     * 
+     */
     @Override
     public void run() {
         // TODO: Replace true by terminating condition
@@ -56,12 +86,20 @@ public class Coach extends Thread {
      * and updates selectedContestants array at the Bench
      */
     private void callContestants() {
-        // Basic strategy. Calls for the strongest players
+        // Contestants bench
+        ContestantsBench bench = ContestantsBench.getInstance(team);
         
-        ContestantsBench bench = ContestantsBench.getInstance(this.team);
-        bench.sort();                                   // Arrange players by stregth
-        int[] contestantsids = bench.getIDs();          // choose the 3 strongest
-        bench.setSelectedContestants(contestantsids);   // add to selectedContestants
+        // Referee site
+        RefereeSite site = RefereeSite.getInstance();
+        
+        // Picking team
+        int[] pickedContestants = this.strategy.pickTeam(bench, site);
+        
+        // Setting the selected team
+        bench.setSelectedContestants(pickedContestants);
+        
+        // Updating coach state
+        this.setCoachState(CoachState.ASSEMBLE_TEAM);
     }
 
     // TODO: Implement
@@ -73,14 +111,34 @@ public class Coach extends Thread {
      */
     private void reviewNotes() {
         ContestantsBench bench = ContestantsBench.getInstance(this.team);
-        int[] contestantsids = bench.getSelectedContestants();
+        int[] selectedContestants = bench.getSelectedContestants();
+        List<Contestant> allContestants = bench.getBench();
         
-        for(int i = 0; i < 3; i++){
-            Contestant contestant = bench.getContestant(contestantsids[i]);
-            contestant.setStrength(contestant.getStrength() - 1);
+        boolean updated;
+        for(Contestant contestant : allContestants) {
+            updated = false;
+            
+            // Updating selected players
+            for(int i = 0; i < selectedContestants.length; i++) {
+                if(contestant.getContestantId() == selectedContestants[i]) {
+                    contestant.setContestantStrength(contestant.getContestantStrength() - 1);
+                    updated = true;
+                    break;
+                }
+            }
+            
+            if(updated == false) {
+                contestant.setContestantStrength(contestant.getContestantStrength() + 1);
+            }
         }
+        
+        // Updating coach state
+        this.setCoachState(CoachState.WAIT_FOR_REFEREE_COMMAND);
     }
     
+    /**
+     * 
+     */
     public enum CoachState {
         WAIT_FOR_REFEREE_COMMAND (1, "WFRC"),
         ASSEMBLE_TEAM (2, "AETM"),
@@ -89,15 +147,28 @@ public class Coach extends Thread {
         private int id;
         private String state;
         
+        /**
+         * 
+         * @param id
+         * @param state 
+         */
         CoachState(int id, String state) {
             this.id = id;
             this.state = state;
         }
 
+        /**
+         * 
+         * @return 
+         */
         public int getId() {
             return id;
         }
 
+        /**
+         * 
+         * @return 
+         */
         public String getState() {
             return state;
         }

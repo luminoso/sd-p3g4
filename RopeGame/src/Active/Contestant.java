@@ -11,12 +11,23 @@ import java.util.logging.Logger;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class Contestant extends Thread implements Comparable<Contestant>{
-    private ContestantState state;  // Contestant state
-    private int team;               // Contestant team
-    private int id;                 // Contestant identification in team
-    private int strength;           // Contestant strength
+public class Contestant extends Thread implements Comparable<Contestant> {
     
+    // Final fields
+    private final int team;                 // Contestant team
+    private final int id;                   // Contestant identification in team
+    
+    // Internal state fields
+    private ContestantState state;          // Contestant state
+    private int strength;                   // Contestant strength
+    
+    /**
+     * 
+     * @param name
+     * @param team
+     * @param id
+     * @param strength 
+     */
     public Contestant(String name, int team, int id, int strength) {
         super(name);
         
@@ -70,6 +81,16 @@ public class Contestant extends Thread implements Comparable<Contestant>{
         }
     }
 
+    /**
+     * Compares this contestant strength to another contestant strength
+     * @param contestant Contestant to compare to
+     * @return Strength difference
+     */
+    @Override
+    public int compareTo(Contestant contestant) {
+        return this.getContestantId() - contestant.getContestantId();
+    }
+    
     /**
      * Contestant checks if is selected to the game. 
      * If so, goes to the playground.
@@ -125,10 +146,6 @@ public class Contestant extends Thread implements Comparable<Contestant>{
         }
     
     }
-
-    public void setStrength(int strength) {
-        this.strength = strength;
-    }
     
     public enum ContestantState {
         SEAT_AT_THE_BENCH (1, "STB"),
@@ -151,23 +168,4 @@ public class Contestant extends Thread implements Comparable<Contestant>{
             return state;
         }
     }
-
-    /**
-     * This method returns the contestant strength
-     * @return strength value
-     */
-    public int getStrength() {
-        return strength;
-    }
-    
-    /**
-     * Compares this contestant strength to another contestant strength
-     * @param contestant Contestant to compare to
-     * @return Strength difference
-     */
-    @Override
-    public int compareTo(Contestant contestant) {
-        return contestant.getStrength() - this.strength;
-    }
-    
 }

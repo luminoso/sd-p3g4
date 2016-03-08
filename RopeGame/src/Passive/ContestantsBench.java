@@ -2,14 +2,13 @@ package Passive;
 
 import Active.Contestant;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- *
+ * General Description:
+ * 
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
@@ -106,37 +105,6 @@ public class ContestantsBench {
         } finally {
             lock.unlock();
         }
-    }
-    
-    /**
-     * Sorts the bench by Contestants strength 
-     */
-    public void sort() {
-        lock.lock();
-        try {
-            Collections.sort(this.bench);
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    /**
-     * Get players ID present at the bench by Contestant ID
-     * @return Integer array of contestants IDs
-     */
-    public int[] getIDs() {
-        int[] ids = new int[bench.size()];
-        
-        lock.lock();
-        try {
-            for (int i = 0; i < bench.size(); i++) {
-                ids[i] = bench.get(i).getContestantId();
-            }
-        } finally {
-            lock.unlock();
-        }
-        
-        return ids;
     }
 
     /**
