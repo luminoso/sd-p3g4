@@ -11,7 +11,7 @@ import java.util.logging.Logger;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class Contestant extends Thread implements Comparable<Contestant> {
+public class Contestant extends Thread {
     
     // Final fields
     private final int team;                 // Contestant team
@@ -79,16 +79,6 @@ public class Contestant extends Thread implements Comparable<Contestant> {
                     break;
             }
         }
-    }
-
-    /**
-     * Compares this contestant strength to another contestant strength
-     * @param contestant Contestant to compare to
-     * @return Strength difference
-     */
-    @Override
-    public int compareTo(Contestant contestant) {
-        return this.getContestantId() - contestant.getContestantId();
     }
     
     /**

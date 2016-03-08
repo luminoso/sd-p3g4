@@ -2,9 +2,13 @@ package Passive;
 
 import Active.Contestant;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * General Description:
@@ -16,6 +20,8 @@ public class ContestantsBench {
     private static final ContestantsBench[] instances = new ContestantsBench[2];    // Doubleton containing the two teams benches
     
     private Lock lock;
+    private Condition allPlayersSeated;
+    private Condition playersSelected;
     
     private List<Contestant> bench;                                                 // Structure that contains the players in the bench
     private int[] selectedContestants;                                              // Selected contestants to play the trial
@@ -43,6 +49,8 @@ public class ContestantsBench {
      */
     private ContestantsBench(int team) {
         this.lock = new ReentrantLock();
+        this.allPlayersSeated = this.lock.newCondition();
+        this.playersSelected = this.lock.newCondition();
         this.team = team;
         this.bench = new ArrayList<>();
         this.selectedContestants = new int[3];
@@ -54,7 +62,13 @@ public class ContestantsBench {
      * @return Team identifier.
      */
     public int getTeam() {
-        return team;
+        lock.lock();
+        
+        try {
+            return team;
+        } finally {
+            lock.unlock();
+        }
     }
     
     /**
@@ -65,8 +79,19 @@ public class ContestantsBench {
      */
     public void addContestant(Contestant contestant) {
         lock.lock();
+        
         try {
             bench.add(contestant);
+            
+            if(checkAllPlayersSeated()) {
+                allPlayersSeated.signal();
+            }
+            
+            while(checkPlayerSelected()) {
+                playersSelected.await();
+            }
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ContestantsBench.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             lock.unlock();
         }
@@ -79,19 +104,27 @@ public class ContestantsBench {
      * @return Contestant that needed to be removed.
      */
     public Contestant getContestant(int id) {
+        Contestant cont = null;
+        
         lock.lock();
+        
         try {
-            for (Contestant contestant : bench) {
-                if (contestant.getContestantId() == id) {
-                    bench.remove(contestant);
-                    return contestant;
+            Iterator<Contestant> it = bench.iterator();
+            while(it.hasNext()) {
+                cont = it.next();
+                
+                if(cont.getContestantId() == id) {
+                    it.remove();
+                    break;
                 }
+                
+                cont = null;
             }
+            
+            return cont;
         } finally {
             lock.unlock();
         }
-
-        return null;
     }
 
     /**
@@ -99,12 +132,23 @@ public class ContestantsBench {
      * @return List of the contestants in the bench
      */
     public List<Contestant> getBench() {
+        List<Contestant> temp = null;
+        
         lock.lock();
+        
         try {
-            return bench;
+            while(checkAllPlayersSeated() != true) {
+                allPlayersSeated.await();
+            }
+            
+            temp = bench;
+        } catch (InterruptedException ex) {
+            // TODO: Treat exception
         } finally {
             lock.unlock();
         }
+        
+        return bench;
     }
 
     /**
@@ -115,8 +159,11 @@ public class ContestantsBench {
      */
     public void setSelectedContestants(int[] selectedContestants) {
         lock.lock();
+        
         try {
             this.selectedContestants = selectedContestants;
+            
+            playersSelected.signalAll();
         } finally {
             lock.unlock();
         }
@@ -128,11 +175,20 @@ public class ContestantsBench {
      */
     public int[] getSelectedContestants() {
         lock.lock();
+        
         try {
             return selectedContestants;
         } finally {
             lock.unlock();
         }
+    }
+
+    private boolean checkPlayerSelected() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private boolean checkAllPlayersSeated() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
