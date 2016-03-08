@@ -2,6 +2,7 @@ package Passive;
 
 import Active.Contestant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.locks.Condition;
@@ -183,12 +184,20 @@ public class ContestantsBench {
         }
     }
 
+    /**
+     * Checks if current Thread contestant is present in the selectedContestants array
+     * @return True if contestant is selected
+     */
     private boolean checkPlayerSelected() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Arrays.asList(selectedContestants).contains(((Contestant) Thread.currentThread() ).getContestantId());
     }
 
+    /**
+     * Checks if all players are seated on bench
+     * @return True if all players seated
+     */
     private boolean checkAllPlayersSeated() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return bench.size() == 5;
     }
     
 }
