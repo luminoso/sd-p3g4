@@ -114,22 +114,16 @@ public class Coach extends Thread {
         int[] selectedContestants = bench.getSelectedContestants();
         List<Contestant> allContestants = bench.getBench();
         
-        boolean updated;
         for(Contestant contestant : allContestants) {
-            updated = false;
-            
             // Updating selected players
             for(int i = 0; i < selectedContestants.length; i++) {
                 if(contestant.getContestantId() == selectedContestants[i]) {
                     contestant.setContestantStrength(contestant.getContestantStrength() - 1);
-                    updated = true;
                     break;
                 }
             }
             
-            if(updated == false) {
-                contestant.setContestantStrength(contestant.getContestantStrength() + 1);
-            }
+            contestant.setContestantStrength(contestant.getContestantStrength() + 1);
         }
         
         // Updating coach state

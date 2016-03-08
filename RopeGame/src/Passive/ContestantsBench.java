@@ -148,7 +148,7 @@ public class ContestantsBench {
             lock.unlock();
         }
         
-        return bench;
+        return temp;
     }
 
     /**
