@@ -3,6 +3,9 @@ package Passive;
 import Active.Contestant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  *
@@ -12,6 +15,12 @@ import java.util.List;
 public class Playground {
     private static Playground instance;
     
+    private Lock lock;
+    private Condition startTrial;
+    private Condition teamsInPosition;
+    private Condition finishedPulling;
+    private Condition resultAssert;
+    private int pullCounter;
     private int flagPosition;
     private int lastFlagPosition;
     private List<Contestant>[] teams;
@@ -35,7 +44,12 @@ public class Playground {
      */
     private Playground() {
         this.flagPosition = 0;
-        
+        this.lock = new ReentrantLock();
+        this.startTrial = this.lock.newCondition();
+        this.teamsInPosition = this.lock.newCondition();
+        this.finishedPulling = this.lock.newCondition();
+        this.resultAssert = this.lock.newCondition();
+        this.pullCounter = 0;
         this.teams = new List[2];
         this.teams[0] = new ArrayList<>();
         this.teams[1] = new ArrayList<>();
@@ -48,7 +62,94 @@ public class Playground {
      * @param contestant Contestant to be added.
      */
     public void addContestantToTeam(int teamId, Contestant contestant){
-        this.teams[teamId-1].add(contestant);
+        lock.lock();
+        try {
+            this.teams[teamId-1].add(contestant);
+            
+            if(isTeamInPlace(teamId)) {
+                this.teamsInPosition.signalAll();
+            }
+            
+            while(!wasTrialStarted()) {
+                startTrial.await();
+            }
+        } catch (InterruptedException ex) {
+            // TODO: Treat exception
+        } finally {
+            lock.unlock();
+        }
+    }
+    
+    /**
+     * 
+     * @param teamId 
+     */
+    public void checkTeamPlacement(int teamId) {
+        lock.lock();
+        
+        try {
+            while(!isTeamInPlace(teamId)) {
+                this.teamsInPosition.await();
+            }
+        } catch (InterruptedException ex) {
+            // TODO: Treat exception
+        } finally {
+            lock.unlock();
+        }
+    }
+    
+    /**
+     * 
+     */
+    public void watchTrial() {
+        lock.lock();
+        
+        try {
+            while(!isResultAsserted()) {
+                this.resultAssert.await();
+            }
+        } catch (InterruptedException ex) {
+            // TODO: Treat exception
+        } finally {
+            lock.unlock();
+        }
+    }
+    
+    /**
+     * 
+     */
+    public void finishedPullingRope() {
+        lock.lock();
+        try {
+            this.pullCounter++;
+            
+            if(haveAllPulled()) {
+                this.finishedPulling.signal();
+            }
+            
+            while(!isResultAsserted()) {
+                this.resultAssert.await();
+            }
+        } catch (InterruptedException ex) {
+            // TODO: Treat exception
+        } finally {
+            lock.unlock();
+        }
+    }
+    
+    /**
+     * 
+     */
+    public void resultAsserted() {
+        lock.lock();
+        
+        try {
+            this.pullCounter = 0;
+            
+            this.resultAssert.signalAll();
+        } finally {
+            lock.unlock();
+        }
     }
     
     /**
@@ -95,5 +196,21 @@ public class Playground {
      */
     public int getLastFlagPosition() {
         return lastFlagPosition;
+    }
+
+    private boolean wasTrialStarted() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private boolean isTeamInPlace(int teamId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private boolean isResultAsserted() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private boolean haveAllPulled() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
