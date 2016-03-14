@@ -63,8 +63,16 @@ public class Referee extends Thread {
         }
     }
 
-    // TODO: Implement
-    private void announceNewGame() {}
+    /** 
+     * Reset trial points and flag position when starting a new game
+     */
+    private void announceNewGame() {
+        RefereeSite refereesite = RefereeSite.getInstance();
+        refereesite.setTrialPoints(new int[]{0, 0});
+        
+        Playground playground = Playground.getInstance();
+        playground.setFlagPosition(0);
+    }
 
     // TODO: Implement
     private void callTrial() {}
