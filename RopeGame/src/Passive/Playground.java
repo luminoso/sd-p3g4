@@ -96,4 +96,19 @@ public class Playground {
     public int getLastFlagPosition() {
         return lastFlagPosition;
     }
+    
+    /**
+     * Checks if all contestants are in the playground and ready to play the game
+     * @return True if all 6 players are in game
+     */
+    public boolean checkAllContestantsReady(){
+        return (teams[0].size() + teams[1].size()) == 6;
+    }
+
+    public List<Contestant>[] getTeams() {
+        return teams;
+    }
+    
+    
+    
 }
