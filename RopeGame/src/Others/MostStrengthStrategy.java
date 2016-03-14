@@ -9,7 +9,10 @@ import Active.Contestant;
 import Passive.ContestantsBench;
 import Passive.RefereeSite;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * General Description:
@@ -33,14 +36,18 @@ public class MostStrengthStrategy implements CoachStrategy {
      * @return 
      */
     @Override
-    public int[] pickTeam(ContestantsBench bench, RefereeSite site) {
-        int[] pickedTeam = new int[3];
+    public Set<Contestant> pickTeam(ContestantsBench bench, RefereeSite site) {
+        Set<Contestant> pickedTeam = new HashSet<>();
         
-        List<Contestant> contestants = bench.getBench();
+        List<Contestant> contestants = new LinkedList<>(bench.getBench());
         contestants.sort(comparator);
         
-        for(int i = 0; i < 3; i++) {
-            pickedTeam[i] = contestants.get(i).getContestantId();
+        for(Contestant cont : contestants) {
+            if(pickedTeam.size() == 3) {
+                break;
+            }
+            
+            pickedTeam.add(cont);
         }
         
         return pickedTeam;

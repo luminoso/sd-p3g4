@@ -3,7 +3,7 @@ package Active;
 import Others.CoachStrategy;
 import Passive.ContestantsBench;
 import Passive.RefereeSite;
-import java.util.List;
+import java.util.Set;
 
 /**
  * General Description:
@@ -87,13 +87,13 @@ public class Coach extends Thread {
      */
     private void callContestants() {
         // Contestants bench
-        ContestantsBench bench = ContestantsBench.getInstance(team);
+        ContestantsBench bench = ContestantsBench.getInstance();
         
         // Referee site
         RefereeSite site = RefereeSite.getInstance();
         
         // Picking team
-        int[] pickedContestants = this.strategy.pickTeam(bench, site);
+        Set<Contestant> pickedContestants = this.strategy.pickTeam(bench, site);
         
         // Setting the selected team
         bench.setSelectedContestants(pickedContestants);
@@ -110,20 +110,16 @@ public class Coach extends Thread {
      * updates their strength
      */
     private void reviewNotes() {
-        ContestantsBench bench = ContestantsBench.getInstance(this.team);
-        int[] selectedContestants = bench.getSelectedContestants();
-        List<Contestant> allContestants = bench.getBench();
+        ContestantsBench bench = ContestantsBench.getInstance();
+        Set<Contestant> selectedContestants = bench.getSelectedContestants();
+        Set<Contestant> allContestants = bench.getBench();
         
         for(Contestant contestant : allContestants) {
-            // Updating selected players
-            for(int i = 0; i < selectedContestants.length; i++) {
-                if(contestant.getContestantId() == selectedContestants[i]) {
-                    contestant.setContestantStrength(contestant.getContestantStrength() - 1);
-                    break;
-                }
+            if(selectedContestants.contains(contestant)) {
+                contestant.setContestantStrength(contestant.getContestantStrength() - 1);
+            } else {
+                contestant.setContestantStrength(contestant.getContestantStrength() + 1);
             }
-            
-            contestant.setContestantStrength(contestant.getContestantStrength() + 1);
         }
         
         // Updating coach state

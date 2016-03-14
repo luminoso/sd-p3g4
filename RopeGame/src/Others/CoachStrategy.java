@@ -5,8 +5,10 @@
  */
 package Others;
 
+import Active.Contestant;
 import Passive.ContestantsBench;
 import Passive.RefereeSite;
+import java.util.Set;
 
 /**
  * General Description:
@@ -15,5 +17,5 @@ import Passive.RefereeSite;
  * @author Guilherme Cardoso
  */
 public interface CoachStrategy {
-    public int[] pickTeam(ContestantsBench bench, RefereeSite site);
+    public Set<Contestant> pickTeam(ContestantsBench bench, RefereeSite site);
 }

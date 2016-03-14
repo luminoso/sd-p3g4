@@ -1,15 +1,12 @@
 package Passive;
 
+import Active.Coach;
 import Active.Contestant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * General Description:
@@ -20,27 +17,36 @@ import java.util.logging.Logger;
 public class ContestantsBench {
     private static final ContestantsBench[] instances = new ContestantsBench[2];    // Doubleton containing the two teams benches
     
-    private Lock lock;
-    private Condition allPlayersSeated;
-    private Condition playersSelected;
+    // Final fields
+    private final int team;                                                               // Team identifier
+    private final Lock lock;
+    private final Condition allPlayersSeated;
+    private final Condition playersSelected;
     
-    private List<Contestant> bench;                                                 // Structure that contains the players in the bench
-    private int[] selectedContestants;                                              // Selected contestants to play the trial
-    private int team;                                                               // Team identifier
+    private final Set<Contestant> bench;                                                 // Structure that contains the players in the bench
+    private final Set<Contestant> selectedContestants;                                   // Selected contestants to play the trial
+    
   
     /**
      * Method that returns a ContestantsBench object. The method is thread-safe
      * and uses the implicit monitor of the class.
      * 
-     * @param id Team identifier.
      * @return ContestantsBench object specified by the team identifier passed.
      */
-    public static synchronized ContestantsBench getInstance(int id) {
-        if(instances[id-1] == null) {
-            instances[id-1] = new ContestantsBench(id);
+    public static synchronized ContestantsBench getInstance() {
+        int team = -1;
+        
+        if(Thread.currentThread().getClass() == Contestant.class) {
+            team = ((Contestant) Thread.currentThread()).getContestantTeam();
+        } else if(Thread.currentThread().getClass() == Coach.class) {
+            team = ((Coach) Thread.currentThread()).getCoachTeam();
         }
         
-        return instances[id-1];
+        if(instances[team-1] == null) {
+            instances[team-1] = new ContestantsBench(team);
+        }
+        
+        return instances[team-1];
     }
     
     /**
@@ -53,8 +59,8 @@ public class ContestantsBench {
         this.allPlayersSeated = this.lock.newCondition();
         this.playersSelected = this.lock.newCondition();
         this.team = team;
-        this.bench = new ArrayList<>();
-        this.selectedContestants = new int[3];
+        this.bench = new TreeSet<>();
+        this.selectedContestants = new TreeSet<>();
     }
 
     /**
@@ -63,77 +69,59 @@ public class ContestantsBench {
      * @return Team identifier.
      */
     public int getTeam() {
-        lock.lock();
-        
-        try {
-            return team;
-        } finally {
-            lock.unlock();
-        }
+        return team;
     }
     
     /**
      * The method adds a contestant to the bench.
      * 
-     * @param contestant Contestant that belongs to the team and needs to be 
-     * added to the bench.
      */
-    public void addContestant(Contestant contestant) {
+    public void addContestant() {
+        Contestant contestant = (Contestant) Thread.currentThread();
+        
         lock.lock();
         
+        bench.add(contestant);
+
+        if(checkAllPlayersSeated()) {
+            allPlayersSeated.signal();
+        }
+        
         try {
-            bench.add(contestant);
-            
-            if(checkAllPlayersSeated()) {
-                allPlayersSeated.signal();
-            }
-            
-            while(checkPlayerSelected()) {
+            while(isContestantSelected()) {
                 playersSelected.await();
             }
         } catch (InterruptedException ex) {
-            Logger.getLogger(ContestantsBench.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
             lock.unlock();
-        }
+        } 
+            
+        lock.unlock();
     }
 
     /**
      * The method removes a contestant from the bench.
      *
-     * @param id Contestant identifier.
      * @return Contestant that needed to be removed.
      */
-    public Contestant getContestant(int id) {
-        Contestant cont = null;
+    public boolean getContestant() {
+        Contestant contestant = (Contestant) Thread.currentThread();
+        boolean result;
         
         lock.lock();
         
-        try {
-            Iterator<Contestant> it = bench.iterator();
-            while(it.hasNext()) {
-                cont = it.next();
-                
-                if(cont.getContestantId() == id) {
-                    it.remove();
-                    break;
-                }
-                
-                cont = null;
-            }
-            
-            return cont;
-        } finally {
-            lock.unlock();
-        }
+        result = bench.remove(contestant);
+        
+        lock.unlock();
+        
+        return result;
     }
 
     /**
      * This method returns the bench which contains the Contestants
      * @return List of the contestants in the bench
      */
-    public List<Contestant> getBench() {
-        List<Contestant> temp = null;
+    public Set<Contestant> getBench() {
+        Set<Contestant> temp = null;
         
         lock.lock();
         
@@ -141,13 +129,14 @@ public class ContestantsBench {
             while(checkAllPlayersSeated() != true) {
                 allPlayersSeated.await();
             }
-            
-            temp = bench;
         } catch (InterruptedException ex) {
-            // TODO: Treat exception
-        } finally {
             lock.unlock();
+            return null;
         }
+        
+        temp = new TreeSet<>(this.bench);
+        
+        lock.unlock();
         
         return temp;
     }
@@ -156,40 +145,46 @@ public class ContestantsBench {
      * Set selected contestants array.
      * This arrays should be filled with the IDs of the players for the next round.
      * 
-     * @param selectedContestants
+     * @param selected
      */
-    public void setSelectedContestants(int[] selectedContestants) {
+    public void setSelectedContestants(Set<Contestant> selected) {
         lock.lock();
         
-        try {
-            this.selectedContestants = selectedContestants;
+        selectedContestants.clear();
+        selectedContestants.addAll(selected);
             
-            playersSelected.signalAll();
-        } finally {
-            lock.unlock();
-        }
+        playersSelected.signalAll();
+        
+        lock.unlock();
+    }
+    
+    public Set<Contestant> getSelectedContestants() {
+        Set<Contestant> selected = null;
+        
+        lock.lock();
+        
+        selected = new TreeSet<>(this.selectedContestants);
+        
+        lock.unlock();
+        
+        return selected;
     }
     
     /**
      * Gets the selected contestants array
      * @return Integer array of the selected contestants for the round
      */
-    public int[] getSelectedContestants() {
+    private boolean isContestantSelected() {
+        Contestant contestant = (Contestant) Thread.currentThread();
+        boolean result;
+        
         lock.lock();
         
-        try {
-            return selectedContestants;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    /**
-     * Checks if current Thread contestant is present in the selectedContestants array
-     * @return True if contestant is selected
-     */
-    private boolean checkPlayerSelected() {
-        return Arrays.asList(selectedContestants).contains(((Contestant) Thread.currentThread() ).getContestantId());
+        result = selectedContestants.contains(contestant);
+        
+        lock.unlock();
+        
+        return result;
     }
 
     /**
@@ -199,5 +194,4 @@ public class ContestantsBench {
     private boolean checkAllPlayersSeated() {
         return bench.size() == 5;
     }
-    
 }
