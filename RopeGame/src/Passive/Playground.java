@@ -1,5 +1,6 @@
 package Passive;
 
+import Active.Coach;
 import Active.Contestant;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +9,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- *
+ * General Description: 
+ * 
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
@@ -20,8 +22,6 @@ public class Playground {
     private Condition teamsInPosition;
     private Condition finishedPulling;
     private Condition resultAssert;
-    private boolean assertedResult;
-    private boolean trialStarted;
     private int pullCounter;
     private int flagPosition;
     private int lastFlagPosition;
@@ -60,21 +60,20 @@ public class Playground {
     /**
      * The method adds a contestant to the playground.
      * 
-     * @param teamId Team identifier.
-     * @param contestant Contestant to be added.
      */
-    public void addContestantToTeam(int teamId, Contestant contestant){
+    public void addContestant(){
+        Contestant contestant = (Contestant) Thread.currentThread();
+        
         lock.lock();
+        
         try {
-            this.teams[teamId-1].add(contestant);
+            this.teams[contestant.getContestantTeam()-1].add(contestant);
             
-            if(isTeamInPlace(teamId-1)) {
+            if(isTeamInPlace(contestant.getContestantTeam()-1)) {
                 this.teamsInPosition.signalAll();
             }
             
-            while(!wasTrialStarted()) {
-                startTrial.await();
-            }
+            startTrial.await();
         } catch (InterruptedException ex) {
             // TODO: Treat exception
         } finally {
@@ -84,13 +83,14 @@ public class Playground {
     
     /**
      * 
-     * @param teamId 
      */
-    public void checkTeamPlacement(int teamId) {
+    public void checkTeamPlacement() {
+        Coach coach = (Coach) Thread.currentThread();
+        
         lock.lock();
         
         try {
-            while(!isTeamInPlace(teamId)) {
+            while(!isTeamInPlace(coach.getCoachTeam()-1)) {
                 this.teamsInPosition.await();
             }
         } catch (InterruptedException ex) {
@@ -107,9 +107,7 @@ public class Playground {
         lock.lock();
         
         try {
-            while(!isResultAsserted()) {
-                this.resultAssert.await();
-            }
+            this.resultAssert.await();
         } catch (InterruptedException ex) {
             // TODO: Treat exception
         } finally {
@@ -122,6 +120,7 @@ public class Playground {
      */
     public void finishedPullingRope() {
         lock.lock();
+        
         try {
             this.pullCounter++;
             
@@ -129,9 +128,7 @@ public class Playground {
                 this.finishedPulling.signal();
             }
             
-            while(!isResultAsserted()) {
-                this.resultAssert.await();
-            }
+            this.resultAssert.await();
         } catch (InterruptedException ex) {
             // TODO: Treat exception
         } finally {
@@ -157,19 +154,19 @@ public class Playground {
     /**
      * The method removes the contestant from the playground.
      * 
-     * @param teamId Team identifier.
-     * @param contestantId Contestant identifier.
      * @return Contestant specified for removal.
      */
-    public Contestant getContestantFromTeam(int teamId, int contestantId){
-        for(Contestant contestant : this.teams[teamId-1]){
-            if(contestant.getId() == contestantId){
-                this.teams[teamId-1].remove(contestant);
-                return contestant;
-            }
-        }
+    public boolean getContestant(){
+        Contestant contestant = (Contestant) Thread.currentThread();
+        boolean result;
         
-        return null;
+        lock.lock();
+        
+        result = teams[contestant.getContestantTeam()-1].remove(contestant);
+        
+        lock.unlock();
+        
+        return result;
     }
     
     /**
@@ -179,7 +176,15 @@ public class Playground {
      * @return Position of the flag. 
      */
     public int getFlagPosition(){
-        return this.flagPosition;
+        int result;
+        
+        lock.lock();
+        
+        result = this.flagPosition;
+        
+        lock.unlock();
+        
+        return result;
     }
 
     /**
@@ -188,8 +193,12 @@ public class Playground {
      * @param flagPosition Position of the flag.
      */
     public void setFlagPosition(int flagPosition) {
+        lock.lock();
+        
         this.lastFlagPosition = this.flagPosition;
         this.flagPosition = flagPosition;
+        
+        lock.unlock();
     }
 
     /**
@@ -197,19 +206,19 @@ public class Playground {
      * @return 
      */
     public int getLastFlagPosition() {
-        return lastFlagPosition;
-    }
-
-    private boolean wasTrialStarted() {
-        return this.trialStarted;
+        int result;
+        
+        lock.lock();
+        
+        result = lastFlagPosition;
+        
+        lock.unlock();
+        
+        return result;
     }
 
     private boolean isTeamInPlace(int teamId) {
         return this.teams[teamId].size() == 3;
-    }
-
-    private boolean isResultAsserted() {
-        return this.assertedResult;
     }
 
     private boolean haveAllPulled() {

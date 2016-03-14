@@ -2,12 +2,10 @@ package Active;
 
 import Passive.ContestantsBench;
 import Passive.Playground;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- *
+ * General Description:
+ * 
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
@@ -86,41 +84,26 @@ public class Contestant extends Thread {
      * If so, goes to the playground.
      */
     private void followCoachAdvice() {
-        ContestantsBench bench = ContestantsBench.getInstance(this.team);
-        int[] selectedContestants = bench.getSelectedContestants();
-        
-        if(Arrays.asList(selectedContestants).contains(this.id)){
-            Playground playground = Playground.getInstance();
-            playground.addContestantToTeam(this.team, this);
-            state = ContestantState.STAND_IN_POSITION;
-        } else {
-            state = ContestantState.SEAT_AT_THE_BENCH;
-        }
-        
+        ContestantsBench.getInstance().getContestant();
+        Playground.getInstance().addContestant();
+            
+        state = ContestantState.STAND_IN_POSITION;
     }
     
     // TODO: Implement	
     private void getReady() {
-        
-        if(this.state == ContestantState.STAND_IN_POSITION){
-            this.state = ContestantState.DO_YOUR_BEST;
-        }
-            
-    
+        this.state = ContestantState.DO_YOUR_BEST;
     }
  
     // TODO: Implement
     private void pullTheRope() {
-        
-        if(this.state == ContestantState.DO_YOUR_BEST){
-            try {
-                Thread.sleep((long) (Math.random()*3000));
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Contestant.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try {
+            Thread.sleep((long) (Math.random()*3000));
+        } catch (InterruptedException ex) {
+            // TODO: Treat exception
         }
-    
-    
+        
+        Playground.getInstance().finishedPullingRope();
     }
 
     /**
@@ -128,13 +111,10 @@ public class Contestant extends Thread {
      * state to seat at the bench
      */
     private void seatDown() {
-
-        if(this.state == ContestantState.DO_YOUR_BEST){
-            ContestantsBench bench = ContestantsBench.getInstance(this.team);
-            bench.addContestant(this);
-            this.state = ContestantState.SEAT_AT_THE_BENCH;
-        }
-    
+        Playground.getInstance().getContestant();
+        ContestantsBench.getInstance().addContestant();
+        
+        this.state = ContestantState.SEAT_AT_THE_BENCH;
     }
     
     public enum ContestantState {
