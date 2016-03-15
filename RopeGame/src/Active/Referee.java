@@ -2,6 +2,9 @@ package Active;
 
 import Passive.Playground;
 import Passive.RefereeSite;
+import Passive.RefereeSite.GameScore;
+import Passive.RefereeSite.TrialScore;
+import RopeGame.Constants;
 import java.util.List;
 
 /**
@@ -28,7 +31,6 @@ public class Referee extends Thread {
     
     @Override
     public void run() {
-        boolean finishedTrial = false;
         // TODO: Replace true by terminating condition
         while(true) {
             switch(state) {
@@ -42,16 +44,16 @@ public class Referee extends Thread {
                     startTrial();
                     break;
                 case WAIT_FOR_TRIAL_CONCLUSION:
-                    finishedTrial = assertTrialDecision();
+                    assertTrialDecision();
                     
-                    if(finishedTrial == true) {
+                    if(checkForGameWinner()) {
                         declareGameWinner();
                     } else {
                         callTrial();
                     }
                     break;
                 case END_OF_A_GAME:
-                    if(allGamesPlayed()) {
+                    if(checkForMatchWinner()) {
                         declareMatchWinner();
                     } else {
                         announceNewGame();
@@ -84,49 +86,19 @@ public class Referee extends Thread {
      * Decides the trial winner and steps the flag accordingly 
      * @return true if all trials over, false if more trials to play
      */
-    private boolean assertTrialDecision() {
+    private void assertTrialDecision() {
         Playground playground = Playground.getInstance();
-        List<Contestant>[] teams = playground.getTeams();
+        RefereeSite site = RefereeSite.getInstance();
         
-        int teamA = 0, teamB = 0; // strength sum for each tam
+        int flagPosition = playground.getFlagPosition();
         
-        for (int i = 0; i < 2; i++) { // sum strengths for each team
-            for (Contestant contestant : teams[i]) {
-                teamA += contestant.getContestantStrength();
-            }
-        }
-        
-        RefereeSite refereesite = RefereeSite.getInstance();
-        refereesite.setTrialRound(refereesite.getTrialRound() + 1);
-
-        int [] trialpoints = refereesite.getTrialPoints();
-        if(teamA == teamB){
-            trialpoints[0] += 1;
-            trialpoints[1] += 1;
-            //TODO: logger trial draw
-        } else if(teamA > teamB){
-            trialpoints[0] += 1;
-            //TODO: logger teamA wins trial
+        if(flagPosition == 0) {
+            site.addTrialPoint(TrialScore.DRAW);
+        } else if(flagPosition < 0) {
+            site.addTrialPoint(TrialScore.VICTORY_TEAM_1);
         } else {
-            trialpoints[1] += 1;
-            // TODO: logger teamB wins trial
+            site.addTrialPoint(TrialScore.VICTORY_TEAM_2);
         }
-        
-        refereesite.setTrialPoints(trialpoints);
-        
-        // check for knockout or winning Game by points
-        return trialpoints[0] == 4
-                || trialpoints[1] == 4
-                || (trialpoints[0] + trialpoints[1] == 6);
- 
-    }
-
-    private boolean allGamesPlayed(){
-        RefereeSite refereesite = RefereeSite.getInstance();
-        int[] gamePoints = refereesite.getGamePoints();
-        return gamePoints[0] == 2
-               || gamePoints[1] == 2
-               || (gamePoints[0] + gamePoints[1] == 3);
     }
     
     /**
@@ -134,50 +106,93 @@ public class Referee extends Thread {
      * @return true if more games to play, false if all games ended
      */
     private void declareGameWinner() {
-        RefereeSite refereesite = RefereeSite.getInstance();
-
-       int[] trialpoints = refereesite.getTrialPoints();
-       int[] gamePoints = refereesite.getGamePoints();
+        RefereeSite site = RefereeSite.getInstance();
+        List<TrialScore> trialPoints = site.getTrialPoints();
+        
+        int team1 = 0;
+        int team2 = 0;
        
-       int teamA = trialpoints[0];
-       int teamB = trialpoints[1];
-       
-       if(teamA == teamB){
-           gamePoints[0] += 1;
-           gamePoints[1] += 1;
-           // TODO: logger: draw
-       } else if(teamA > teamB){
-           gamePoints[0] += 1;
-           // TODO: logger: teamA wins the Game
-       } else {
-           gamePoints[1] += 1;
-           // TODO logger: teamB wins the Game
-       }
-       
-       refereesite.setGamePoints(gamePoints);
-       
+        for(TrialScore score : trialPoints){
+            if(score == TrialScore.VICTORY_TEAM_1) {
+                team1++;
+            } else if(score == TrialScore.VICTORY_TEAM_2) {
+                team2++;
+            }
+        }
+        
+        if(team1 == team2){
+            site.addGamePoint(GameScore.DRAW);
+            // TODO: logger: draw
+        } else if(team1 > team2){
+            if(site.getRemainingTrials() == 0) {
+                site.addGamePoint(GameScore.VICTORY_TEAM_1_BY_POINTS);
+            } else {
+                site.addGamePoint(GameScore.VICTORY_TEAM_1_BY_KNOCKOUT);
+            }
+            // TODO: logger: team1 wins the Game
+        } else {
+            if(site.getRemainingTrials() == 0) {
+                site.addGamePoint(GameScore.VICTORY_TEAM_1_BY_POINTS);
+            } else {
+                site.addGamePoint(GameScore.VICTORY_TEAM_1_BY_KNOCKOUT);
+            }
+            // TODO logger: team2 wins the Game
+        }
     }
 
     // TODO: Implement
     private void declareMatchWinner() {
         RefereeSite refereesite = RefereeSite.getInstance();
-        Playground playground = Playground.getInstance();
+       
         
-        int[] gamePoints = refereesite.getGamePoints();
-        
-        int teamA = gamePoints[0];
-        int teamB = gamePoints[1];
-        
-        if(teamA == teamB){
-           // match draw
-       } else if(teamA > teamB){
-           gamePoints[0] += 1;
-           // teamA wins the match
-       } else {
-           gamePoints[1] += 1;
-           // teamB wins the match
-       }
+    }
 
+    private boolean checkForGameWinner() {
+        RefereeSite site = RefereeSite.getInstance();
+        List<TrialScore> trialScore = site.getTrialPoints();
+        
+        if(site.getRemainingTrials() == 0)
+            return true;
+        
+        if(trialScore.size() >= (Math.floor(Constants.NUMBER_OF_TRIALS/2) + 1)) {
+            int team1 = 0;
+            int team2 = 0;
+            
+            for(TrialScore score : trialScore) {
+                if(score == TrialScore.VICTORY_TEAM_1) {
+                    team1++;
+                } else {
+                    team2++;
+                }
+            }
+            
+            if(Math.abs(team1 - team2) > site.getRemainingTrials())
+                return true;
+        }
+        
+        return false;
+    }
+    
+    private boolean checkForMatchWinner(){
+        RefereeSite site = RefereeSite.getInstance();
+        List<GameScore> gamePoints = site.getGamePoints();
+        
+        int team1 = 0;
+        int team2 = 0;
+        
+        for(GameScore score : gamePoints){
+            if(score == GameScore.VICTORY_TEAM_1_BY_POINTS || 
+                    score == GameScore.VICTORY_TEAM_1_BY_KNOCKOUT) {
+                team1++;
+            } else if(score == GameScore.VICTORY_TEAM_2_BY_POINTS || 
+                    score == GameScore.VICTORY_TEAM_2_BY_KNOCKOUT) {
+                team2++;
+            }
+        }
+        
+        return team1 == (Math.floor(Constants.NUMBER_OF_GAMES/2)+1) || 
+                team2 == (Math.floor(Constants.NUMBER_OF_GAMES/2)+1) || 
+                site.getRemainingGames() == 0;
     }
     
     public enum RefereeState {
@@ -202,24 +217,6 @@ public class Referee extends Thread {
 
         public String getState() {
             return state;
-        }
-    }
-    
-    public enum VictoryType {
-        VictoryByPoints (1, "by points"),
-        VictoryByKnockout (2, "by knocout"),
-        Draw (3, "was a draw");
-        
-        private int id;
-        private String type;
-        
-        VictoryType(int id, String type){
-            this.id = id;
-            this.type = type;
-        }
-        
-        public String getType() {
-            return type;
         }
     }
 }

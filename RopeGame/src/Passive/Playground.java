@@ -24,7 +24,6 @@ public class Playground {
     private Condition resultAssert;
     private int pullCounter;
     private int flagPosition;
-    private int lastFlagPosition;
     private List<Contestant>[] teams;
     
     /**
@@ -125,6 +124,7 @@ public class Playground {
             this.pullCounter++;
             
             if(haveAllPulled()) {
+                updateFlagPosition();
                 this.finishedPulling.signal();
             }
             
@@ -187,36 +187,6 @@ public class Playground {
         return result;
     }
 
-    /**
-     * The method sets the flag position in relation to the middle. Middle = 0.
-     * 
-     * @param flagPosition Position of the flag.
-     */
-    public void setFlagPosition(int flagPosition) {
-        lock.lock();
-        
-        this.lastFlagPosition = this.flagPosition;
-        this.flagPosition = flagPosition;
-        
-        lock.unlock();
-    }
-
-    /**
-     * The method gets the flag position in the begging of the match/trial
-     * @return 
-     */
-    public int getLastFlagPosition() {
-        int result;
-        
-        lock.lock();
-        
-        result = lastFlagPosition;
-        
-        lock.unlock();
-        
-        return result;
-    }
-
     private boolean isTeamInPlace(int teamId) {
         return this.teams[teamId].size() == 3;
     }
@@ -235,6 +205,25 @@ public class Playground {
 
     public List<Contestant>[] getTeams() {
         return teams;
+    }
+
+    private void updateFlagPosition() {
+        int team1 = 0;
+        int team2 = 0;
+        
+        for(Contestant contestant : this.teams[0]) {
+            team1 += contestant.getContestantStrength();
+        }
+        
+        for(Contestant contestant : this.teams[1]) {
+            team2 += contestant.getContestantStrength();
+        }
+        
+        if(team1 > team2) {
+            this.flagPosition--;
+        } else if(team1 < team2) {
+            this.flagPosition++;
+        }
     }
     
     

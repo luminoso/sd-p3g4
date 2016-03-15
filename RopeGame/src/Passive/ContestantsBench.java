@@ -18,13 +18,13 @@ public class ContestantsBench {
     private static final ContestantsBench[] instances = new ContestantsBench[2];    // Doubleton containing the two teams benches
     
     // Final fields
-    private final int team;                                                               // Team identifier
+    private final int team;                                                         // Team identifier
     private final Lock lock;
     private final Condition allPlayersSeated;
     private final Condition playersSelected;
     
-    private final Set<Contestant> bench;                                                 // Structure that contains the players in the bench
-    private final Set<Contestant> selectedContestants;                                   // Selected contestants to play the trial
+    private final Set<Contestant> bench;                                            // Structure that contains the players in the bench
+    private final Set<Integer> selectedContestants;                                 // Selected contestants to play the trial
     
   
     /**
@@ -93,6 +93,7 @@ public class ContestantsBench {
             }
         } catch (InterruptedException ex) {
             lock.unlock();
+            return;
         } 
             
         lock.unlock();
@@ -103,17 +104,14 @@ public class ContestantsBench {
      *
      * @return Contestant that needed to be removed.
      */
-    public boolean getContestant() {
+    public void getContestant() {
         Contestant contestant = (Contestant) Thread.currentThread();
-        boolean result;
         
         lock.lock();
         
-        result = bench.remove(contestant);
+        bench.remove(contestant);
         
         lock.unlock();
-        
-        return result;
     }
 
     /**
@@ -121,7 +119,7 @@ public class ContestantsBench {
      * @return List of the contestants in the bench
      */
     public Set<Contestant> getBench() {
-        Set<Contestant> temp = null;
+        Set<Contestant> temp;
         
         lock.lock();
         
@@ -147,7 +145,7 @@ public class ContestantsBench {
      * 
      * @param selected
      */
-    public void setSelectedContestants(Set<Contestant> selected) {
+    public void setSelectedContestants(Set<Integer> selected) {
         lock.lock();
         
         selectedContestants.clear();
@@ -158,8 +156,8 @@ public class ContestantsBench {
         lock.unlock();
     }
     
-    public Set<Contestant> getSelectedContestants() {
-        Set<Contestant> selected = null;
+    public Set<Integer> getSelectedContestants() {
+        Set<Integer> selected = null;
         
         lock.lock();
         
@@ -180,7 +178,7 @@ public class ContestantsBench {
         
         lock.lock();
         
-        result = selectedContestants.contains(contestant);
+        result = selectedContestants.contains(contestant.getContestantId());
         
         lock.unlock();
         

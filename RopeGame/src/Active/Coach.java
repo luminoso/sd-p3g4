@@ -93,7 +93,7 @@ public class Coach extends Thread {
         RefereeSite site = RefereeSite.getInstance();
         
         // Picking team
-        Set<Contestant> pickedContestants = this.strategy.pickTeam(bench, site);
+        Set<Integer> pickedContestants = this.strategy.pickTeam(bench, site);
         
         // Setting the selected team
         bench.setSelectedContestants(pickedContestants);
@@ -111,11 +111,11 @@ public class Coach extends Thread {
      */
     private void reviewNotes() {
         ContestantsBench bench = ContestantsBench.getInstance();
-        Set<Contestant> selectedContestants = bench.getSelectedContestants();
+        Set<Integer> selectedContestants = bench.getSelectedContestants();
         Set<Contestant> allContestants = bench.getBench();
         
         for(Contestant contestant : allContestants) {
-            if(selectedContestants.contains(contestant)) {
+            if(selectedContestants.contains(contestant.getContestantId())) {
                 contestant.setContestantStrength(contestant.getContestantStrength() - 1);
             } else {
                 contestant.setContestantStrength(contestant.getContestantStrength() + 1);
