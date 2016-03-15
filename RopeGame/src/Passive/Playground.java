@@ -94,10 +94,11 @@ public class Playground {
                 this.teamsInPosition.await();
             }
         } catch (InterruptedException ex) {
-            // TODO: Treat exception
-        } finally {
             lock.unlock();
+            return;
         }
+            
+        lock.unlock();
     }
     
     /**
@@ -109,10 +110,11 @@ public class Playground {
         try {
             this.resultAssert.await();
         } catch (InterruptedException ex) {
-            // TODO: Treat exception
-        } finally {
             lock.unlock();
+            return;
         }
+            
+        lock.unlock();
     }
     
     /**
@@ -135,10 +137,11 @@ public class Playground {
             
             this.resultAssert.await();
         } catch (InterruptedException ex) {
-            // TODO: Treat exception
-        } finally {
             lock.unlock();
+            return;
         }
+            
+        lock.unlock();
     }
     
     /**
