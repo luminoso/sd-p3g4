@@ -70,10 +70,7 @@ public class Referee extends Thread {
      */
     private void announceNewGame() {
         RefereeSite refereesite = RefereeSite.getInstance();
-        refereesite.setTrialPoints(new int[]{0, 0});
-        
-        Playground playground = Playground.getInstance();
-        playground.setFlagPosition(0);
+        refereesite.resetTrialPoints();
     }
 
     // TODO: Implement
