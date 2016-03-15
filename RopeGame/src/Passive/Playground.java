@@ -198,6 +198,10 @@ public class Playground {
      * 
      * @return 
      */
+    public boolean checkAllContestantsReady(){
+        return (teams[0].size() + teams[1].size()) == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND * 2;
+    }
+
     public List<Contestant>[] getTeams() {
         List<Contestant>[] teams = new List[2];
         

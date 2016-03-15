@@ -8,6 +8,7 @@ package Others;
 import Active.Contestant;
 import Passive.ContestantsBench;
 import Passive.RefereeSite;
+import RopeGame.Constants;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -43,7 +44,7 @@ public class MostStrengthStrategy implements CoachStrategy {
         contestants.sort(comparator);
         
         for(Contestant cont : contestants) {
-            if(pickedTeam.size() == 3) {
+            if(pickedTeam.size() == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND) {
                 break;
             }
             

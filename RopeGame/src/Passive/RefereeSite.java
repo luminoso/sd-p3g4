@@ -110,7 +110,12 @@ public class RefereeSite {
         
         return trialPoints;
     }
-
+    
+    public void resetTrialPoints(){
+        lock.lock();
+        this.trialStatus = new LinkedList<>();
+        lock.unlock();
+    }
     /**
      * 
      * @return 
