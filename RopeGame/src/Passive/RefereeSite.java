@@ -3,6 +3,7 @@ package Passive;
 import RopeGame.Constants;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -15,6 +16,9 @@ public class RefereeSite {
     private static RefereeSite instance;
     
     private Lock lock;
+    
+    private Condition informReferee;
+    private int informRefereeCounter;
     
     private List<TrialScore> trialStatus;
     private List<GameScore> gameStatus;
@@ -37,10 +41,13 @@ public class RefereeSite {
      * Private constructor to be used in singleton.
      */
     private RefereeSite() {
-        this.lock = new ReentrantLock();
+        lock = new ReentrantLock();
         
-        this.trialStatus = new LinkedList<>();
-        this.gameStatus = new LinkedList<>();
+        trialStatus = new LinkedList<>();
+        gameStatus = new LinkedList<>();
+        
+        informReferee = lock.newCondition();
+        informRefereeCounter = 0;
     }
 
     /**
@@ -173,6 +180,15 @@ public class RefereeSite {
         lock.lock();
         
         this.trialStatus.add(score);
+        
+        lock.unlock();
+    }
+    
+    public void informReferee() {
+        lock.lock();
+        
+        informRefereeCounter++;
+        informReferee.signal();
         
         lock.unlock();
     }

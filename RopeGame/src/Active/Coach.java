@@ -2,6 +2,7 @@ package Active;
 
 import Others.CoachStrategy;
 import Passive.ContestantsBench;
+import Passive.Playground;
 import Passive.RefereeSite;
 import java.util.Set;
 
@@ -65,8 +66,9 @@ public class Coach extends Thread {
      */
     @Override
     public void run() {
-        // TODO: Replace true by terminating condition
-        while(true) {
+        ContestantsBench.getInstance().waitForNextTrial();
+        
+        while(!checkEndOperations()) {
             switch(state) {
                 case WAIT_FOR_REFEREE_COMMAND:
                     callContestants();
@@ -100,10 +102,20 @@ public class Coach extends Thread {
         
         // Updating coach state
         this.setCoachState(CoachState.ASSEMBLE_TEAM);
+        
+        Playground.getInstance().checkTeamPlacement();
     }
 
-    // TODO: Implement
-    private void informReferee() {}
+    /**
+     * 
+     */
+    private void informReferee() {
+        RefereeSite.getInstance().informReferee();
+        
+        setCoachState(CoachState.WATCH_TRIAL);
+        
+        Playground.getInstance().watchTrial();
+    }
 
     /**
      * The coach updates his players which have played and game and
@@ -124,6 +136,12 @@ public class Coach extends Thread {
         
         // Updating coach state
         this.setCoachState(CoachState.WAIT_FOR_REFEREE_COMMAND);
+        
+        bench.waitForNextTrial();
+    }
+
+    private boolean checkEndOperations() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     /**

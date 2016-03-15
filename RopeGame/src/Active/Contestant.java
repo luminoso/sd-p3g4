@@ -64,7 +64,7 @@ public class Contestant extends Thread {
     public void run() {
         seatDown();
         
-        while(checkEndOperations()) {
+        while(!checkEndOperations()) {
             switch(state) {
                 case SEAT_AT_THE_BENCH:
                     followCoachAdvice();
@@ -110,9 +110,10 @@ public class Contestant extends Thread {
      */
     private void seatDown() {
         Playground.getInstance().getContestant();
-        ContestantsBench.getInstance().addContestant();
         
         this.setContestantState(ContestantState.SEAT_AT_THE_BENCH);
+        
+        ContestantsBench.getInstance().addContestant();
     }
 
     /**
