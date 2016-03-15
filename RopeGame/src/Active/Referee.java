@@ -18,7 +18,7 @@ public class Referee extends Thread {
     public Referee(String name) {
         super(name);
         
-        this.state = RefereeState.START_OF_THE_MATCH;
+        state = RefereeState.START_OF_THE_MATCH;
     }
 
     public RefereeState getRefereeState() {

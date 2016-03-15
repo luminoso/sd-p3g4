@@ -2,7 +2,6 @@ package Active;
 
 import Passive.ContestantsBench;
 import Passive.Playground;
-import RopeGame.Constants;
 
 /**
  * General Description:
@@ -30,7 +29,7 @@ public class Contestant extends Thread {
     public Contestant(String name, int team, int id, int strength) {
         super(name);
         
-        this.state = ContestantState.SEAT_AT_THE_BENCH;
+        state = ContestantState.SEAT_AT_THE_BENCH;
         
         this.team = team;
         this.id = id;
@@ -64,9 +63,9 @@ public class Contestant extends Thread {
     @Override
     public void run() {
         seatDown();
-        // TODO: Replace true by terminating condition
+        
         while(checkEndOperations()) {
-            switch(this.state) {
+            switch(state) {
                 case SEAT_AT_THE_BENCH:
                     followCoachAdvice();
                     break;
@@ -87,12 +86,15 @@ public class Contestant extends Thread {
      */
     private void followCoachAdvice() {
         ContestantsBench.getInstance().getContestant();
-        Playground.getInstance().addContestant();
-            
+        
         this.setContestantState(ContestantState.STAND_IN_POSITION);
+        
+        Playground.getInstance().addContestant();
     }
     
-    // TODO: Implement	
+    /**
+     * 
+     */
     private void getReady() {
         this.setContestantState(ContestantState.DO_YOUR_BEST);
     }
