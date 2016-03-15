@@ -70,7 +70,10 @@ public class Referee extends Thread {
      */
     private void announceNewGame() {
         RefereeSite refereesite = RefereeSite.getInstance();
+        Playground playground = Playground.getInstance();
+        
         refereesite.resetTrialPoints();
+        playground.setFlagPosition(0);
         
         this.setRefereeState(RefereeState.START_OF_A_GAME);
         
@@ -78,13 +81,15 @@ public class Referee extends Thread {
 
     // TODO: Implement
     private void callTrial() {
-    
         this.setRefereeState(RefereeState.TEAMS_READY);
     }
 
     // TODO: Implement
     private void startTrial() {
+        Playground playground = Playground.getInstance();
         
+        playground.checkTeamPlacement();
+        playground.pullRope();
         this.setRefereeState(RefereeState.WAIT_FOR_TRIAL_CONCLUSION);
     }
 

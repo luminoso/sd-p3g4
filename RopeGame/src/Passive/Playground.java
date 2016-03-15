@@ -186,6 +186,11 @@ public class Playground {
         return result;
     }
 
+    public void setFlagPosition(int flagPosition) {
+        this.flagPosition = flagPosition;
+    }
+    
+
     private boolean isTeamInPlace(int teamId) {
         return this.teams[teamId].size() == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND;
     }
