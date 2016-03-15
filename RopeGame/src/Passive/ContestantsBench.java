@@ -8,6 +8,8 @@ import java.util.TreeSet;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * General Description:
@@ -23,6 +25,7 @@ public class ContestantsBench {
     private final Lock lock;
     private final Condition allPlayersSeated;
     private final Condition playersSelected;
+    private final Condition waitForNextTrial;
     
     private final Set<Contestant> bench;                                            // Structure that contains the players in the bench
     private final Set<Integer> selectedContestants;                                 // Selected contestants to play the trial
@@ -56,12 +59,14 @@ public class ContestantsBench {
      * @param team Team identifier.
      */
     private ContestantsBench(int team) {
-        this.lock = new ReentrantLock();
-        this.allPlayersSeated = this.lock.newCondition();
-        this.playersSelected = this.lock.newCondition();
         this.team = team;
-        this.bench = new TreeSet<>();
-        this.selectedContestants = new TreeSet<>();
+        
+        lock = new ReentrantLock();
+        allPlayersSeated = lock.newCondition();
+        playersSelected = lock.newCondition();
+        waitForNextTrial = lock.newCondition();
+        bench = new TreeSet<>();
+        selectedContestants = new TreeSet<>();
     }
 
     /**
@@ -89,7 +94,7 @@ public class ContestantsBench {
         }
         
         try {
-            while(isContestantSelected()) {
+            while(!isContestantSelected()) {
                 playersSelected.await();
             }
         } catch (InterruptedException ex) {
@@ -192,5 +197,15 @@ public class ContestantsBench {
      */
     private boolean checkAllPlayersSeated() {
         return bench.size() == Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH;
+    }
+
+    public void waitForNextTrial() {
+        lock.lock();
+        
+        try {
+            waitForNextTrial.await();
+        } catch (InterruptedException ex) {}
+        
+        lock.unlock();
     }
 }
