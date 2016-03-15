@@ -2,6 +2,7 @@ package Passive;
 
 import Active.Coach;
 import Active.Contestant;
+import RopeGame.Constants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Condition;
@@ -117,10 +118,14 @@ public class Playground {
     /**
      * 
      */
-    public void finishedPullingRope() {
+    public void pullRope() {
         lock.lock();
         
         try {
+            long waitTime = (long) (Constants.MINIMUM_WAIT_TIME + Math.random() * (Constants.MAXIMUM_WAIT_TIME - Constants.MINIMUM_WAIT_TIME));
+            
+            Thread.currentThread().wait(waitTime);
+            
             this.pullCounter++;
             
             if(haveAllPulled()) {
@@ -142,31 +147,25 @@ public class Playground {
     public void resultAsserted() {
         lock.lock();
         
-        try {
-            this.pullCounter = 0;
+        this.pullCounter = 0;
             
-            this.resultAssert.signalAll();
-        } finally {
-            lock.unlock();
-        }
+        this.resultAssert.signalAll();
+        
+        lock.unlock();
     }
     
     /**
      * The method removes the contestant from the playground.
      * 
-     * @return Contestant specified for removal.
      */
-    public boolean getContestant(){
+    public void getContestant(){
         Contestant contestant = (Contestant) Thread.currentThread();
-        boolean result;
         
         lock.lock();
         
-        result = teams[contestant.getContestantTeam()-1].remove(contestant);
+        teams[contestant.getContestantTeam()-1].remove(contestant);
         
         lock.unlock();
-        
-        return result;
     }
     
     /**
@@ -188,25 +187,33 @@ public class Playground {
     }
 
     private boolean isTeamInPlace(int teamId) {
-        return this.teams[teamId].size() == 3;
+        return this.teams[teamId].size() == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND;
     }
 
     private boolean haveAllPulled() {
-        return this.pullCounter == (this.teams[0].size() + this.teams[1].size());
-    }
-    
-    /**
-     * Checks if all contestants are in the playground and ready to play the game
-     * @return True if all 6 players are in game
-     */
-    public boolean checkAllContestantsReady(){
-        return (teams[0].size() + teams[1].size()) == 6;
+        return this.pullCounter == 2 * Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public List<Contestant>[] getTeams() {
+        List<Contestant>[] teams = new List[2];
+        
+        lock.lock();
+        
+        teams[0] = new ArrayList<>(this.teams[0]);
+        teams[1] = new ArrayList<>(this.teams[1]);
+        
+        lock.unlock();
+        
         return teams;
     }
 
+    /**
+     * 
+     */
     private void updateFlagPosition() {
         int team1 = 0;
         int team2 = 0;
@@ -224,8 +231,5 @@ public class Playground {
         } else if(team1 < team2) {
             this.flagPosition++;
         }
-    }
-    
-    
-    
+    }    
 }

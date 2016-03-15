@@ -19,4 +19,7 @@ public class Constants {
     
     public static int INITIAL_MINIMUM_FORCE = 10;
     public static int INITIAL_MAXIMUM_FORCE = 20;
+    
+    public static int MINIMUM_WAIT_TIME = 1000;
+    public static int MAXIMUM_WAIT_TIME = 3000;
 }

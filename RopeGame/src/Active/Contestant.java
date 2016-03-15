@@ -2,6 +2,7 @@ package Active;
 
 import Passive.ContestantsBench;
 import Passive.Playground;
+import RopeGame.Constants;
 
 /**
  * General Description:
@@ -62,9 +63,10 @@ public class Contestant extends Thread {
     
     @Override
     public void run() {
+        seatDown();
         // TODO: Replace true by terminating condition
-        while(true) {
-            switch(state) {
+        while(checkEndOperations()) {
+            switch(this.state) {
                 case SEAT_AT_THE_BENCH:
                     followCoachAdvice();
                     break;
@@ -97,13 +99,7 @@ public class Contestant extends Thread {
  
     // TODO: Implement
     private void pullTheRope() {
-        try {
-            Thread.sleep((long) (Math.random()*3000));
-        } catch (InterruptedException ex) {
-            // TODO: Treat exception
-        }
-        
-        Playground.getInstance().finishedPullingRope();
+        Playground.getInstance().pullRope();
     }
 
     /**
@@ -115,6 +111,15 @@ public class Contestant extends Thread {
         ContestantsBench.getInstance().addContestant();
         
         this.state = ContestantState.SEAT_AT_THE_BENCH;
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    private boolean checkEndOperations() {
+        // TODO: Implement checking of end operations
+        return true;
     }
     
     public enum ContestantState {
