@@ -71,13 +71,22 @@ public class Referee extends Thread {
     private void announceNewGame() {
         RefereeSite refereesite = RefereeSite.getInstance();
         refereesite.resetTrialPoints();
+        
+        this.setRefereeState(RefereeState.START_OF_A_GAME);
+        
     }
 
     // TODO: Implement
-    private void callTrial() {}
+    private void callTrial() {
+    
+        this.setRefereeState(RefereeState.TEAMS_READY);
+    }
 
     // TODO: Implement
-    private void startTrial() {}
+    private void startTrial() {
+        
+        this.setRefereeState(RefereeState.WAIT_FOR_TRIAL_CONCLUSION);
+    }
 
     /**
      * Decides the trial winner and steps the flag accordingly 
@@ -135,13 +144,15 @@ public class Referee extends Thread {
             }
             // TODO logger: team2 wins the Game
         }
+        
+        this.setRefereeState(RefereeState.END_OF_A_GAME);
     }
 
     // TODO: Implement
     private void declareMatchWinner() {
         RefereeSite refereesite = RefereeSite.getInstance();
        
-        
+        this.setRefereeState(RefereeState.END_OF_THE_MATCH);
     }
 
     private boolean checkForGameWinner() {

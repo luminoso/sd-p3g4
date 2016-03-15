@@ -2,6 +2,7 @@ package Passive;
 
 import Active.Coach;
 import Active.Contestant;
+import RopeGame.Constants;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.locks.Condition;
@@ -190,6 +191,6 @@ public class ContestantsBench {
      * @return True if all players seated
      */
     private boolean checkAllPlayersSeated() {
-        return bench.size() == 5;
+        return bench.size() == Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH;
     }
 }

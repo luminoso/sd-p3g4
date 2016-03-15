@@ -2,6 +2,7 @@ package Passive;
 
 import Active.Coach;
 import Active.Contestant;
+import RopeGame.Constants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Condition;
@@ -188,11 +189,11 @@ public class Playground {
     }
 
     private boolean isTeamInPlace(int teamId) {
-        return this.teams[teamId].size() == 3;
+        return this.teams[teamId].size() == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND;
     }
 
     private boolean haveAllPulled() {
-        return this.pullCounter == (this.teams[0].size() + this.teams[1].size());
+        return this.pullCounter == (Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND * 2);
     }
     
     /**
@@ -200,7 +201,7 @@ public class Playground {
      * @return True if all 6 players are in game
      */
     public boolean checkAllContestantsReady(){
-        return (teams[0].size() + teams[1].size()) == 6;
+        return (teams[0].size() + teams[1].size()) == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND * 2;
     }
 
     public List<Contestant>[] getTeams() {

@@ -87,12 +87,12 @@ public class Contestant extends Thread {
         ContestantsBench.getInstance().getContestant();
         Playground.getInstance().addContestant();
             
-        state = ContestantState.STAND_IN_POSITION;
+        this.setContestantState(ContestantState.STAND_IN_POSITION);
     }
     
     // TODO: Implement	
     private void getReady() {
-        this.state = ContestantState.DO_YOUR_BEST;
+        this.setContestantState(ContestantState.DO_YOUR_BEST);
     }
  
     // TODO: Implement
@@ -114,7 +114,7 @@ public class Contestant extends Thread {
         Playground.getInstance().getContestant();
         ContestantsBench.getInstance().addContestant();
         
-        this.state = ContestantState.SEAT_AT_THE_BENCH;
+        this.setContestantState(ContestantState.SEAT_AT_THE_BENCH);
     }
     
     public enum ContestantState {
