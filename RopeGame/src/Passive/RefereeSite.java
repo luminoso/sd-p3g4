@@ -202,7 +202,7 @@ public class RefereeSite {
         informRefereeCounter++;
         
         if(informRefereeCounter == 2)
-            informReferee.signal();
+            informReferee.signalAll();
         
         lock.unlock();
     }
