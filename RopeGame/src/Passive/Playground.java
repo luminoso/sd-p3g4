@@ -128,7 +128,7 @@ public class Playground {
         try {
             long waitTime = (long) (Constants.MINIMUM_WAIT_TIME + Math.random() * (Constants.MAXIMUM_WAIT_TIME - Constants.MINIMUM_WAIT_TIME));
             
-            Thread.currentThread().wait(waitTime);
+            Thread.currentThread().sleep(waitTime);
             
             this.pullCounter++;
             
@@ -160,7 +160,9 @@ public class Playground {
     }
     
     public void startPulling() {
+        lock.lock();
         this.startTrial.signalAll();
+        lock.unlock();
     }
     
     /**
@@ -205,11 +207,13 @@ public class Playground {
     }
 
     public void haveAllPulled() {
+        lock.lock();
         try {
             this.finishedPulling.await();
         } catch (InterruptedException ex) {
             Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
         }
+        lock.unlock();
     }
 
     /**

@@ -9,7 +9,7 @@ import Passive.Playground;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class Contestant extends Thread {
+public class Contestant extends Thread implements Comparable<Contestant>{
     
     // Final fields
     private final int team;                 // Contestant team
@@ -64,7 +64,7 @@ public class Contestant extends Thread {
     public void run() {
         seatDown();
         
-        while(!checkEndOperations()) {
+        while(true) {
             switch(state) {
                 case SEAT_AT_THE_BENCH:
                     followCoachAdvice();
@@ -116,6 +116,11 @@ public class Contestant extends Thread {
         ContestantsBench.getInstance().addContestant();
     }
 
+    @Override
+    public int compareTo(Contestant o) {
+        return this.id - o.id;
+    }
+ 
     /**
      * 
      * @return 

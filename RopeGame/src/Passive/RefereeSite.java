@@ -187,11 +187,13 @@ public class RefereeSite {
     }
     
     public void bothTeamsReady(){
+        lock.lock();
         try {
             informReferee.await();
         } catch (InterruptedException ex) {
             Logger.getLogger(RefereeSite.class.getName()).log(Level.SEVERE, null, ex);
         }
+        lock.unlock();
     }
     
     public void informReferee() {
