@@ -69,9 +69,9 @@ public class Playground {
         lock.lock();
         
         try {
-            this.teams[contestant.getContestantTeam()-1].add(contestant);
+            this.teams[contestant.getContestantTeam()].add(contestant);
             
-            if(isTeamInPlace(contestant.getContestantTeam()-1)) {
+            if(isTeamInPlace(contestant.getContestantTeam())) {
                 this.teamsInPosition.signalAll();
             }
             
@@ -92,7 +92,7 @@ public class Playground {
         lock.lock();
         
         try {
-            while(!isTeamInPlace(coach.getCoachTeam()-1)) {
+            while(!isTeamInPlace(coach.getCoachTeam())) {
                 this.teamsInPosition.await();
             }
         } catch (InterruptedException ex) {
@@ -174,7 +174,7 @@ public class Playground {
         
         lock.lock();
         
-        teams[contestant.getContestantTeam()-1].remove(contestant);
+        teams[contestant.getContestantTeam()].remove(contestant);
         
         lock.unlock();
     }

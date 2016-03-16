@@ -31,7 +31,7 @@ public class Coach extends Thread {
         this.state = CoachState.WAIT_FOR_REFEREE_COMMAND;
         
         // Team assignement
-        this.team = team;
+        this.team = team - 1;
         
         // Team picking strategy
         this.strategy = strategy;

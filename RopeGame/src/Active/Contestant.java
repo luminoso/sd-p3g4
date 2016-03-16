@@ -31,7 +31,7 @@ public class Contestant extends Thread implements Comparable<Contestant>{
         
         state = ContestantState.SEAT_AT_THE_BENCH;
         
-        this.team = team;
+        this.team = team - 1;
         this.id = id;
         this.strength = strength;
     }
