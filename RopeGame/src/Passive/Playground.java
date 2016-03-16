@@ -25,7 +25,6 @@ public class Playground {
     private Condition teamsInPosition;
     private Condition finishedPulling;
     private Condition resultAssert;
-    private Condition waitForNextTrial;
     private int pullCounter;
     private int flagPosition;
     private List<Contestant>[] teams;
@@ -54,7 +53,6 @@ public class Playground {
         this.teamsInPosition = this.lock.newCondition();
         this.finishedPulling = this.lock.newCondition();
         this.resultAssert = this.lock.newCondition();
-        this.waitForNextTrial = this.lock.newCondition();
         this.pullCounter = 0;
         this.teams = new List[2];
         this.teams[0] = new ArrayList<>();
@@ -256,19 +254,4 @@ public class Playground {
             this.flagPosition++;
         }
     }
-    
-    public void waitForNextTrial() {
-        lock.lock();
-        
-        try {
-            waitForNextTrial.await();
-        } catch (InterruptedException ex) {}
-        
-        lock.unlock();
-    }
-    
-    public void coachPickYourTeam(){
-        waitForNextTrial.signalAll();
-    }
-    
 }

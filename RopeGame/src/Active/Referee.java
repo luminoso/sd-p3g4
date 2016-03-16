@@ -1,5 +1,6 @@
 package Active;
 
+import Passive.ContestantsBench;
 import Passive.Playground;
 import Passive.RefereeSite;
 import Passive.RefereeSite.GameScore;
@@ -76,19 +77,22 @@ public class Referee extends Thread {
         playground.setFlagPosition(0);
         
         this.setRefereeState(RefereeState.START_OF_A_GAME);
-        
-        Playground.getInstance().coachPickYourTeam();
     }
 
     // TODO: Implement
     private void callTrial() {
-        RefereeSite.getInstance().bothTeamsReady();
+        List<ContestantsBench> benchs = ContestantsBench.getInstances();
+        
+        for(ContestantsBench bench : benchs)
+            bench.pickYourTeam();
+        
         this.setRefereeState(RefereeState.TEAMS_READY);
+        
+        RefereeSite.getInstance().bothTeamsReady();
     }
 
     // TODO: Implement
     private void startTrial() {
-        
         Playground.getInstance().startPulling();
         
         this.setRefereeState(RefereeState.WAIT_FOR_TRIAL_CONCLUSION);
