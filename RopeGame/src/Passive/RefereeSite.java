@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -184,11 +186,21 @@ public class RefereeSite {
         lock.unlock();
     }
     
+    public void bothTeamsReady(){
+        try {
+            informReferee.await();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(RefereeSite.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void informReferee() {
         lock.lock();
         
         informRefereeCounter++;
-        informReferee.signal();
+        
+        if(informRefereeCounter == 2)
+            informReferee.signal();
         
         lock.unlock();
     }

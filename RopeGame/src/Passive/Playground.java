@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * General Description: 
@@ -130,7 +132,7 @@ public class Playground {
             
             this.pullCounter++;
             
-            if(haveAllPulled()) {
+            if(this.pullCounter == 2 * Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND) {
                 updateFlagPosition();
                 this.finishedPulling.signal();
             }
@@ -155,6 +157,10 @@ public class Playground {
         this.resultAssert.signalAll();
         
         lock.unlock();
+    }
+    
+    public void startPulling() {
+        this.startTrial.signalAll();
     }
     
     /**
@@ -198,8 +204,12 @@ public class Playground {
         return this.teams[teamId].size() == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND;
     }
 
-    private boolean haveAllPulled() {
-        return this.pullCounter == 2 * Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND;
+    public void haveAllPulled() {
+        try {
+            this.finishedPulling.await();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

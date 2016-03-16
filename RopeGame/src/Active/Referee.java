@@ -81,15 +81,15 @@ public class Referee extends Thread {
 
     // TODO: Implement
     private void callTrial() {
+        RefereeSite.getInstance().bothTeamsReady();
         this.setRefereeState(RefereeState.TEAMS_READY);
     }
 
     // TODO: Implement
     private void startTrial() {
-        Playground playground = Playground.getInstance();
         
-        playground.checkTeamPlacement();
-        playground.pullRope();
+        Playground.getInstance().startPulling();
+        
         this.setRefereeState(RefereeState.WAIT_FOR_TRIAL_CONCLUSION);
     }
 
@@ -101,6 +101,8 @@ public class Referee extends Thread {
         Playground playground = Playground.getInstance();
         RefereeSite site = RefereeSite.getInstance();
         
+        playground.haveAllPulled();
+        
         int flagPosition = playground.getFlagPosition();
         
         if(flagPosition == 0) {
@@ -110,6 +112,9 @@ public class Referee extends Thread {
         } else {
             site.addTrialPoint(TrialScore.VICTORY_TEAM_2);
         }
+        
+        playground.resultAsserted();
+        
     }
     
     /**
@@ -182,6 +187,9 @@ public class Referee extends Thread {
             if(Math.abs(team1 - team2) > site.getRemainingTrials())
                 return true;
         }
+        
+        // Inform the Coaches there is a new Trial to play
+        
         
         return false;
     }
