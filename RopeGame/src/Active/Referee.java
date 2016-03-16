@@ -77,6 +77,7 @@ public class Referee extends Thread {
         
         this.setRefereeState(RefereeState.START_OF_A_GAME);
         
+        Playground.getInstance().coachPickYourTeam();
     }
 
     // TODO: Implement

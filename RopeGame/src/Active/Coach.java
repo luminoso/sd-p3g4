@@ -66,7 +66,7 @@ public class Coach extends Thread {
      */
     @Override
     public void run() {
-        ContestantsBench.getInstance().waitForNextTrial();
+        Playground.getInstance().waitForNextTrial();
         
         while(!checkEndOperations()) {
             switch(state) {
@@ -137,7 +137,7 @@ public class Coach extends Thread {
         // Updating coach state
         this.setCoachState(CoachState.WAIT_FOR_REFEREE_COMMAND);
         
-        bench.waitForNextTrial();
+        Playground.getInstance().waitForNextTrial();
     }
 
     private boolean checkEndOperations() {
