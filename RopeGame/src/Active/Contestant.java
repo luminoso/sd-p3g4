@@ -1,6 +1,7 @@
 package Active;
 
 import Passive.ContestantsBench;
+import Passive.GeneralInformationRepository;
 import Passive.Playground;
 
 /**
@@ -31,7 +32,7 @@ public class Contestant extends Thread implements Comparable<Contestant>{
         
         state = ContestantState.SEAT_AT_THE_BENCH;
         
-        this.team = team - 1;
+        this.team = team;
         this.id = id;
         this.strength = strength;
     }
@@ -86,10 +87,9 @@ public class Contestant extends Thread implements Comparable<Contestant>{
      */
     private void followCoachAdvice() {
         ContestantsBench.getInstance().getContestant();
-        
-        this.setContestantState(ContestantState.STAND_IN_POSITION);
-        
         Playground.getInstance().addContestant();
+        GeneralInformationRepository.getInstance().setTeamPlacement();
+        GeneralInformationRepository.getInstance().printLineUpdate();
     }
     
     /**
@@ -97,9 +97,12 @@ public class Contestant extends Thread implements Comparable<Contestant>{
      */
     private void getReady() {
         this.setContestantState(ContestantState.DO_YOUR_BEST);
+        GeneralInformationRepository.getInstance().printLineUpdate();
     }
  
-    // TODO: Implement
+    /**
+     * 
+     */
     private void pullTheRope() {
         Playground.getInstance().pullRope();
     }
@@ -110,24 +113,13 @@ public class Contestant extends Thread implements Comparable<Contestant>{
      */
     private void seatDown() {
         Playground.getInstance().getContestant();
-        
-        this.setContestantState(ContestantState.SEAT_AT_THE_BENCH);
-        
         ContestantsBench.getInstance().addContestant();
+        GeneralInformationRepository.getInstance().printLineUpdate();
     }
 
     @Override
     public int compareTo(Contestant o) {
         return this.id - o.id;
-    }
- 
-    /**
-     * 
-     * @return 
-     */
-    private boolean checkEndOperations() {
-        // TODO: Implement checking of end operations
-        return true;
     }
     
     public enum ContestantState {
@@ -148,6 +140,11 @@ public class Contestant extends Thread implements Comparable<Contestant>{
         }
 
         public String getState() {
+            return state;
+        }
+        
+        @Override
+        public String toString() {
             return state;
         }
     }

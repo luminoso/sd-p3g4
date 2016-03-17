@@ -22,4 +22,6 @@ public class Constants {
     
     public static int MINIMUM_WAIT_TIME = 1000;
     public static int MAXIMUM_WAIT_TIME = 3000;
+    
+    public static String FILE_NAME = "game.log";
 }

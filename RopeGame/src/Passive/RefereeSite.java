@@ -1,5 +1,7 @@
 package Passive;
 
+import Active.Referee;
+import Active.Referee.RefereeState;
 import RopeGame.Constants;
 import java.util.LinkedList;
 import java.util.List;
@@ -187,12 +189,20 @@ public class RefereeSite {
     }
     
     public void bothTeamsReady(){
+        Referee referee = (Referee) Thread.currentThread();
+        
         lock.lock();
         try {
-            informReferee.await();
+            referee.setRefereeState(RefereeState.TEAMS_READY);
+            
+            if(informRefereeCounter != 2)
+                informReferee.await();
         } catch (InterruptedException ex) {
             Logger.getLogger(RefereeSite.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        informRefereeCounter = 0;
+        
         lock.unlock();
     }
     
@@ -202,7 +212,7 @@ public class RefereeSite {
         informRefereeCounter++;
         
         if(informRefereeCounter == 2)
-            informReferee.signalAll();
+            informReferee.signal();
         
         lock.unlock();
     }

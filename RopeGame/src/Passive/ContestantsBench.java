@@ -1,7 +1,9 @@
 package Passive;
 
 import Active.Coach;
+import Active.Coach.CoachState;
 import Active.Contestant;
+import Active.Contestant.ContestantState;
 import RopeGame.Constants;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,11 +28,13 @@ public class ContestantsBench {
     private final Condition allPlayersSeated;
     private final Condition playersSelected;
     private final Condition waitForNextTrial;
+    private final Condition waitForCoach;
     
     private final Set<Contestant> bench;                                            // Structure that contains the players in the bench
     private final Set<Integer> selectedContestants;                                 // Selected contestants to play the trial
     
-  
+    private boolean coachWaiting;
+    
     /**
      * Method that returns a ContestantsBench object. The method is thread-safe
      * and uses the implicit monitor of the class.
@@ -67,6 +71,7 @@ public class ContestantsBench {
         return temp;
     }
     
+    
     /**
      * Private constructor to be used in the doubleton.
      * 
@@ -79,6 +84,7 @@ public class ContestantsBench {
         allPlayersSeated = lock.newCondition();
         playersSelected = lock.newCondition();
         waitForNextTrial = lock.newCondition();
+        waitForCoach = lock.newCondition();
         bench = new TreeSet<>();
         selectedContestants = new TreeSet<>();
     }
@@ -103,14 +109,16 @@ public class ContestantsBench {
         
         bench.add(contestant);
 
+        contestant.setContestantState(ContestantState.SEAT_AT_THE_BENCH);
+        
         if(checkAllPlayersSeated()) {
             allPlayersSeated.signal();
         }
         
         try {
-            while(!isContestantSelected()) {
+            do {
                 playersSelected.await();
-            }
+            } while(!isContestantSelected());
         } catch (InterruptedException ex) {
             lock.unlock();
             return;
@@ -191,17 +199,33 @@ public class ContestantsBench {
     public void pickYourTeam(){
         lock.lock();
         
-        waitForNextTrial.signalAll();
+        
+        try {
+            while(!coachWaiting)
+                waitForCoach.await();
+        } catch (InterruptedException ex) {
+        }
+        
+        waitForNextTrial.signal();
         
         lock.unlock();
     }
     
     public void waitForNextTrial() {
+        Coach coach = (Coach) Thread.currentThread();
+        
         lock.lock();
+        
+        coach.setCoachState(CoachState.WAIT_FOR_REFEREE_COMMAND);
+        
+        coachWaiting = true;
+        waitForCoach.signal();
         
         try {
             waitForNextTrial.await();
         } catch (InterruptedException ex) {}
+        
+        coachWaiting = false;
         
         lock.unlock();
     }

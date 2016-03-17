@@ -1,7 +1,11 @@
 package Passive;
 
 import Active.Coach;
+import Active.Coach.CoachState;
 import Active.Contestant;
+import Active.Contestant.ContestantState;
+import Active.Referee;
+import Active.Referee.RefereeState;
 import RopeGame.Constants;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +31,7 @@ public class Playground {
     private Condition resultAssert;
     private int pullCounter;
     private int flagPosition;
+    private int lastFlagPosition;
     private List<Contestant>[] teams;
     
     /**
@@ -48,6 +53,7 @@ public class Playground {
      */
     private Playground() {
         this.flagPosition = 0;
+        this.lastFlagPosition = 0;
         this.lock = new ReentrantLock();
         this.startTrial = this.lock.newCondition();
         this.teamsInPosition = this.lock.newCondition();
@@ -69,7 +75,9 @@ public class Playground {
         lock.lock();
         
         try {
-            this.teams[contestant.getContestantTeam()].add(contestant);
+            this.teams[contestant.getContestantTeam()-1].add(contestant);
+            
+            contestant.setContestantState(ContestantState.STAND_IN_POSITION);
             
             if(isTeamInPlace(contestant.getContestantTeam())) {
                 this.teamsInPosition.signalAll();
@@ -91,6 +99,8 @@ public class Playground {
         
         lock.lock();
         
+        coach.setCoachState(CoachState.ASSEMBLE_TEAM);
+        
         try {
             while(!isTeamInPlace(coach.getCoachTeam())) {
                 this.teamsInPosition.await();
@@ -107,7 +117,11 @@ public class Playground {
      * 
      */
     public void watchTrial() {
+        Coach coach = (Coach) Thread.currentThread();
+        
         lock.lock();
+        
+        coach.setCoachState(CoachState.WATCH_TRIAL);
         
         try {
             this.resultAssert.await();
@@ -159,9 +173,27 @@ public class Playground {
         lock.unlock();
     }
     
+    /**
+     * 
+     */
     public void startPulling() {
+        Referee referee = (Referee) Thread.currentThread();
+        
         lock.lock();
+        
         this.startTrial.signalAll();
+        
+        referee.setRefereeState(RefereeState.WAIT_FOR_TRIAL_CONCLUSION);
+        
+        if(pullCounter != 2 * Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND)
+            try {
+                finishedPulling.await();
+            } catch (InterruptedException ex) {
+                lock.unlock();
+                return;
+            }
+        
+        
         lock.unlock();
     }
     
@@ -174,7 +206,7 @@ public class Playground {
         
         lock.lock();
         
-        teams[contestant.getContestantTeam()].remove(contestant);
+        teams[contestant.getContestantTeam()-1].remove(contestant);
         
         lock.unlock();
     }
@@ -196,14 +228,27 @@ public class Playground {
         
         return result;
     }
+    
+    public int getLastFlagPosition() {
+        int result;
+        
+        lock.lock();
+        
+        result = this.lastFlagPosition;
+        
+        lock.unlock();
+        
+        return result;
+    }
 
     public void setFlagPosition(int flagPosition) {
+        this.lastFlagPosition = flagPosition;
         this.flagPosition = flagPosition;
     }
     
 
     private boolean isTeamInPlace(int teamId) {
-        return this.teams[teamId].size() == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND;
+        return this.teams[teamId-1].size() == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND;
     }
 
     public void haveAllPulled() {
@@ -251,6 +296,8 @@ public class Playground {
         for(Contestant contestant : this.teams[1]) {
             team2 += contestant.getContestantStrength();
         }
+        
+        lastFlagPosition = flagPosition;
         
         if(team1 > team2) {
             this.flagPosition--;

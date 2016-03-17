@@ -2,6 +2,7 @@ package Active;
 
 import Others.CoachStrategy;
 import Passive.ContestantsBench;
+import Passive.GeneralInformationRepository;
 import Passive.Playground;
 import Passive.RefereeSite;
 import java.util.Set;
@@ -12,7 +13,7 @@ import java.util.Set;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class Coach extends Thread {
+public class Coach extends Thread implements Comparable<Coach>{
     private CoachState state;           // Coach state
     private int team;                   // Coach team
     private CoachStrategy strategy;     // Team picking strategy
@@ -31,7 +32,7 @@ public class Coach extends Thread {
         this.state = CoachState.WAIT_FOR_REFEREE_COMMAND;
         
         // Team assignement
-        this.team = team - 1;
+        this.team = team;
         
         // Team picking strategy
         this.strategy = strategy;
@@ -68,7 +69,7 @@ public class Coach extends Thread {
     public void run() {
         ContestantsBench.getInstance().waitForNextTrial();
         
-        while(!checkEndOperations()) {
+        while(true) {
             switch(state) {
                 case WAIT_FOR_REFEREE_COMMAND:
                     callContestants();
@@ -100,10 +101,8 @@ public class Coach extends Thread {
         // Setting the selected team
         bench.setSelectedContestants(pickedContestants);
         
-        // Updating coach state
-        this.setCoachState(CoachState.ASSEMBLE_TEAM);
-        
         Playground.getInstance().checkTeamPlacement();
+        GeneralInformationRepository.getInstance().printLineUpdate();
     }
 
     /**
@@ -111,10 +110,8 @@ public class Coach extends Thread {
      */
     private void informReferee() {
         RefereeSite.getInstance().informReferee();
-        
-        setCoachState(CoachState.WATCH_TRIAL);
-        
         Playground.getInstance().watchTrial();
+        GeneralInformationRepository.getInstance().printLineUpdate();
     }
 
     /**
@@ -134,15 +131,13 @@ public class Coach extends Thread {
             }
         }
         
-        // Updating coach state
-        this.setCoachState(CoachState.WAIT_FOR_REFEREE_COMMAND);
-        
         ContestantsBench.getInstance().waitForNextTrial();
+        GeneralInformationRepository.getInstance().printLineUpdate();
     }
 
-    private boolean checkEndOperations() {
-        return false;
-        
+    @Override
+    public int compareTo(Coach o) {
+        return this.team - o.team;
     }
     
     /**
@@ -179,6 +174,11 @@ public class Coach extends Thread {
          * @return 
          */
         public String getState() {
+            return state;
+        }
+
+        @Override
+        public String toString() {
             return state;
         }
     }
