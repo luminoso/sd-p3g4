@@ -25,14 +25,14 @@ public class Playground {
     private static Playground instance;
     
     private Lock lock;
-    private Condition startTrial;
-    private Condition teamsInPosition;
-    private Condition finishedPulling;
-    private Condition resultAssert;
-    private int pullCounter;
-    private int flagPosition;
-    private int lastFlagPosition;
-    private List<Contestant>[] teams;
+    private Condition startTrial;                   // condition for waiting the trial start
+    private Condition teamsInPosition;              // condition for waiting to the teams to be in position
+    private Condition finishedPulling;              // condition for waiting the contestants finished pulling the rope
+    private Condition resultAssert;                 // condition for waiting for the result to be asserted
+    private int pullCounter;                        // how many pulls the contestants made
+    private int flagPosition;                       // current flag position
+    private int lastFlagPosition;                   // last flag position
+    private List<Contestant>[] teams;               // list containing the Contestant in both teams
     
     /**
      * The method returns the Playground object. This method is thread-safe and 
@@ -92,7 +92,7 @@ public class Playground {
     }
     
     /**
-     * 
+     * Synchronization point for waiting for the teams to be ready
      */
     public void checkTeamPlacement() {
         Coach coach = (Coach) Thread.currentThread();
@@ -114,7 +114,7 @@ public class Playground {
     }
     
     /**
-     * 
+     * Synchronization point for watching the trial in progress
      */
     public void watchTrial() {
         Coach coach = (Coach) Thread.currentThread();
@@ -134,7 +134,7 @@ public class Playground {
     }
     
     /**
-     * 
+     * Contestant pulls the rope
      */
     public void pullRope() {
         lock.lock();
@@ -161,7 +161,7 @@ public class Playground {
     }
     
     /**
-     * 
+     * Synchronization point for signaling the result is asserted
      */
     public void resultAsserted() {
         lock.lock();
@@ -174,7 +174,7 @@ public class Playground {
     }
     
     /**
-     * 
+     * Referee instructs the Contestants to start pulling the rope
      */
     public void startPulling() {
         Referee referee = (Referee) Thread.currentThread();
@@ -229,6 +229,10 @@ public class Playground {
         return result;
     }
     
+    /**
+     * Gets the last flag position
+     * @return the flag position before the current position
+     */
     public int getLastFlagPosition() {
         int result;
         
@@ -241,16 +245,27 @@ public class Playground {
         return result;
     }
 
+    /**
+     * Sets the flag position
+     * @param flagPosition position of the flag
+     */
     public void setFlagPosition(int flagPosition) {
         this.lastFlagPosition = flagPosition;
         this.flagPosition = flagPosition;
     }
     
-
+    /**
+     * Checks if the team is in place
+     * @param teamId team id to check if the team is in place
+     * @return true if team in place and ready.
+     */
     private boolean isTeamInPlace(int teamId) {
         return this.teams[teamId-1].size() == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND;
     }
 
+    /**
+     * Checks if everyone pulled the rope
+     */
     public void haveAllPulled() {
         lock.lock();
         try {
@@ -262,13 +277,17 @@ public class Playground {
     }
 
     /**
-     * 
-     * @return 
+     * Checks if all contestants are ready to pull the rope
+     * @return true if every Contestant is in place to pull the rope
      */
     public boolean checkAllContestantsReady(){
         return (teams[0].size() + teams[1].size()) == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND * 2;
     }
 
+    /**
+     * Gets the current teams in the playground
+     * @return List containing both teams Contestants in the playground
+     */
     public List<Contestant>[] getTeams() {
         List<Contestant>[] teams = new List[2];
         
@@ -283,7 +302,7 @@ public class Playground {
     }
 
     /**
-     * 
+     * Updates the flag position accordingly with the teams joint forces
      */
     private void updateFlagPosition() {
         int team1 = 0;

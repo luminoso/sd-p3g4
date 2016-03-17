@@ -30,13 +30,13 @@ public class GeneralInformationRepository {
     private final Set<Coach> coaches;
     private Referee referee;
     
-    private final List<Integer> team1Placement;
-    private final List<Integer> team2Placement;
+    private final List<Integer> team1Placement;     // list containing team contestants
+    private final List<Integer> team2Placement;     // list containing team contestants
     
-    private final List<GameScore> gameScore;
-    private final List<TrialScore> trialScore;
+    private final List<GameScore> gameScore;        // list containing scores of the game
+    private final List<TrialScore> trialScore;      // list containing scores of the trial
     
-    private int flagPosition;
+    private int flagPosition;                       // current flag position
     
     public static synchronized GeneralInformationRepository getInstance() {
         if(instance == null)

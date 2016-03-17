@@ -25,14 +25,25 @@ public class Referee extends Thread {
         state = RefereeState.START_OF_THE_MATCH;
     }
 
+    /**
+     * Get the current Referee state
+     * @return Referee state
+     */
     public RefereeState getRefereeState() {
         return state;
     }
 
+    /**
+     * Sets the current Referee state
+     * @param state RefereeState
+     */
     public void setRefereeState(RefereeState state) {
         this.state = state;
     }
     
+    /**
+     * Runs this object thread
+     */
     @Override
     public void run() {
         while(state != END_OF_THE_MATCH) {
@@ -180,6 +191,9 @@ public class Referee extends Thread {
         GeneralInformationRepository.getInstance().setTrialScore(new LinkedList<>());
     }
 
+    /**
+     * Declares the match winner and sets the game score accordingly
+     */
     private void declareMatchWinner() {
         RefereeSite site = RefereeSite.getInstance();
         
@@ -206,6 +220,10 @@ public class Referee extends Thread {
         GeneralInformationRepository.getInstance().close();
     }
 
+    /**
+     * Checks if the game has ended
+     * @return true if game has ended false if more games to play
+     */
     private boolean checkForGameEnd() {
         RefereeSite site = RefereeSite.getInstance();
         List<TrialScore> trialScore = site.getTrialPoints();
@@ -232,6 +250,10 @@ public class Referee extends Thread {
         return false;
     }
     
+    /**
+     * Checks if the match has ended
+     * @return true if match as ended.
+     */
     private boolean checkForMatchEnd(){
         RefereeSite site = RefereeSite.getInstance();
         List<GameScore> gamePoints = site.getGamePoints();
@@ -254,6 +276,9 @@ public class Referee extends Thread {
                 site.getRemainingGames() == 0;
     }
     
+    /**
+     * Enums of possible Referee states
+     */
     public enum RefereeState {
         START_OF_THE_MATCH (1, "SOM"),
         START_OF_A_GAME (2, "SOG"),
@@ -265,19 +290,36 @@ public class Referee extends Thread {
         private int id;
         private String state;
         
+        /**
+         * Create a RefereeState enum
+         * @param id of the enum Referee state
+         * @param state Initials of the Referee state
+         */
         RefereeState(int id, String state) {
             this.id = id;
             this.state = state;
         }
 
+        /**
+         * Gets the ID of the RefereeState enum
+         * @return id of the Referee state
+         */
         public int getId() {
             return id;
         }
 
+        /**
+         * Gets the enum Referee state
+         * @return Referee state enum string
+         */
         public String getState() {
             return state;
         }
         
+        /**
+         * Converts current Referee state to String
+         * @return String describing Referee sate
+         */
         @Override
         public String toString() {
             return state;

@@ -22,7 +22,10 @@ import java.util.Set;
  * @author Guilherme Cardoso
  */
 public class MostStrengthStrategy implements CoachStrategy {
-    // Comparator to sort by strength
+    
+    /**
+     * Comparator to sort the Contestant accordingly to this strategy
+     */
     private Comparator<Contestant> comparator = new Comparator<Contestant>() {
         @Override
         public int compare(Contestant o1, Contestant o2) {
@@ -31,10 +34,10 @@ public class MostStrengthStrategy implements CoachStrategy {
     };
     
     /**
-     * 
-     * @param bench
-     * @param site
-     * @return 
+     * Picks a team using the most strength strategy
+     * @param bench Bench containing all Contestants to pick from
+     * @param site Current Playground Site 
+     * @return Set of the picked Contestants
      */
     @Override
     public Set<Integer> pickTeam(ContestantsBench bench, RefereeSite site) {

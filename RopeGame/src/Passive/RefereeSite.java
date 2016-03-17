@@ -21,11 +21,11 @@ public class RefereeSite {
     
     private Lock lock;
     
-    private Condition informReferee;
-    private int informRefereeCounter;
+    private Condition informReferee;                    // condition for referee wait for the coaches
+    private int informRefereeCounter;                   // counter of how many coaches informed the referee
     
-    private List<TrialScore> trialStatus;
-    private List<GameScore> gameStatus;
+    private List<TrialScore> trialStatus;               // current trial status
+    private List<GameScore> gameStatus;                 // current game status
     
     /**
      * The method returns the RefereeSite object. The method is thread-safe and
@@ -122,6 +122,9 @@ public class RefereeSite {
         return trialPoints;
     }
     
+    /**
+     * Resets the trial points
+     */
     public void resetTrialPoints(){
         lock.lock();
         
@@ -130,8 +133,8 @@ public class RefereeSite {
         lock.unlock();
     }
     /**
-     * 
-     * @return 
+     * Gets how many trials are remaining to play
+     * @return number of remaining trials left
      */
     public int getRemainingTrials() {
         int remaining;
@@ -146,8 +149,8 @@ public class RefereeSite {
     }
     
     /**
-     * 
-     * @return 
+     * Gets how many games are remaining to play
+     * @return number of remaining games left
      */
     public int getRemainingGames() {
         int remaining;
@@ -188,6 +191,9 @@ public class RefereeSite {
         lock.unlock();
     }
     
+    /**
+     * Synchronization point where the Referee waits for both teams to be ready
+     */
     public void bothTeamsReady(){
         Referee referee = (Referee) Thread.currentThread();
         
@@ -206,6 +212,9 @@ public class RefereeSite {
         lock.unlock();
     }
     
+    /**
+     * Synchronization point where the Coaches inform the Referee that they're ready
+     */
     public void informReferee() {
         lock.lock();
         
@@ -216,6 +225,7 @@ public class RefereeSite {
         
         lock.unlock();
     }
+    
     
     public enum TrialScore {
         DRAW(0, "D"),

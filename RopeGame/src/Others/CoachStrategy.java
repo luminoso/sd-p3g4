@@ -16,6 +16,7 @@ import java.util.Set;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
+
 public interface CoachStrategy {
     public Set<Integer> pickTeam(ContestantsBench bench, RefereeSite site);
 }

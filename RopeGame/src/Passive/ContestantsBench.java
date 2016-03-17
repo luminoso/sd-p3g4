@@ -57,6 +57,10 @@ public class ContestantsBench {
         return instances[team-1];
     }
     
+    /**
+     * Gets all the instances of the Contestants Bench
+     * @return List containing contestants benches
+     */
     public static synchronized List<ContestantsBench> getInstances() {
         List<ContestantsBench> temp = new LinkedList<>();
         
@@ -129,8 +133,6 @@ public class ContestantsBench {
 
     /**
      * The method removes a contestant from the bench.
-     *
-     * @return Contestant that needed to be removed.
      */
     public void getContestant() {
         Contestant contestant = (Contestant) Thread.currentThread();
@@ -184,6 +186,10 @@ public class ContestantsBench {
         lock.unlock();
     }
     
+    /**
+     * Gets the selected contestants to play
+     * @return Set with the selected contestants
+     */
     public Set<Integer> getSelectedContestants() {
         Set<Integer> selected = null;
         
@@ -196,6 +202,9 @@ public class ContestantsBench {
         return selected;
     }
     
+    /**
+     * Synchronization point where the Referee waits for the Coaches to pick the teams
+     */
     public void pickYourTeam(){
         lock.lock();
         
@@ -211,6 +220,9 @@ public class ContestantsBench {
         lock.unlock();
     }
     
+    /**
+     * Synchronization point where Coaches wait for the next trial instructed by the Referee
+     */
     public void waitForNextTrial() {
         Coach coach = (Coach) Thread.currentThread();
         
