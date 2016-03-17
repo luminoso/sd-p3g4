@@ -140,7 +140,10 @@ public class Referee extends Thread {
         }
         
         GeneralInformationRepository.getInstance().setFlagPosition(flagPosition);
-        GeneralInformationRepository.getInstance().setTrialScore(RefereeSite.getInstance().getTrialPoints());
+
+        if (RefereeSite.getInstance().getTrialPoints().size() < Constants.NUMBER_OF_TRIALS)
+            GeneralInformationRepository.getInstance().setTrialScore(RefereeSite.getInstance().getTrialPoints());
+
         GeneralInformationRepository.getInstance().printLineUpdate();
         GeneralInformationRepository.getInstance().resetTeamPlacement();
         
@@ -236,7 +239,10 @@ public class Referee extends Thread {
             int team2 = 0;
             
             for(TrialScore score : trialScore) {
-                if(score == TrialScore.VICTORY_TEAM_1) {
+                if(score == TrialScore.DRAW){
+                    team1++;
+                    team2++;
+                } else if(score == TrialScore.VICTORY_TEAM_1) {
                     team1++;
                 } else {
                     team2++;
