@@ -72,23 +72,6 @@ public class RefereeSite {
     }
 
     /**
-     * The method returns the trial round number.
-     * 
-     * @return Trial round number.
-     */
-    public int getTrialRound() {
-        int trialNumber;
-        
-        lock.lock();
-        
-        trialNumber = this.trialStatus.size() + 1;
-        
-        lock.unlock();
-        
-        return trialNumber;
-    }
-
-    /**
      * The method returns the game points in the form of an array.
      * 
      * @return Game points.
