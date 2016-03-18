@@ -92,15 +92,6 @@ public class ContestantsBench {
         bench = new TreeSet<>();
         selectedContestants = new TreeSet<>();
     }
-
-    /**
-     * The method returns the team identifier that is in the bench.
-     * 
-     * @return Team identifier.
-     */
-    public int getTeam() {
-        return team;
-    }
     
     /**
      * The method adds a contestant to the bench.

@@ -54,23 +54,6 @@ public class RefereeSite {
     }
 
     /**
-     * The method returns the game round number.
-     * 
-     * @return Game round number.
-     */
-    public int getGameRound() {
-        int gameRound;
-        
-        lock.lock();
-        
-        gameRound = this.gameStatus.size() + 1;
-        
-        lock.unlock();
-        
-        return gameRound;
-    }
-
-    /**
      * The method returns the game points in the form of an array.
      * 
      * @return Game points.

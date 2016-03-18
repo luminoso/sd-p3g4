@@ -2,7 +2,6 @@ package Active;
 
 import Others.CoachStrategy;
 import Passive.ContestantsBench;
-import Passive.GeneralInformationRepository;
 import Passive.Playground;
 import Passive.RefereeSite;
 import java.util.Set;

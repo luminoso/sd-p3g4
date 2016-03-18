@@ -294,16 +294,16 @@ public class Playground {
      * @return List containing both teams Contestants in the playground
      */
     public List<Contestant>[] getTeams() {
-        List<Contestant>[] teams = new List[2];
+        List<Contestant>[] teamslist = new List[2];
         
         lock.lock();
         
-        teams[0] = new ArrayList<>(this.teams[0]);
-        teams[1] = new ArrayList<>(this.teams[1]);
+        teamslist[0] = new ArrayList<>(this.teams[0]);
+        teamslist[1] = new ArrayList<>(this.teams[1]);
         
         lock.unlock();
         
-        return teams;
+        return teamslist;
     }
 
     /**
