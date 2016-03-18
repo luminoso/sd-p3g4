@@ -1,8 +1,12 @@
 package Passive;
 
 import Active.Coach;
+import Active.Coach.CoachState;
 import Active.Contestant;
+import Active.Contestant.ContestantState;
 import Active.Referee;
+import Active.Referee.RefereeState;
+import Others.Tuple;
 import Passive.RefereeSite.GameScore;
 import Passive.RefereeSite.TrialScore;
 import RopeGame.Constants;
@@ -30,9 +34,9 @@ public class GeneralInformationRepository {
     private final Lock lock;
     private PrintWriter printer;
     
-    private final Set<Contestant>[] teams;
-    private final Set<Coach> coaches;
-    private Referee referee;
+    private List<Tuple<ContestantState, Integer>[]> teamsState;
+    private CoachState[] coachesState;
+    private RefereeState refereeState;
     
     private final List<Integer> team1Placement;     // list containing team contestants
     private final List<Integer> team2Placement;     // list containing team contestants
@@ -63,10 +67,11 @@ public class GeneralInformationRepository {
             printer = null;
         }
         
-        teams = new Set[2];
-        teams[0] = new TreeSet<>();
-        teams[1] = new TreeSet<>();
-        coaches = new TreeSet<>();
+        teamsState = new LinkedList<>();
+        teamsState.add(new Tuple[5]);
+        teamsState.add(new Tuple[5]);
+        
+        coachesState = new CoachState[2];
         
         gameScore = new LinkedList<>();
         trialScore = new LinkedList<>();
@@ -83,7 +88,7 @@ public class GeneralInformationRepository {
     public void addReferee(Referee referee) {
         lock.lock();
         
-        this.referee = referee;
+        refereeState = referee.getRefereeState();
         
         lock.unlock();
     }
@@ -91,7 +96,10 @@ public class GeneralInformationRepository {
     public void addContestant(Contestant contestant) {
         lock.lock();
         
-        this.teams[contestant.getContestantTeam()-1].add(contestant);
+        int team = contestant.getContestantTeam() - 1;
+        int id = contestant.getContestantId() - 1; 
+        
+        this.teamsState.get(team)[id] = new Tuple<>(contestant.getContestantState(), contestant.getContestantStrength());
         
         lock.unlock();
     }
@@ -99,7 +107,9 @@ public class GeneralInformationRepository {
     public void addCoach(Coach coach) {
         lock.lock();
         
-        this.coaches.add(coach);
+        int team = coach.getCoachTeam() - 1;
+        
+        this.coachesState[team] = coach.getCoachState();
         
         lock.unlock();
     }
@@ -166,17 +176,24 @@ public class GeneralInformationRepository {
     }
     
     public void printLineUpdate() {
+        Thread thread = Thread.currentThread();
+        
         lock.lock();
+        
+        if(thread.getClass() == Contestant.class)
+            addContestant((Contestant) thread);
+        else if(thread.getClass() == Coach.class)
+            addCoach((Coach) thread);
+        else
+            addReferee((Referee) thread);
         
         String string = "";
         
         string += printActiveEntitiesStates();
         string += printTrialResult(trialScore.size() + 1, flagPosition);
         
-        if(!string.equals(this.lastline)){
-            printer.print(string);
-            printer.flush();
-        }
+        printer.print(string);
+        printer.flush();
 
         this.lastline = string;
     
@@ -296,14 +313,14 @@ public class GeneralInformationRepository {
         String string = "";
         
         // Printing referee state
-        string += String.format("%3s", referee.getRefereeState());
+        string += String.format("%3s", refereeState);
         
         // Printing teams state
-        for(Coach coach : coaches) {
-            string += String.format("  %4s", coach.getCoachState());
+        for(int i = 0; i < coachesState.length; i++) {
+            string += String.format("  %4s", coachesState[i]);
             
-            for(Contestant contestant : teams[coach.getCoachTeam()-1]) {
-                string += String.format(" %3s %2d", contestant.getContestantState(), contestant.getContestantStrength());
+            for(int j = 0; j < teamsState.get(i).length; j++) {
+                string += String.format(" %3s %2d", teamsState.get(i)[j].getX(), teamsState.get(i)[j].getY());
             }
         }
     
