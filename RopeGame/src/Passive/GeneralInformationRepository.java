@@ -12,8 +12,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * General Description:
@@ -38,6 +41,11 @@ public class GeneralInformationRepository {
     private final List<TrialScore> trialScore;      // list containing scores of the trial
     
     private int flagPosition;                       // current flag position
+    
+    private final Condition canPrintGameResult;        // current 
+    private boolean benchesFinishedPrinting;
+    
+    private String lastline;
     
     public static synchronized GeneralInformationRepository getInstance() {
         if(instance == null)
@@ -65,6 +73,9 @@ public class GeneralInformationRepository {
         
         team1Placement = new LinkedList<>();
         team2Placement = new LinkedList<>();
+        
+        canPrintGameResult = lock.newCondition();
+        benchesFinishedPrinting = false;
         
         flagPosition = 0;
     }
@@ -144,6 +155,9 @@ public class GeneralInformationRepository {
     public void printGameHeader() {
         lock.lock();
         
+        benchesFinishedPrinting = true;
+        canPrintGameResult.signal();
+        
         printer.printf("Game %1d%n", gameScore.size() + 1);
         printColumnHeader();
         printer.flush();
@@ -154,14 +168,31 @@ public class GeneralInformationRepository {
     public void printLineUpdate() {
         lock.lock();
         
-        printActiveEntitiesStates();
-        printTrialResult(trialScore.size() + 1, flagPosition);
+        String string = "";
+        
+        string += printActiveEntitiesStates();
+        string += printTrialResult(trialScore.size() + 1, flagPosition);
+        
+        if(!string.equals(this.lastline)){
+            printer.print(string);
+            printer.flush();
+        }
+
+        this.lastline = string;
     
         lock.unlock();
     }
     
     public void printGameResult() {
         lock.lock();
+        
+        if(!benchesFinishedPrinting){
+            try {
+                canPrintGameResult.await();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(GeneralInformationRepository.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         
         switch(gameScore.get(gameScore.size()-1)) {
             case VICTORY_TEAM_1_BY_KNOCKOUT:
@@ -187,6 +218,14 @@ public class GeneralInformationRepository {
     public void printMatchWinner(int team, int score1, int score2) {
         lock.lock();
         
+        if(!benchesFinishedPrinting){
+            try {
+                canPrintGameResult.await();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(GeneralInformationRepository.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
         printer.printf("Match was won by team %d (%d-%d).%n", team, score1, score2);
         printer.flush();
     
@@ -195,6 +234,14 @@ public class GeneralInformationRepository {
     
     public void printMatchDraw() {
         lock.lock();
+        
+        if(!benchesFinishedPrinting){
+            try {
+                canPrintGameResult.await();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(GeneralInformationRepository.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         
         printer.printf("Match was a draw.%n");
         printer.flush();
@@ -225,7 +272,7 @@ public class GeneralInformationRepository {
         printer.printf("%n");
         printColumnHeader();       
         printActiveEntitiesStates();
-        printEmptyResult();
+        //printEmptyResult();
         printer.flush();
     
         lock.unlock();
@@ -234,31 +281,35 @@ public class GeneralInformationRepository {
     private void printColumnHeader() {
         lock.lock();
         
+        benchesFinishedPrinting = false;
+        
         printer.printf("Ref Coa 1 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5 Coa 2 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5 Trial%n");
         printer.printf("Sta  Stat Sta SG Sta SG Sta SG Sta SG Sta SG  Stat Sta SG Sta SG Sta SG Sta SG Sta SG 3 2 1 . 1 2 3 NB PS%n");
         printer.flush();
-    
+        
         lock.unlock();
     }
     
-    private void printActiveEntitiesStates() {
+    private String printActiveEntitiesStates() {
         lock.lock();
         
+        String string = "";
+        
         // Printing referee state
-        printer.printf("%3s", referee.getRefereeState());
+        string += String.format("%3s", referee.getRefereeState());
         
         // Printing teams state
         for(Coach coach : coaches) {
-            printer.printf("  %4s", coach.getCoachState());
+            string += String.format("  %4s", coach.getCoachState());
             
             for(Contestant contestant : teams[coach.getCoachTeam()-1]) {
-                printer.printf(" %3s %2d", contestant.getContestantState(), contestant.getContestantStrength());
+                string += String.format(" %3s %2d", contestant.getContestantState(), contestant.getContestantStrength());
             }
         }
-        
-        printer.flush();
     
         lock.unlock();
+        
+        return string;
     }
     
     private void printEmptyResult() {
@@ -270,30 +321,32 @@ public class GeneralInformationRepository {
         lock.unlock();
     }
     
-    private void printTrialResult(int trialNumber, int flagPosition) {
+    private String printTrialResult(int trialNumber, int flagPosition) {
         lock.lock();
+        
+        String string = "";
         
         for(int i = 0; i < Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND; i++) {
             if(i >= team1Placement.size())
-                printer.printf(" -");
+                string += String.format(" -");
             else 
-                printer.printf(" %1d", team1Placement.get(i));
+                string += String.format(" %1d", team1Placement.get(i));
         }
         
-        printer.printf(" .");
+        string += " .";
         
         for(int i = 0; i < Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND; i++) {
             if(i >= team2Placement.size())
-                printer.printf(" -");
+                string += String.format(" -");
             else 
-                printer.printf(" %1d", team2Placement.get(i));
+                string += String.format(" %1d", team2Placement.get(i));
         }
         
-        printer.printf(" %2d %2d%n", trialNumber, flagPosition);
+        string += String.format(" %2d %2d%n", trialNumber, flagPosition);
         
-        printer.flush();
-    
         lock.unlock();
+        
+        return string;
     }
     
     private void printGameWinnerByKnockOut(int game, int team, int trials) {

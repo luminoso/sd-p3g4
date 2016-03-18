@@ -261,7 +261,6 @@ public class ContestantsBench {
      * @return True if all players seated
      */
     private boolean checkAllPlayersSeated() {
-        System.out.println("bench size da thread " + Thread.currentThread().getName()  + " é de: "  + Integer.toString(bench.size()));
         return bench.size() == Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH;
     }
 
