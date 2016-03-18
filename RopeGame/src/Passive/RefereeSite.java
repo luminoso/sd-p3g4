@@ -182,6 +182,7 @@ public class RefereeSite {
         lock.lock();
         try {
             referee.setRefereeState(RefereeState.TEAMS_READY);
+            GeneralInformationRepository.getInstance().printLineUpdate();
             
             if(informRefereeCounter != 2)
                 informReferee.await();

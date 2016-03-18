@@ -115,8 +115,6 @@ public class Contestant extends Thread implements Comparable<Contestant>{
     private void followCoachAdvice() {
         ContestantsBench.getInstance().getContestant();
         Playground.getInstance().addContestant();
-        GeneralInformationRepository.getInstance().setTeamPlacement();
-        GeneralInformationRepository.getInstance().printLineUpdate();
     }
     
     /**
@@ -142,7 +140,6 @@ public class Contestant extends Thread implements Comparable<Contestant>{
     private void seatDown() {
         Playground.getInstance().getContestant();
         ContestantsBench.getInstance().addContestant();
-        GeneralInformationRepository.getInstance().printLineUpdate();
     }
 
     /**

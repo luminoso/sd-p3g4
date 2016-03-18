@@ -96,7 +96,6 @@ public class Coach extends Thread implements Comparable<Coach>{
         bench.setSelectedContestants(pickedContestants);
         
         Playground.getInstance().checkTeamPlacement();
-        GeneralInformationRepository.getInstance().printLineUpdate();
     }
 
     /**
@@ -105,7 +104,6 @@ public class Coach extends Thread implements Comparable<Coach>{
     private void informReferee() {
         RefereeSite.getInstance().informReferee();
         Playground.getInstance().watchTrial();
-        GeneralInformationRepository.getInstance().printLineUpdate();
     }
 
     /**
@@ -126,7 +124,6 @@ public class Coach extends Thread implements Comparable<Coach>{
         }
         
         ContestantsBench.getInstance().waitForNextTrial();
-        GeneralInformationRepository.getInstance().printLineUpdate();
     }
 
     /**

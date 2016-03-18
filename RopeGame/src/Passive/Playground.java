@@ -78,6 +78,8 @@ public class Playground {
             this.teams[contestant.getContestantTeam()-1].add(contestant);
             
             contestant.setContestantState(ContestantState.STAND_IN_POSITION);
+            GeneralInformationRepository.getInstance().setTeamPlacement();
+            GeneralInformationRepository.getInstance().printLineUpdate();
             
             if(isTeamInPlace(contestant.getContestantTeam())) {
                 this.teamsInPosition.signalAll();
@@ -86,9 +88,9 @@ public class Playground {
             startTrial.await();
         } catch (InterruptedException ex) {
             // TODO: Treat exception
-        } finally {
-            lock.unlock();
-        }
+        } 
+            
+        lock.unlock();
     }
     
     /**
@@ -100,6 +102,7 @@ public class Playground {
         lock.lock();
         
         coach.setCoachState(CoachState.ASSEMBLE_TEAM);
+        GeneralInformationRepository.getInstance().printLineUpdate();
         
         try {
             while(!isTeamInPlace(coach.getCoachTeam())) {
@@ -122,7 +125,8 @@ public class Playground {
         lock.lock();
         
         coach.setCoachState(CoachState.WATCH_TRIAL);
-        
+        GeneralInformationRepository.getInstance().printLineUpdate();
+                
         try {
             this.resultAssert.await();
         } catch (InterruptedException ex) {
@@ -184,6 +188,7 @@ public class Playground {
         this.startTrial.signalAll();
         
         referee.setRefereeState(RefereeState.WAIT_FOR_TRIAL_CONCLUSION);
+        GeneralInformationRepository.getInstance().printLineUpdate();
         
         if(pullCounter != 2 * Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND)
             try {
