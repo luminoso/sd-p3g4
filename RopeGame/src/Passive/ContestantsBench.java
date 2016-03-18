@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * General Description:
- * 
+ * This is an passive class that describes the Contestants bench for each team
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */

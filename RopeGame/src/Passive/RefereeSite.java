@@ -12,20 +12,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * General Description: 
+ * This is an passive class that describes the Referee site
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
 public class RefereeSite {
     private static RefereeSite instance;
-    
-    private Lock lock;
-    
-    private Condition informReferee;                    // condition for referee wait for the coaches
+    private final Lock lock;
+    private final Condition informReferee;              // condition for referee wait for the coaches
     private int informRefereeCounter;                   // counter of how many coaches informed the referee
     
     private List<TrialScore> trialStatus;               // current trial status
-    private List<GameScore> gameStatus;                 // current game status
+    private final List<GameScore> gameStatus;           // current game status
     
     /**
      * The method returns the RefereeSite object. The method is thread-safe and
@@ -150,7 +149,7 @@ public class RefereeSite {
     /**
      * The method allows to set the game points for both team.
      * 
-     * @param gamePoints Game points of both teams.
+     * @param score Game points of both teams.
      */
     public void addGamePoint(GameScore score) {
         lock.lock();
@@ -164,7 +163,7 @@ public class RefereeSite {
     /**
      * The method allows to set the trial points for both team.
      * 
-     * @param trialPoints Trial points of both teams.
+     * @param score Trial points of both teams.
      */
     public void addTrialPoint(TrialScore score) {
         lock.lock();
@@ -215,8 +214,8 @@ public class RefereeSite {
         VICTORY_TEAM_1(1, "VT1"),
         VICTORY_TEAM_2(2, "VT2");
         
-        private int id;
-        private String status;
+        private final int id;
+        private final String status;
         
         private TrialScore(int id, String status) {
             this.id = id;
@@ -239,8 +238,8 @@ public class RefereeSite {
         VICTORY_TEAM_2_BY_POINTS(3, "VT2PT"),
         VICTORY_TEAM_2_BY_KNOCKOUT(4, "VT2KO");
         
-        private int id;
-        private String status;
+        private final int id;
+        private final String status;
         
         private GameScore(int id, String status) {
             this.id = id;

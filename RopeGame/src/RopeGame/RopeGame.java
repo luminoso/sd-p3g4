@@ -4,10 +4,8 @@ import Active.Coach;
 import Active.Contestant;
 import Active.Referee;
 import Others.MostStrengthStrategy;
-import Passive.ContestantsBench;
 import Passive.GeneralInformationRepository;
 import java.security.SecureRandom;
-import java.util.Scanner;
 
 /**
  *
@@ -39,8 +37,8 @@ public class RopeGame {
         Coach coach1 = new Coach("coach1", 1, new MostStrengthStrategy());
         Coach coach2 = new Coach("coach2", 2, new MostStrengthStrategy());
     
-        Scanner sc = new Scanner(System.in);
-        sc.next();
+        //Scanner sc = new Scanner(System.in);
+        //sc.next();
         
         GeneralInformationRepository informationRepository = GeneralInformationRepository.getInstance();
         

@@ -6,7 +6,7 @@ import Passive.Playground;
 
 /**
  * General Description:
- * 
+ * This is an active class implements the Contestant and his interactions in the passive classes
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
@@ -164,8 +164,8 @@ public class Contestant extends Thread implements Comparable<Contestant>{
         STAND_IN_POSITION (2, "SIP"),
         DO_YOUR_BEST (3, "DYB");
         
-        private int id;
-        private String state;
+        private final int id;
+        private final String state;
         
         /**
          * Create a ContestantState enum

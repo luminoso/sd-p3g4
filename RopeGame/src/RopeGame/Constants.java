@@ -6,8 +6,9 @@
 package RopeGame;
 
 /**
- *
- * @author ed1000
+ * General Description:
+ * This class contains constants commum to the Rope Game
+ * @author Eduardo Sousa
  */
 public class Constants {
     // Game information

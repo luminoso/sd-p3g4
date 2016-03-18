@@ -5,14 +5,13 @@
  */
 package Others;
 
-import Active.Contestant;
 import Passive.ContestantsBench;
 import Passive.RefereeSite;
 import java.util.Set;
 
 /**
  * General Description:
- * 
+ * Interface for Coaches strategies 
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */

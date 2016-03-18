@@ -9,14 +9,14 @@ import java.util.Set;
 
 /**
  * General Description:
- * 
+ * This is an active class implements the Coach and his interactions in the passive classes
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
 public class Coach extends Thread implements Comparable<Coach>{
     private CoachState state;           // Coach state
-    private int team;                   // Coach team
-    private CoachStrategy strategy;     // Team picking strategy
+    private final int team;                   // Coach team
+    private final CoachStrategy strategy;     // Team picking strategy
     
     /**
      * Initializes a Coach instance
@@ -148,8 +148,8 @@ public class Coach extends Thread implements Comparable<Coach>{
         ASSEMBLE_TEAM (2, "AETM"),
         WATCH_TRIAL (3, "WHTL");
         
-        private int id;
-        private String state;
+        private final int id;
+        private final String state;
         
         /**
          * Create a CoachState enum

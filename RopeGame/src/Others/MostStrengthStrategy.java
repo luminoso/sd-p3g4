@@ -17,7 +17,7 @@ import java.util.Set;
 
 /**
  * General Description:
- * 
+ * Coach strategy implementation that picks the most strengthful players
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
@@ -26,7 +26,7 @@ public class MostStrengthStrategy implements CoachStrategy {
     /**
      * Comparator to sort the Contestant accordingly to this strategy
      */
-    private Comparator<Contestant> comparator = new Comparator<Contestant>() {
+    private final Comparator<Contestant> comparator = new Comparator<Contestant>() {
         @Override
         public int compare(Contestant o1, Contestant o2) {
             return o2.getContestantStrength()- o1.getContestantStrength();

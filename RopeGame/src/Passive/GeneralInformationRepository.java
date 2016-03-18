@@ -16,7 +16,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- *
+ * General Description:
+ * This is an passive class that logs entities activity
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */

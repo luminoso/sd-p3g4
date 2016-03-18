@@ -17,22 +17,22 @@ import java.util.logging.Logger;
 
 /**
  * General Description: 
- * 
+ * This is an passive class that describes the Playground
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
 public class Playground {
     private static Playground instance;
     
-    private Lock lock;
-    private Condition startTrial;                   // condition for waiting the trial start
-    private Condition teamsInPosition;              // condition for waiting to the teams to be in position
-    private Condition finishedPulling;              // condition for waiting the contestants finished pulling the rope
-    private Condition resultAssert;                 // condition for waiting for the result to be asserted
+    private final Lock lock;
+    private final Condition startTrial;                   // condition for waiting the trial start
+    private final Condition teamsInPosition;              // condition for waiting to the teams to be in position
+    private final Condition finishedPulling;              // condition for waiting the contestants finished pulling the rope
+    private final Condition resultAssert;                 // condition for waiting for the result to be asserted
     private int pullCounter;                        // how many pulls the contestants made
     private int flagPosition;                       // current flag position
     private int lastFlagPosition;                   // last flag position
-    private List<Contestant>[] teams;               // list containing the Contestant in both teams
+    private final List<Contestant>[] teams;               // list containing the Contestant in both teams
     
     /**
      * The method returns the Playground object. This method is thread-safe and 

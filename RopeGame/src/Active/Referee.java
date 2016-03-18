@@ -12,7 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
+ * General Description:
+ * This is an active class implements the Referee and his interactions in the passive classes
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
@@ -293,8 +294,8 @@ public class Referee extends Thread {
         END_OF_A_GAME (5, "EOG"),
         END_OF_THE_MATCH (6, "EOM");
         
-        private int id;
-        private String state;
+        private final int id;
+        private final String state;
         
         /**
          * Create a RefereeState enum
