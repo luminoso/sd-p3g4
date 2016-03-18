@@ -56,6 +56,12 @@ public class RopeGame {
         informationRepository.addContestant(team2contestant4);
         informationRepository.addContestant(team2contestant5);
         
+        informationRepository.addCoach(coach1);
+        informationRepository.addCoach(coach2);
+        informationRepository.addReferee(rf);
+        
+        informationRepository.printHeader();
+        
         team1contestant1.start();
         team1contestant2.start();
         team1contestant3.start();
@@ -67,12 +73,6 @@ public class RopeGame {
         team2contestant3.start();
         team2contestant4.start();
         team2contestant5.start();
-        
-        informationRepository.addCoach(coach1);
-        informationRepository.addCoach(coach2);
-        informationRepository.addReferee(rf);
-        
-        informationRepository.printHeader();
         
         coach1.start();
         coach2.start();

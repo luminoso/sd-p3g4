@@ -110,7 +110,6 @@ public class Referee extends Thread {
             bench.pickYourTeam();
         
         RefereeSite.getInstance().bothTeamsReady();
-        GeneralInformationRepository.getInstance().printLineUpdate();
     }
 
     /**
@@ -120,7 +119,6 @@ public class Referee extends Thread {
      */
     private void startTrial() {
         Playground.getInstance().startPulling();
-        GeneralInformationRepository.getInstance().printLineUpdate();
     }
 
     /**
@@ -219,8 +217,6 @@ public class Referee extends Thread {
             GeneralInformationRepository.getInstance().printMatchWinner(2, score1, score2);
         else
             GeneralInformationRepository.getInstance().printMatchDraw();
-        
-        GeneralInformationRepository.getInstance().close();
     }
 
     /**

@@ -113,7 +113,10 @@ public class ContestantsBench {
         
         bench.add(contestant);
 
-        contestant.setContestantState(ContestantState.SEAT_AT_THE_BENCH);
+        if(contestant.getContestantState() != ContestantState.SEAT_AT_THE_BENCH) {
+            contestant.setContestantState(ContestantState.SEAT_AT_THE_BENCH);
+            GeneralInformationRepository.getInstance().printLineUpdate();
+        }
         
         if(checkAllPlayersSeated()) {
             allPlayersSeated.signal();
@@ -228,7 +231,10 @@ public class ContestantsBench {
         
         lock.lock();
         
-        coach.setCoachState(CoachState.WAIT_FOR_REFEREE_COMMAND);
+        if(coach.getCoachState() != CoachState.WAIT_FOR_REFEREE_COMMAND) {
+            coach.setCoachState(CoachState.WAIT_FOR_REFEREE_COMMAND);
+            GeneralInformationRepository.getInstance().printLineUpdate();
+        }
         
         coachWaiting = true;
         waitForCoach.signal();
