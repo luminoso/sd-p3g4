@@ -203,13 +203,14 @@ public class GeneralInformationRepository {
     public void printGameResult() {
         lock.lock();
         
+        /*
         if(!benchesFinishedPrinting){
             try {
                 canPrintGameResult.await();
             } catch (InterruptedException ex) {
                 Logger.getLogger(GeneralInformationRepository.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        }*/
         
         switch(gameScore.get(gameScore.size()-1)) {
             case VICTORY_TEAM_1_BY_KNOCKOUT:
@@ -235,13 +236,14 @@ public class GeneralInformationRepository {
     public void printMatchWinner(int team, int score1, int score2) {
         lock.lock();
         
+        /*
         if(!benchesFinishedPrinting){
             try {
                 canPrintGameResult.await();
             } catch (InterruptedException ex) {
                 Logger.getLogger(GeneralInformationRepository.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        }*/
         
         printer.printf("Match was won by team %d (%d-%d).%n", team, score1, score2);
         printer.flush();
@@ -252,6 +254,7 @@ public class GeneralInformationRepository {
     public void printMatchDraw() {
         lock.lock();
         
+        /*
         if(!benchesFinishedPrinting){
             try {
                 canPrintGameResult.await();
@@ -259,6 +262,7 @@ public class GeneralInformationRepository {
                 Logger.getLogger(GeneralInformationRepository.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        */
         
         printer.printf("Match was a draw.%n");
         printer.flush();
