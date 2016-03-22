@@ -68,8 +68,8 @@ public class GeneralInformationRepository {
         }
         
         teamsState = new LinkedList<>();
-        teamsState.add(new Tuple[5]);
-        teamsState.add(new Tuple[5]);
+        teamsState.add(new Tuple[Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH]);
+        teamsState.add(new Tuple[Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH]);
         
         coachesState = new CoachState[2];
         

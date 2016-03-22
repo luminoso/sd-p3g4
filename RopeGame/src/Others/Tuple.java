@@ -1,13 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Others;
 
 /**
- *
- * @author ed1000
+ * Generic Tuple implementation
+ * @author Eduardo Sousa
  */
 public class Tuple<X, Y> {
     private X x;
