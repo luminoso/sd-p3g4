@@ -218,6 +218,14 @@ public class Referee extends Thread {
             GeneralInformationRepository.getInstance().printMatchWinner(2, score1, score2);
         else
             GeneralInformationRepository.getInstance().printMatchDraw();
+        
+        site.setHasMatchEnded(true);
+        
+        List<ContestantsBench> benchs = ContestantsBench.getInstances();
+        
+        for(ContestantsBench bench : benchs)
+            bench.okGoHome();
+        
     }
 
     /**

@@ -3,6 +3,7 @@ package Active;
 import Passive.ContestantsBench;
 import Passive.GeneralInformationRepository;
 import Passive.Playground;
+import Passive.RefereeSite;
 
 /**
  * General Description:
@@ -92,7 +93,7 @@ public class Contestant extends Thread implements Comparable<Contestant>{
     public void run() {
         seatDown();
         
-        while(true) {
+        while(!RefereeSite.getInstance().hasMatchEnded()) {
             switch(state) {
                 case SEAT_AT_THE_BENCH:
                     followCoachAdvice();

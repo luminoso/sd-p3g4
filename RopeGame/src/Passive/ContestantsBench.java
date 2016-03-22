@@ -12,6 +12,8 @@ import java.util.TreeSet;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * General Description:
@@ -116,7 +118,7 @@ public class ContestantsBench {
         try {
             do {
                 playersSelected.await();
-            } while(!isContestantSelected());
+            } while(!isContestantSelected() && !RefereeSite.getInstance().hasMatchEnded());
         } catch (InterruptedException ex) {
             lock.unlock();
             return;
@@ -263,5 +265,36 @@ public class ContestantsBench {
     private boolean checkAllPlayersSeated() {
         return bench.size() == Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH;
     }
+    
+    /**
+     * Signals everyone one last time to that Thread run condition is over
+     */
+    public void okGoHome(){
+        lock.lock();
+        
+        
+        while(!checkAllPlayersSeated()) {
+            try {
+                allPlayersSeated.await();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ContestantsBench.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
+        playersSelected.signalAll();
+
+        try {
+            while (!coachWaiting) {
+                waitForCoach.await();
+            }
+        } catch (InterruptedException ex) {
+        }
+        
+        waitForNextTrial.signal();
+
+       
+        
+        lock.unlock();
+    }
+    
 }

@@ -92,6 +92,8 @@ public class RopeGame {
         team2contestant4.join();
         team2contestant5.join();
         
+        System.out.println("Tudo terminou correctamente");
+        
         
     }
 }

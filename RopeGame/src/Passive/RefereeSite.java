@@ -22,6 +22,7 @@ public class RefereeSite {
     private final Lock lock;
     private final Condition informReferee;              // condition for referee wait for the coaches
     private int informRefereeCounter;                   // counter of how many coaches informed the referee
+    private boolean hasMatchEnded;
     
     private List<TrialScore> trialStatus;               // current trial status
     private final List<GameScore> gameStatus;           // current game status
@@ -51,6 +52,7 @@ public class RefereeSite {
         
         informReferee = lock.newCondition();
         informRefereeCounter = 0;
+        hasMatchEnded = false;
     }
 
     /**
@@ -191,7 +193,28 @@ public class RefereeSite {
         
         lock.unlock();
     }
-    
+
+    /**
+     * Checks if the match has ended
+     * @return True if no more matches to play. False if otherwise.
+     */
+    public boolean hasMatchEnded() {
+        boolean hasEnded;
+        lock.lock();
+        hasEnded = hasMatchEnded;
+        lock.unlock();
+        return hasEnded;
+    }
+
+    /**
+     * Changes the information at RefereeSite if the match as ended
+     * @param hasMatchEnded true if match ended
+     */
+    public void setHasMatchEnded(boolean hasMatchEnded) {
+        lock.lock();
+        this.hasMatchEnded = hasMatchEnded;
+        lock.unlock();
+    }
     
     public enum TrialScore {
         DRAW(0, "D"),

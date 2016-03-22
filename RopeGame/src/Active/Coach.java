@@ -62,7 +62,7 @@ public class Coach extends Thread implements Comparable<Coach>{
     public void run() {
         ContestantsBench.getInstance().waitForNextTrial();
         
-        while(true) {
+        while(!RefereeSite.getInstance().hasMatchEnded()) {
             switch(state) {
                 case WAIT_FOR_REFEREE_COMMAND:
                     callContestants();
