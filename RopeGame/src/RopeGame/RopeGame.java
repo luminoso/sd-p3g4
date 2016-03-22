@@ -3,6 +3,7 @@ package RopeGame;
 import Active.Coach;
 import Active.Contestant;
 import Active.Referee;
+import Others.KeepWinningTeam;
 import Others.MostStrengthStrategy;
 import Passive.GeneralInformationRepository;
 import java.security.SecureRandom;
@@ -35,7 +36,7 @@ public class RopeGame {
         Referee rf = new Referee("Arbit");
         
         Coach coach1 = new Coach("coach1", 1, new MostStrengthStrategy());
-        Coach coach2 = new Coach("coach2", 2, new MostStrengthStrategy());
+        Coach coach2 = new Coach("coach2", 2, new KeepWinningTeam());
     
         //Scanner sc = new Scanner(System.in);
         //sc.next();
