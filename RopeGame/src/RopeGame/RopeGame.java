@@ -6,9 +6,6 @@ import Active.Referee;
 import Others.KeepWinningTeam;
 import Others.MostStrengthStrategy;
 import Passive.GeneralInformationRepository;
-import static genclass.GenericIO.readlnInt;
-import static genclass.GenericIO.writeString;
-import static genclass.GenericIO.writelnString;
 import java.security.SecureRandom;
 
 
@@ -40,7 +37,7 @@ public class RopeGame {
             
             for(int j = 0, id=1; j < Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH; j++, id++){
                 
-                contestants[i][j] = new Contestant("Contestant team:" + Integer.toString(i) + " id:" + Integer.toString(id) , i+1, id, randomStrength() );
+                contestants[i][j] = new Contestant("Contestant team:" + i + " id:" + id , i+1, id, randomStrength() );
                 informationRepository.addContestant(contestants[i][j]);
             
             }
