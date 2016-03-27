@@ -65,6 +65,6 @@ public class RopeGame {
     }
     
     private static int randomStrength(){
-        return Constants.INITIAL_MINIMUM_FORCE + (int)(Math.random() * Constants.INITIAL_MAXIMUM_FORCE);
+        return Constants.INITIAL_MINIMUM_FORCE + (int) (Math.random() * (Constants.INITIAL_MAXIMUM_FORCE - Constants.INITIAL_MINIMUM_FORCE));
     }
 }
