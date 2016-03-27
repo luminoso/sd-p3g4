@@ -8,7 +8,6 @@ import Passive.RefereeSite;
 import Passive.RefereeSite.GameScore;
 import Passive.RefereeSite.TrialScore;
 import RopeGame.Constants;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -218,11 +217,6 @@ public class Referee extends Thread {
             GeneralInformationRepository.getInstance().printMatchDraw();
         
         site.setHasMatchEnded(true);
-        
-        List<ContestantsBench> benchs = ContestantsBench.getInstances();
-        
-        for(ContestantsBench bench : benchs)
-            bench.okGoHome();
     }
 
     /**

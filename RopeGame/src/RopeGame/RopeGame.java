@@ -69,10 +69,12 @@ public class RopeGame {
         rf.join();
         
         for (int i = 0; i < coaches.length; i++) {
-            coaches[i].join();
+            while(coaches[i].isAlive())
+                coaches[i].interrupt();
 
             for (int j = 0; j < contestants[i].length; j++) {
-                contestants[i][j].join();
+                while(contestants[i][j].isAlive())
+                    contestants[i][j].interrupt();
             }
         }
     }

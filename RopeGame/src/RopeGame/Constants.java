@@ -41,12 +41,12 @@ public class Constants {
     /**
      * Minimum time for a player to pull the rope (in ms).
      */
-    public static final int MINIMUM_WAIT_TIME = 1000;
+    public static final int MINIMUM_WAIT_TIME = 1;
     
     /**
      * Maximum time for a player to pull the rope (in ms).
      */
-    public static final int MAXIMUM_WAIT_TIME = 3000;
+    public static final int MAXIMUM_WAIT_TIME = 3;
     
     /**
      * Position of the flag for a win by knock out.

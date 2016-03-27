@@ -114,14 +114,15 @@ public class Coach extends Thread implements Comparable<Coach>{
         Set<Integer> selectedContestants = bench.getSelectedContestants();
         Set<Contestant> allContestants = bench.getBench();
         
-        for(Contestant contestant : allContestants) {
-            if(selectedContestants.contains(contestant.getContestantId())) {
-                contestant.setContestantStrength(contestant.getContestantStrength() - 1);
-            } else {
-                contestant.setContestantStrength(contestant.getContestantStrength() + 1);
+        if(allContestants != null) {
+            for(Contestant contestant : allContestants) {
+                if(selectedContestants.contains(contestant.getContestantId())) {
+                    contestant.setContestantStrength(contestant.getContestantStrength() - 1);
+                } else {
+                    contestant.setContestantStrength(contestant.getContestantStrength() + 1);
+                }
             }
         }
-        
         ContestantsBench.getInstance().waitForNextTrial();
     }
 
