@@ -116,7 +116,9 @@ public class Contestant extends Thread implements Comparable<Contestant>{
      */
     private void followCoachAdvice() {
         ContestantsBench.getInstance().getContestant();
-        Playground.getInstance().addContestant();
+        
+        if(!RefereeSite.getInstance().hasMatchEnded())
+            Playground.getInstance().addContestant();
     }
     
     /**
@@ -137,7 +139,7 @@ public class Contestant extends Thread implements Comparable<Contestant>{
 
     /**
      * If contestant was playing moves to his bench and changes his 
-     * state to seat at the bench
+     * state to SEAT_AT_THE_BENCH
      */
     private void seatDown() {
         Playground.getInstance().getContestant();

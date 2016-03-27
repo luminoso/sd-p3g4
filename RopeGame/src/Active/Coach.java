@@ -18,7 +18,7 @@ public class Coach extends Thread implements Comparable<Coach>{
     private final CoachStrategy strategy;     // Team picking strategy
     
     /**
-     * Initializes a Coach instance
+     * Initialises a Coach instance
      * @param name Name of the coach
      * @param team Team of the coach
      * @param strategy Coach strategy

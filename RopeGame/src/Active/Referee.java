@@ -78,10 +78,6 @@ public class Referee extends Thread {
                     break;
             }
         }
-        
-        for(GameScore score : RefereeSite.getInstance().getGamePoints()) {
-            System.out.println(score);
-        }
     }
 
     /** 
@@ -158,10 +154,12 @@ public class Referee extends Thread {
         int flagPosition = Playground.getInstance().getFlagPosition();
         
         switch (flagPosition) {
-            case -4:
+            // To the left
+            case -Constants.KNOCK_OUT_FLAG_POSITION:
                 RefereeSite.getInstance().addGamePoint(GameScore.VICTORY_TEAM_1_BY_KNOCKOUT);
                 break;
-            case 4:
+            // To the right
+            case Constants.KNOCK_OUT_FLAG_POSITION:
                 RefereeSite.getInstance().addGamePoint(GameScore.VICTORY_TEAM_2_BY_KNOCKOUT);
                 break;
             default:
@@ -233,30 +231,10 @@ public class Referee extends Thread {
      * @return true if game has ended false if more games to play
      */
     private boolean checkForGameEnd() {
-        RefereeSite site = RefereeSite.getInstance();
-        List<TrialScore> trialScore = site.getTrialPoints();
-        
-        if(site.getRemainingTrials() == 0)
+        if(Math.abs(Playground.getInstance().getFlagPosition()) >= Constants.KNOCK_OUT_FLAG_POSITION)
             return true;
-        
-        if(trialScore.size() >= (Math.floor(Constants.NUMBER_OF_TRIALS/2) + 1)) {
-            int team1 = 0;
-            int team2 = 0;
-            
-            for(TrialScore score : trialScore) {
-                if(score == TrialScore.DRAW){
-                    team1++;
-                    team2++;
-                } else if(score == TrialScore.VICTORY_TEAM_1) {
-                    team1++;
-                } else {
-                    team2++;
-                }
-            }
-            
-            if(Math.abs(team1 - team2) > site.getRemainingTrials())
-                return true;
-        }
+        else if(RefereeSite.getInstance().getRemainingTrials() == 0)
+            return true;
 
         return false;
     }
