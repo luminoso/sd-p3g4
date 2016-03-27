@@ -188,11 +188,11 @@ public class Referee extends Thread {
         GeneralInformationRepository.getInstance().printLineUpdate();
         GeneralInformationRepository.getInstance().setGameScore(RefereeSite.getInstance().getGamePoints());
         GeneralInformationRepository.getInstance().printGameResult();
-        GeneralInformationRepository.getInstance().setTrialScore(new LinkedList<>());
     }
 
     /**
-     * Declares the match winner and sets the game score accordingly
+     * Declares the match winner and sets the game score accordingly.
+     * Wakes up all other active entities and sends them home.
      */
     private void declareMatchWinner() {
         RefereeSite site = RefereeSite.getInstance();
@@ -223,7 +223,6 @@ public class Referee extends Thread {
         
         for(ContestantsBench bench : benchs)
             bench.okGoHome();
-        
     }
 
     /**
