@@ -17,7 +17,7 @@ import java.security.SecureRandom;
 import static java.lang.System.out;
 public class RopeGame {
     public static void main(String[] args) throws InterruptedException {
-        
+
         Referee rf;
         GeneralInformationRepository informationRepository;
         Contestant [][] contestants;
@@ -80,7 +80,6 @@ public class RopeGame {
     }
     
     private static int randomStrength(){
-        SecureRandom rand = new SecureRandom();
-        return (int) (rand.nextInt(2) * (Constants.INITIAL_MAXIMUM_FORCE - Constants.INITIAL_MINIMUM_FORCE) + Constants.INITIAL_MINIMUM_FORCE);
+        return Constants.INITIAL_MINIMUM_FORCE + (int)(Math.random() * Constants.INITIAL_MAXIMUM_FORCE);
     }
 }
