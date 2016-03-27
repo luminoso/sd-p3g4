@@ -12,7 +12,8 @@ import Passive.RefereeSite;
 
 /**
  * General description:
- * This class starts the Rope Game. It instantiates all the active 
+ * This class starts the Rope Game. It instantiates all the active and passive
+ * entities.
  * 
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
@@ -76,6 +77,11 @@ public class RopeGame {
         }
     }
     
+    /**
+     * Function to generate a random strength when a player is instantiated.
+     * 
+     * @return a strength for a player instantiation
+     */
     private static int randomStrength(){
         return Constants.INITIAL_MINIMUM_FORCE + (int) (Math.random() * (Constants.INITIAL_MAXIMUM_FORCE - Constants.INITIAL_MINIMUM_FORCE));
     }
