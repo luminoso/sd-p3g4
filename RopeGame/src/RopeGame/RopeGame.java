@@ -6,9 +6,6 @@ import Active.Referee;
 import Others.KeepWinningTeam;
 import Others.MostStrengthStrategy;
 import Passive.GeneralInformationRepository;
-import static genclass.GenericIO.readlnInt;
-import static genclass.GenericIO.writeString;
-import static genclass.GenericIO.writelnString;
 import java.security.SecureRandom;
 
 
@@ -17,16 +14,14 @@ import java.security.SecureRandom;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-import static java.lang.System.out;
 public class RopeGame {
     public static void main(String[] args) throws InterruptedException {
-        
         Referee rf;
         GeneralInformationRepository informationRepository;
-        Contestant [][] contestants;
-        Coach [] coaches = new Coach[2];
+        Contestant[][] contestants;
+        Coach[] coaches = new Coach[2];
         
-        coaches[0] = new Coach("Coach Team 1", 1, new MostStrengthStrategy());
+        coaches[0] = new Coach("Coach1", 1, new MostStrengthStrategy());
         coaches[1] = new Coach("coach2", 2, new KeepWinningTeam());
         
         rf = new Referee("Arbit");
@@ -34,27 +29,20 @@ public class RopeGame {
         
         contestants = new Contestant[2][Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH];
         
-        for(int i = 0; i < 2; i++){
+        for(int i = 1; i <= 2; i++){
+            informationRepository.addCoach(coaches[i-1]);
             
-            informationRepository.addCoach(coaches[i]);
-            
-            for(int j = 0, id=1; j < Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH; j++, id++){
-                
-                contestants[i][j] = new Contestant("Contestant team:" + Integer.toString(i) + " id:" + Integer.toString(id) , i+1, id, randomStrength() );
-                informationRepository.addContestant(contestants[i][j]);
-            
+            for(int j = 1; j <= Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH; j++){
+                contestants[i-1][j-1] = new Contestant("Cont: " + j + " Team: " + i, i, j, randomStrength() );
+                informationRepository.addContestant(contestants[i-1][j-1]);
             }
-        
         }
 
         informationRepository.addReferee(rf);
-        
         informationRepository.printHeader();
         
         // start simulation
-        
         for (int i = 0; i < 2; i++) {
-
             coaches[i].start();
 
             for (int j = 0; j < Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH; j++) {
@@ -65,21 +53,15 @@ public class RopeGame {
         rf.start();
 
         // waiting for simulation to end
-        
         rf.join();
         
         for (int i = 0; i < 2; i++) {
-
             coaches[i].join();
 
             for (int j = 0; j < Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH; j++) {
                 contestants[i][j].join();
             }
         }
-        
-        System.out.println("Tudo terminou correctamente");
-        
-        
     }
     
     private static int randomStrength(){

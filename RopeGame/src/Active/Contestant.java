@@ -8,6 +8,7 @@ import Passive.RefereeSite;
 /**
  * General Description:
  * This is an active class implements the Contestant and his interactions in the passive classes
+ * 
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
