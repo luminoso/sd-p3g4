@@ -5,60 +5,72 @@ import Active.Contestant;
 import Active.Referee;
 import Others.KeepWinningTeam;
 import Others.MostStrengthStrategy;
+import Passive.ContestantsBench;
 import Passive.GeneralInformationRepository;
-import java.security.SecureRandom;
-
+import Passive.Playground;
+import Passive.RefereeSite;
 
 /**
- *
+ * General description:
+ * This class starts the Rope Game. It instantiates all the active 
+ * 
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
 public class RopeGame {
     public static void main(String[] args) throws InterruptedException {
-        Referee rf;
-        GeneralInformationRepository informationRepository;
-        Contestant[][] contestants;
-        Coach[] coaches = new Coach[2];
+        // Instantiating all passive entities
+        ContestantsBench.getInstances();
+        RefereeSite.getInstance();
+        Playground.getInstance();
+        GeneralInformationRepository informationRepository = GeneralInformationRepository.getInstance();
         
+        // Instantiating all active entities
+        Referee rf = new Referee("Arbit");
+        
+        Coach[] coaches = new Coach[2];
         coaches[0] = new Coach("Coach: 1", 1, new MostStrengthStrategy());
         coaches[1] = new Coach("Coach: 2", 2, new KeepWinningTeam());
         
-        rf = new Referee("Arbit");
-        informationRepository = GeneralInformationRepository.getInstance();
+        Contestant[][] contestants = new Contestant[2][Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH];
         
-        contestants = new Contestant[2][Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH];
-        
-        for(int i = 0; i < 2; i++){    
-            informationRepository.addCoach(coaches[i]);
-            
+        for(int i = 0; i < 2; i++){
             for(int j = 0; j < Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH; j++){
                 contestants[i][j] = new Contestant("Cont: " + (j+1) + " Team: " + (i+1), i+1, j+1, randomStrength() );
-                informationRepository.addContestant(contestants[i-1][j-1]);
             }
         }
 
+        // Adding initial information to the General Information Repository
         informationRepository.addReferee(rf);
+        
+        for(int i = 0; i < coaches.length; i++) {
+            informationRepository.addCoach(coaches[i]);
+            for(int j = 0; j < contestants[i].length; j++) {
+                informationRepository.addContestant(contestants[i][j]);
+            }
+        }
+        
+        // Print the main header
         informationRepository.printHeader();
         
-        // start simulation
-        for (int i = 0; i < 2; i++) {
+        // Starting simulation
+        for (int i = 0; i < coaches.length; i++) {
             coaches[i].start();
 
-            for (int j = 0; j < Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH; j++) {
+            for (int j = 0; j < contestants[i].length; j++) {
                 contestants[i][j].start();
             }
         }
         
         rf.start();
 
-        // waiting for simulation to end
+        // Waiting for simulation to end
         rf.join();
         
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < coaches.length; i++) {
             coaches[i].join();
 
-            for (int j = 0; j < Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH; j++) {
+            for (int j = 0; j < contestants[i].length; j++) {
                 contestants[i][j].join();
             }
         }
