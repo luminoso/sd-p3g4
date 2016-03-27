@@ -272,7 +272,6 @@ public class ContestantsBench {
     public void okGoHome(){
         lock.lock();
         
-        
         while(!checkAllPlayersSeated()) {
             try {
                 allPlayersSeated.await();
@@ -283,17 +282,16 @@ public class ContestantsBench {
 
         playersSelected.signalAll();
 
-        try {
-            while (!coachWaiting) {
+        while (!coachWaiting) {
+            try {
                 waitForCoach.await();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ContestantsBench.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (InterruptedException ex) {
         }
-        
-        waitForNextTrial.signal();
 
-       
-        
+        waitForNextTrial.signal();
+   
         lock.unlock();
     }
     

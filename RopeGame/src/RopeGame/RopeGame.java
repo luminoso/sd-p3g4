@@ -21,19 +21,19 @@ public class RopeGame {
         Contestant[][] contestants;
         Coach[] coaches = new Coach[2];
         
-        coaches[0] = new Coach("Coach1", 1, new MostStrengthStrategy());
-        coaches[1] = new Coach("coach2", 2, new KeepWinningTeam());
+        coaches[0] = new Coach("Coach: 1", 1, new MostStrengthStrategy());
+        coaches[1] = new Coach("Coach: 2", 2, new KeepWinningTeam());
         
         rf = new Referee("Arbit");
         informationRepository = GeneralInformationRepository.getInstance();
         
         contestants = new Contestant[2][Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH];
         
-        for(int i = 1; i <= 2; i++){
-            informationRepository.addCoach(coaches[i-1]);
+        for(int i = 0; i < 2; i++){    
+            informationRepository.addCoach(coaches[i]);
             
-            for(int j = 1; j <= Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH; j++){
-                contestants[i-1][j-1] = new Contestant("Cont: " + j + " Team: " + i, i, j, randomStrength() );
+            for(int j = 0; j < Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH; j++){
+                contestants[i][j] = new Contestant("Cont: " + (j+1) + " Team: " + (i+1), i+1, j+1, randomStrength() );
                 informationRepository.addContestant(contestants[i-1][j-1]);
             }
         }
@@ -65,7 +65,6 @@ public class RopeGame {
     }
     
     private static int randomStrength(){
-        SecureRandom rand = new SecureRandom();
-        return (int) (rand.nextInt(2) * (Constants.INITIAL_MAXIMUM_FORCE - Constants.INITIAL_MINIMUM_FORCE) + Constants.INITIAL_MINIMUM_FORCE);
+        return Constants.INITIAL_MINIMUM_FORCE + (int)(Math.random() * Constants.INITIAL_MAXIMUM_FORCE);
     }
 }

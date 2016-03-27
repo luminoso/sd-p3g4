@@ -14,13 +14,10 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  * General Description:
@@ -34,8 +31,8 @@ public class GeneralInformationRepository {
     private final Lock lock;
     private PrintWriter printer;
     
-    private List<Tuple<ContestantState, Integer>[]> teamsState;
-    private CoachState[] coachesState;
+    private final List<Tuple<ContestantState, Integer>[]> teamsState;
+    private final CoachState[] coachesState;
     private RefereeState refereeState;
     
     private final List<Integer> team1Placement;     // list containing team contestants
@@ -58,6 +55,9 @@ public class GeneralInformationRepository {
         return instance;
     }
     
+    /**
+     * Private constructor
+     */
     private GeneralInformationRepository() {
         lock = new ReentrantLock();
         
@@ -85,6 +85,10 @@ public class GeneralInformationRepository {
         flagPosition = 0;
     }
     
+    /**
+     * Adds a Referee to General Information Repository
+     * @param referee Referee to add
+     */
     public void addReferee(Referee referee) {
         lock.lock();
         
@@ -93,6 +97,10 @@ public class GeneralInformationRepository {
         lock.unlock();
     }
     
+    /**
+     * Adds a Referee to General Information Repository
+     * @param contestant Contestant to add
+     */
     public void addContestant(Contestant contestant) {
         lock.lock();
         
@@ -104,6 +112,10 @@ public class GeneralInformationRepository {
         lock.unlock();
     }
     
+    /**
+     * Adds a Coach to General Information Repository
+     * @param referee Coach to add
+     */
     public void addCoach(Coach coach) {
         lock.lock();
         
@@ -114,6 +126,10 @@ public class GeneralInformationRepository {
         lock.unlock();
     }
     
+    /**
+     * Sets a game score
+     * @param gameScore to set
+     */
     public void setGameScore(List<GameScore> gameScore) {
         lock.lock();
         
@@ -123,6 +139,10 @@ public class GeneralInformationRepository {
         lock.unlock();
     }
     
+    /**
+     * Sets a trial score score
+     * @param trialScore to set
+     */
     public void setTrialScore(List<TrialScore> trialScore) {
         lock.lock();
         
@@ -132,6 +152,10 @@ public class GeneralInformationRepository {
         lock.unlock();
     }
     
+    /**
+     * Sets flag position
+     * @param flagPosition to set
+     */
     public void setFlagPosition(int flagPosition) {
         lock.lock();
         
@@ -140,6 +164,9 @@ public class GeneralInformationRepository {
         lock.unlock();
     }
     
+    /**
+     * Sets a team placement
+     */
     public void setTeamPlacement() {
         Contestant contestant = (Contestant) Thread.currentThread();
         
@@ -153,6 +180,9 @@ public class GeneralInformationRepository {
         lock.unlock();
     }
     
+    /**
+     * Resets team placement
+     */
     public void resetTeamPlacement() {
         lock.lock();
         
@@ -162,6 +192,9 @@ public class GeneralInformationRepository {
         lock.unlock();
     }
     
+    /**
+     * Print game header
+     */
     public void printGameHeader() {
         lock.lock();
         
@@ -175,6 +208,9 @@ public class GeneralInformationRepository {
         lock.unlock();
     }
     
+    /**
+     * Fully prints a line with all the updates
+     */
     public void printLineUpdate() {
         Thread thread = Thread.currentThread();
         
@@ -200,6 +236,9 @@ public class GeneralInformationRepository {
         lock.unlock();
     }
     
+    /**
+     * Fully prints the game result
+     */
     public void printGameResult() {
         lock.lock();
         
@@ -233,6 +272,12 @@ public class GeneralInformationRepository {
         lock.unlock();
     }
     
+    /**
+     * Print Match winner
+     * @param team that won
+     * @param score1 score team 1
+     * @param score2 score team 2
+     */
     public void printMatchWinner(int team, int score1, int score2) {
         lock.lock();
         
@@ -251,6 +296,9 @@ public class GeneralInformationRepository {
         lock.unlock();
     }
     
+    /**
+     * Prints that was a draw
+     */
     public void printMatchDraw() {
         lock.lock();
         
@@ -270,6 +318,9 @@ public class GeneralInformationRepository {
         lock.unlock();
     }
     
+    /**
+     * Prints game logger legend
+     */
     public void printLegend() {
         lock.lock();
         
@@ -286,6 +337,9 @@ public class GeneralInformationRepository {
         lock.unlock();
     }
     
+    /**
+     * Print General Information Repository header
+     */
     public void printHeader(){
         lock.lock();
         
@@ -299,6 +353,9 @@ public class GeneralInformationRepository {
         lock.unlock();
     }
     
+    /**
+     * Prints game column header 
+     */
     private void printColumnHeader() {
         lock.lock();
         
@@ -311,6 +368,10 @@ public class GeneralInformationRepository {
         lock.unlock();
     }
     
+    /**
+     * Prints active entities states
+     * @return a single string with all states
+     */
     private String printActiveEntitiesStates() {
         lock.lock();
         
@@ -333,6 +394,9 @@ public class GeneralInformationRepository {
         return string;
     }
     
+    /**
+     * Prints an empty result
+     */
     private void printEmptyResult() {
         lock.lock();
         
@@ -342,6 +406,12 @@ public class GeneralInformationRepository {
         lock.unlock();
     }
     
+    /**
+     * Prints trial result
+     * @param trialNumber number of the trial
+     * @param flagPosition position of the flag
+     * @return a String with all the information in a single string
+     */
     private String printTrialResult(int trialNumber, int flagPosition) {
         lock.lock();
         
@@ -370,6 +440,12 @@ public class GeneralInformationRepository {
         return string;
     }
     
+    /**
+     * Prints a game winner by knock out
+     * @param game number of the game
+     * @param team number of the team
+     * @param trials in how many trials 
+     */
     private void printGameWinnerByKnockOut(int game, int team, int trials) {
         lock.lock();
         
@@ -379,6 +455,11 @@ public class GeneralInformationRepository {
         lock.unlock();
     }
     
+    /**
+     * Prints that a game was won by points
+     * @param game number of the game
+     * @param team that won the game
+     */
     private void printGameWinnerByPoints(int game, int team) {
         lock.lock();
         
@@ -388,6 +469,10 @@ public class GeneralInformationRepository {
         lock.unlock();
     }
     
+    /**
+     * Print that the game was a draw
+     * @param game 
+     */
     private void printGameDraw(int game) {
         lock.lock();
         
@@ -397,6 +482,9 @@ public class GeneralInformationRepository {
         lock.unlock();
     }    
 
+    /**
+     * Closes log file
+     */
     public void close() {
         lock.lock();
         
