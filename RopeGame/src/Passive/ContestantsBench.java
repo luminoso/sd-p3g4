@@ -169,7 +169,7 @@ public class ContestantsBench {
      * Set selected contestants array.
      * This arrays should be filled with the IDs of the players for the next round.
      * 
-     * @param selected
+     * @param selected identifiers for the selected players
      */
     public void setSelectedContestants(Set<Integer> selected) {
         lock.lock();

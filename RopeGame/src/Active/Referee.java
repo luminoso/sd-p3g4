@@ -89,7 +89,8 @@ public class Referee extends Thread {
         Playground.getInstance().setFlagPosition(0);
         
         GeneralInformationRepository.getInstance().setFlagPosition(0);
-        GeneralInformationRepository.getInstance().setTrialScore(new LinkedList<>());
+        GeneralInformationRepository.getInstance().setTrialNumber(1);
+        GeneralInformationRepository.getInstance().setGameNumber(RefereeSite.getInstance().getGamePoints().size() + 1);
         GeneralInformationRepository.getInstance().printGameHeader();
         this.setRefereeState(RefereeState.START_OF_A_GAME);
         GeneralInformationRepository.getInstance().printLineUpdate();
@@ -101,6 +102,8 @@ public class Referee extends Thread {
      * wake him.
      */
     private void callTrial() {
+        GeneralInformationRepository.getInstance().setTrialNumber(RefereeSite.getInstance().getTrialPoints().size() + 1);
+        
         List<ContestantsBench> benchs = ContestantsBench.getInstances();
         
         for(ContestantsBench bench : benchs)
@@ -135,9 +138,6 @@ public class Referee extends Thread {
         }
         
         GeneralInformationRepository.getInstance().setFlagPosition(flagPosition);
-
-        if (RefereeSite.getInstance().getTrialPoints().size() < Constants.NUMBER_OF_TRIALS)
-            GeneralInformationRepository.getInstance().setTrialScore(RefereeSite.getInstance().getTrialPoints());
 
         GeneralInformationRepository.getInstance().printLineUpdate();
         GeneralInformationRepository.getInstance().resetTeamPlacement();
@@ -186,8 +186,8 @@ public class Referee extends Thread {
         
         this.setRefereeState(RefereeState.END_OF_A_GAME);
         GeneralInformationRepository.getInstance().printLineUpdate();
-        GeneralInformationRepository.getInstance().setGameScore(RefereeSite.getInstance().getGamePoints());
-        GeneralInformationRepository.getInstance().printGameResult();
+        GeneralInformationRepository.getInstance().printGameResult(
+                RefereeSite.getInstance().getGamePoints().get(RefereeSite.getInstance().getGamePoints().size()-1));
     }
 
     /**
