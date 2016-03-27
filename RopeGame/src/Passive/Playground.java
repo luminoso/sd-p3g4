@@ -29,9 +29,9 @@ public class Playground {
     private final Condition teamsInPosition;              // condition for waiting to the teams to be in position
     private final Condition finishedPulling;              // condition for waiting the contestants finished pulling the rope
     private final Condition resultAssert;                 // condition for waiting for the result to be asserted
-    private int pullCounter;                        // how many pulls the contestants made
-    private int flagPosition;                       // current flag position
-    private int lastFlagPosition;                   // last flag position
+    private int pullCounter;                              // how many pulls the contestants made
+    private int flagPosition;                             // current flag position
+    private int lastFlagPosition;                         // last flag position
     private final List<Contestant>[] teams;               // list containing the Contestant in both teams
     
     /**
@@ -94,7 +94,7 @@ public class Playground {
     }
     
     /**
-     * Synchronization point for waiting for the teams to be ready
+     * Synchronisation point for waiting for the teams to be ready
      */
     public void checkTeamPlacement() {
         Coach coach = (Coach) Thread.currentThread();
@@ -117,7 +117,7 @@ public class Playground {
     }
     
     /**
-     * Synchronization point for watching the trial in progress
+     * Synchronisation point for watching the trial in progress
      */
     public void watchTrial() {
         Coach coach = (Coach) Thread.currentThread();
@@ -165,7 +165,7 @@ public class Playground {
     }
     
     /**
-     * Synchronization point for signaling the result is asserted
+     * Synchronisation point for signalling the result is asserted
      */
     public void resultAsserted() {
         lock.lock();

@@ -181,7 +181,7 @@ public class RefereeSite {
     }
     
     /**
-     * Synchronization point where the Coaches inform the Referee that they're ready
+     * Synchronisation point where the Coaches inform the Referee that they're ready
      */
     public void informReferee() {
         lock.lock();

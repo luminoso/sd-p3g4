@@ -199,7 +199,7 @@ public class ContestantsBench {
     }
     
     /**
-     * Synchronization point where the Referee waits for the Coaches to pick the teams
+     * Synchronisation point where the Referee waits for the Coaches to pick the teams
      */
     public void pickYourTeam(){
         lock.lock();
@@ -217,7 +217,7 @@ public class ContestantsBench {
     }
     
     /**
-     * Synchronization point where Coaches wait for the next trial instructed by the Referee
+     * Synchronisation point where Coaches wait for the next trial instructed by the Referee
      */
     public void waitForNextTrial() {
         Coach coach = (Coach) Thread.currentThread();

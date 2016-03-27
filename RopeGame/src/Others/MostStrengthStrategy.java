@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Others;
 
 import Active.Contestant;
@@ -17,7 +12,7 @@ import java.util.Set;
 
 /**
  * General Description:
- * Coach strategy implementation that picks the most strengthful players
+ * Coach strategy implementation that picks the players with the most strength
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */

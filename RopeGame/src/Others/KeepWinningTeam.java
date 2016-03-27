@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Others;
 
 import Active.Coach;
@@ -19,6 +14,7 @@ import java.util.Set;
 
 /**
  * This strategy keeps the Contestants in game if they won or picks a random players if they lost
+ * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
 public class KeepWinningTeam implements CoachStrategy {

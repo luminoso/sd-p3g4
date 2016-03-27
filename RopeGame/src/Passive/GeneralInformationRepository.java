@@ -385,7 +385,7 @@ public class GeneralInformationRepository {
             string += String.format("  %4s", coachesState[i]);
             
             for(int j = 0; j < teamsState.get(i).length; j++) {
-                string += String.format(" %3s %2d", teamsState.get(i)[j].getX(), teamsState.get(i)[j].getY());
+                string += String.format(" %3s %2d", teamsState.get(i)[j].getLeft(), teamsState.get(i)[j].getRight());
             }
         }
     
