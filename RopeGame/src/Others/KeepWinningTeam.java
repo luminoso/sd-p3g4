@@ -1,10 +1,10 @@
 package Others;
 
-import Active.Coach;
-import Active.Contestant;
-import Passive.ContestantsBench;
-import Passive.RefereeSite;
-import Passive.RefereeSite.TrialScore;
+import ClientSide.Coach;
+import ClientSide.Contestant;
+import ServerSide.ContestantsBench;
+import ServerSide.RefereeSite;
+import ServerSide.RefereeSite.TrialScore;
 import RopeGame.Constants;
 import java.util.Collections;
 import java.util.HashSet;

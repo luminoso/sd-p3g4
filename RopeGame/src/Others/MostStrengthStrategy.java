@@ -1,8 +1,8 @@
 package Others;
 
-import Active.Contestant;
-import Passive.ContestantsBench;
-import Passive.RefereeSite;
+import ClientSide.Contestant;
+import ServerSide.ContestantsBench;
+import ServerSide.RefereeSite;
 import RopeGame.Constants;
 import java.util.Comparator;
 import java.util.HashSet;

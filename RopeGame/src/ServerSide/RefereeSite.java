@@ -1,7 +1,7 @@
-package Passive;
+package ServerSide;
 
-import Active.Referee;
-import Active.Referee.RefereeState;
+import ClientSide.Referee;
+import ClientSide.Referee.RefereeState;
 import RopeGame.Constants;
 import java.util.LinkedList;
 import java.util.List;

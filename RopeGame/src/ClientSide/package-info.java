@@ -5,4 +5,4 @@
  * @author Guilherme Cardoso
  */
 
-package Active;
+package ClientSide;

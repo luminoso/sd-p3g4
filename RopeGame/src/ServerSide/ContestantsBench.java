@@ -1,9 +1,9 @@
-package Passive;
+package ServerSide;
 
-import Active.Coach;
-import Active.Coach.CoachState;
-import Active.Contestant;
-import Active.Contestant.ContestantState;
+import ClientSide.Coach;
+import ClientSide.Coach.CoachState;
+import ClientSide.Contestant;
+import ClientSide.Contestant.ContestantState;
 import RopeGame.Constants;
 import java.util.LinkedList;
 import java.util.List;

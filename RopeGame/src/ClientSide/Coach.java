@@ -1,9 +1,9 @@
-package Active;
+package ClientSide;
 
 import Others.CoachStrategy;
-import Passive.ContestantsBench;
-import Passive.Playground;
-import Passive.RefereeSite;
+import ServerSide.ContestantsBench;
+import ServerSide.Playground;
+import ServerSide.RefereeSite;
 import java.util.Set;
 
 /**

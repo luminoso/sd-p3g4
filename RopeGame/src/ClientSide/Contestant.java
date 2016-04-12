@@ -1,9 +1,9 @@
-package Active;
+package ClientSide;
 
-import Passive.ContestantsBench;
-import Passive.GeneralInformationRepository;
-import Passive.Playground;
-import Passive.RefereeSite;
+import ServerSide.ContestantsBench;
+import ServerSide.GeneralInformationRepository;
+import ServerSide.Playground;
+import ServerSide.RefereeSite;
 
 /**
  * General Description:

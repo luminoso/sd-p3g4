@@ -5,4 +5,4 @@
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-package Passive;
+package ServerSide;

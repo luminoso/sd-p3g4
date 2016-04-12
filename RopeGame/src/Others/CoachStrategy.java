@@ -1,7 +1,7 @@
 package Others;
 
-import Passive.ContestantsBench;
-import Passive.RefereeSite;
+import ServerSide.ContestantsBench;
+import ServerSide.RefereeSite;
 import java.util.Set;
 
 /**

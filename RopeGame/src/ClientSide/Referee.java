@@ -1,12 +1,12 @@
-package Active;
+package ClientSide;
 
-import static Active.Referee.RefereeState.END_OF_THE_MATCH;
-import Passive.ContestantsBench;
-import Passive.GeneralInformationRepository;
-import Passive.Playground;
-import Passive.RefereeSite;
-import Passive.RefereeSite.GameScore;
-import Passive.RefereeSite.TrialScore;
+import static ClientSide.Referee.RefereeState.END_OF_THE_MATCH;
+import ServerSide.ContestantsBench;
+import ServerSide.GeneralInformationRepository;
+import ServerSide.Playground;
+import ServerSide.RefereeSite;
+import ServerSide.RefereeSite.GameScore;
+import ServerSide.RefereeSite.TrialScore;
 import RopeGame.Constants;
 import java.util.List;
 
