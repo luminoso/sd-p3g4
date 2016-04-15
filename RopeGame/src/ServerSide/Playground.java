@@ -1,11 +1,13 @@
 package ServerSide;
 
+import Others.InterfacePlayground;
 import ClientSide.Coach;
 import ClientSide.Coach.CoachState;
 import ClientSide.Contestant;
 import ClientSide.Contestant.ContestantState;
 import ClientSide.Referee;
 import ClientSide.Referee.RefereeState;
+import Others.Ground;
 import RopeGame.Constants;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,7 @@ import java.util.logging.Logger;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class Playground {
+public class Playground extends Ground implements InterfacePlayground {
     private static Playground instance;
     
     private final Lock lock;
@@ -69,19 +71,20 @@ public class Playground {
      * The method adds a contestant to the playground.
      * 
      */
+    @Override
     public void addContestant(){
         Contestant contestant = (Contestant) Thread.currentThread();
         
         lock.lock();
         
         try {
-            this.teams[contestant.getContestantTeam()-1].add(contestant);
+            this.teams[contestant.getTeam()-1].add(contestant);
             
-            contestant.setContestantState(ContestantState.STAND_IN_POSITION);
+            contestant.setState(ContestantState.STAND_IN_POSITION);
             GeneralInformationRepository.getInstance().setTeamPlacement();
             GeneralInformationRepository.getInstance().printLineUpdate();
             
-            if(isTeamInPlace(contestant.getContestantTeam())) {
+            if(isTeamInPlace(contestant.getTeam())) {
                 this.teamsInPosition.signalAll();
             }
             
@@ -96,6 +99,7 @@ public class Playground {
     /**
      * Synchronisation point for waiting for the teams to be ready
      */
+    @Override
     public void checkTeamPlacement() {
         Coach coach = (Coach) Thread.currentThread();
         
@@ -105,7 +109,7 @@ public class Playground {
         GeneralInformationRepository.getInstance().printLineUpdate();
         
         try {
-            while(!isTeamInPlace(coach.getCoachTeam())) {
+            while(!isTeamInPlace(coach.getTeam())) {
                 this.teamsInPosition.await();
             }
         } catch (InterruptedException ex) {
@@ -119,6 +123,7 @@ public class Playground {
     /**
      * Synchronisation point for watching the trial in progress
      */
+    @Override
     public void watchTrial() {
         Coach coach = (Coach) Thread.currentThread();
         
@@ -140,6 +145,7 @@ public class Playground {
     /**
      * Contestant pulls the rope
      */
+    @Override
     public void pullRope() {
         lock.lock();
         
@@ -167,6 +173,7 @@ public class Playground {
     /**
      * Synchronisation point for signalling the result is asserted
      */
+    @Override
     public void resultAsserted() {
         lock.lock();
         
@@ -180,6 +187,7 @@ public class Playground {
     /**
      * Referee instructs the Contestants to start pulling the rope
      */
+    @Override
     public void startPulling() {
         Referee referee = (Referee) Thread.currentThread();
         
@@ -206,12 +214,13 @@ public class Playground {
      * The method removes the contestant from the playground.
      * 
      */
+    @Override
     public void getContestant(){
         Contestant contestant = (Contestant) Thread.currentThread();
         
         lock.lock();
         
-        teams[contestant.getContestantTeam()-1].remove(contestant);
+        teams[contestant.getTeam()-1].remove(contestant);
         
         lock.unlock();
     }
@@ -222,6 +231,7 @@ public class Playground {
      * 
      * @return Position of the flag. 
      */
+    @Override
     public int getFlagPosition(){
         int result;
         
@@ -238,6 +248,7 @@ public class Playground {
      * Gets the last flag position
      * @return the flag position before the current position
      */
+    @Override
     public int getLastFlagPosition() {
         int result;
         
@@ -254,6 +265,7 @@ public class Playground {
      * Sets the flag position
      * @param flagPosition position of the flag
      */
+    @Override
     public void setFlagPosition(int flagPosition) {
         this.lastFlagPosition = flagPosition;
         this.flagPosition = flagPosition;
@@ -271,6 +283,7 @@ public class Playground {
     /**
      * Checks if everyone pulled the rope
      */
+    @Override
     public void haveAllPulled() {
         lock.lock();
         try {
@@ -285,6 +298,7 @@ public class Playground {
      * Checks if all contestants are ready to pull the rope
      * @return true if every Contestant is in place to pull the rope
      */
+    @Override
     public boolean checkAllContestantsReady(){
         return (teams[0].size() + teams[1].size()) == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND * 2;
     }
@@ -293,6 +307,7 @@ public class Playground {
      * Gets the current teams in the playground
      * @return List containing both teams Contestants in the playground
      */
+    @Override
     public List<Contestant>[] getTeams() {
         List<Contestant>[] teamslist = new List[2];
         
@@ -314,11 +329,11 @@ public class Playground {
         int team2 = 0;
         
         for(Contestant contestant : this.teams[0]) {
-            team1 += contestant.getContestantStrength();
+            team1 += contestant.getStrength();
         }
         
         for(Contestant contestant : this.teams[1]) {
-            team2 += contestant.getContestantStrength();
+            team2 += contestant.getStrength();
         }
         
         lastFlagPosition = flagPosition;

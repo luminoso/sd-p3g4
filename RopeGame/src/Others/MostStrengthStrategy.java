@@ -24,7 +24,7 @@ public class MostStrengthStrategy implements CoachStrategy {
     private final Comparator<Contestant> comparator = new Comparator<Contestant>() {
         @Override
         public int compare(Contestant o1, Contestant o2) {
-            return o2.getContestantStrength()- o1.getContestantStrength();
+            return o2.getStrength()- o1.getStrength();
         }
     };
     
@@ -35,7 +35,7 @@ public class MostStrengthStrategy implements CoachStrategy {
      * @return Set of the picked Contestants
      */
     @Override
-    public Set<Integer> pickTeam(ContestantsBench bench, RefereeSite site) {
+    public Set<Integer> pickTeam(Bench bench, RefereeSite site) {
         Set<Integer> pickedTeam = new HashSet<>();
         
         List<Contestant> contestants = new LinkedList<>(bench.getBench());
@@ -46,7 +46,7 @@ public class MostStrengthStrategy implements CoachStrategy {
                 break;
             }
             
-            pickedTeam.add(cont.getContestantId());
+            pickedTeam.add(cont.getContestatId());
         }
         
         return pickedTeam;

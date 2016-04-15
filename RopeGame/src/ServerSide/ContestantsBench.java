@@ -1,9 +1,12 @@
 package ServerSide;
 
+import Others.Bench;
+import Others.InterfaceContestantsBench;
 import ClientSide.Coach;
 import ClientSide.Coach.CoachState;
 import ClientSide.Contestant;
 import ClientSide.Contestant.ContestantState;
+import ClientSide.Referee;
 import RopeGame.Constants;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +22,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class ContestantsBench {
+public class ContestantsBench extends Bench implements InterfaceContestantsBench {
     private static final ContestantsBench[] instances = new ContestantsBench[2];    // Doubleton containing the two teams benches
     
     // Final fields
@@ -41,14 +44,7 @@ public class ContestantsBench {
      * 
      * @return ContestantsBench object specified by the team identifier passed.
      */
-    public static synchronized ContestantsBench getInstance() {
-        int team = -1;
-        
-        if(Thread.currentThread().getClass() == Contestant.class) {
-            team = ((Contestant) Thread.currentThread()).getContestantTeam();
-        } else if(Thread.currentThread().getClass() == Coach.class) {
-            team = ((Coach) Thread.currentThread()).getCoachTeam();
-        }
+    public static synchronized ContestantsBench getInstance(int team) {
         
         if(instances[team-1] == null) {
             instances[team-1] = new ContestantsBench(team);
@@ -75,6 +71,23 @@ public class ContestantsBench {
         return temp;
     }
     
+    @Override
+    public synchronized List<Bench> getBenches() {
+
+        List<Bench> temp = new LinkedList<>();
+
+        for (int i = 0; i < instances.length; i++) {
+            if (instances[i] == null) {
+                instances[i] = new ContestantsBench(i);
+            }
+
+            temp.add(instances[i]);
+        }
+
+        return temp;
+
+    }
+    
     
     /**
      * Private constructor to be used in the doubleton.
@@ -97,6 +110,7 @@ public class ContestantsBench {
      * The method adds a contestant to the bench.
      * 
      */
+    @Override
     public void addContestant() {
         Contestant contestant = (Contestant) Thread.currentThread();
         
@@ -105,7 +119,7 @@ public class ContestantsBench {
         bench.add(contestant);
 
         if(contestant.getContestantState() != ContestantState.SEAT_AT_THE_BENCH) {
-            contestant.setContestantState(ContestantState.SEAT_AT_THE_BENCH);
+            contestant.setState(ContestantState.SEAT_AT_THE_BENCH);
             GeneralInformationRepository.getInstance().printLineUpdate();
         }
         
@@ -128,6 +142,7 @@ public class ContestantsBench {
     /**
      * The method removes a contestant from the bench.
      */
+    @Override
     public void getContestant() {
         Contestant contestant = (Contestant) Thread.currentThread();
         
@@ -142,6 +157,7 @@ public class ContestantsBench {
      * This method returns the bench which contains the Contestants
      * @return List of the contestants in the bench
      */
+    @Override
     public Set<Contestant> getBench() {
         Set<Contestant> temp;
         
@@ -169,6 +185,7 @@ public class ContestantsBench {
      * 
      * @param selected identifiers for the selected players
      */
+    @Override
     public void setSelectedContestants(Set<Integer> selected) {
         lock.lock();
         
@@ -184,6 +201,7 @@ public class ContestantsBench {
      * Gets the selected contestants to play
      * @return Set with the selected contestants
      */
+    @Override
     public Set<Integer> getSelectedContestants() {
         Set<Integer> selected = null;
         
@@ -199,6 +217,7 @@ public class ContestantsBench {
     /**
      * Synchronisation point where the Referee waits for the Coaches to pick the teams
      */
+    @Override
     public void pickYourTeam(){
         lock.lock();
         
@@ -217,6 +236,7 @@ public class ContestantsBench {
     /**
      * Synchronisation point where Coaches wait for the next trial instructed by the Referee
      */
+    @Override
     public void waitForNextTrial() {
         Coach coach = (Coach) Thread.currentThread();
         
@@ -247,7 +267,7 @@ public class ContestantsBench {
         
         lock.lock();
         
-        result = selectedContestants.contains(contestant.getContestantId());
+        result = selectedContestants.contains(contestant.getContestatId());
         
         lock.unlock();
         
@@ -261,4 +281,6 @@ public class ContestantsBench {
     private boolean checkAllPlayersSeated() {
         return bench.size() == Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH;
     }
+    
+    
 }

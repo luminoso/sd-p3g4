@@ -1,6 +1,11 @@
 package ClientSide;
 
+import Others.InterfaceReferee;
 import static ClientSide.Referee.RefereeState.END_OF_THE_MATCH;
+import Others.Bench;
+import Others.GIR;
+import Others.Ground;
+import Others.Site;
 import ServerSide.ContestantsBench;
 import ServerSide.GeneralInformationRepository;
 import ServerSide.Playground;
@@ -16,19 +21,41 @@ import java.util.List;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class Referee extends Thread {
+public class Referee extends Thread implements InterfaceReferee {
     private RefereeState state;     // Referee state
     
+    private final Bench bench;
+    private final Site refereeSite;
+    private final Ground playground;
+    private GIR generalInformationRepository;
+    
     public Referee(String name) {
+       this(name,true);
+    }
+    
+    public Referee(String name, boolean runlocal) {
         super(name);
-        
+
         state = RefereeState.START_OF_THE_MATCH;
+        
+        if (runlocal) {
+            this.bench = ContestantsBench.getInstance(1);
+            this.refereeSite = RefereeSite.getInstance();
+            this.playground = Playground.getInstance();
+            this.generalInformationRepository = GeneralInformationRepository.getInstance();
+        } else {
+            this.bench = ContestantsBenchStub.getInstance(1);
+            this.refereeSite = RefereeSiteStub.getInstance();
+            this.playground = PlaygroundStub.getInstance();
+            this.generalInformationRepository = GeneralInformationRepositoryStub.getInstance();
+        }
     }
 
     /**
      * Get the current Referee state
      * @return Referee state
      */
+    @Override
     public RefereeState getRefereeState() {
         return state;
     }
@@ -37,6 +64,7 @@ public class Referee extends Thread {
      * Sets the current Referee state
      * @param state RefereeState
      */
+    @Override
     public void setRefereeState(RefereeState state) {
         this.state = state;
     }
@@ -84,15 +112,15 @@ public class Referee extends Thread {
      * Updates state to START_OF_A_GAME.
      */
     private void announceNewGame() {
-        RefereeSite.getInstance().resetTrialPoints();
-        Playground.getInstance().setFlagPosition(0);
+        refereeSite.resetTrialPoints();
+        playground.setFlagPosition(0);
         
-        GeneralInformationRepository.getInstance().setFlagPosition(0);
-        GeneralInformationRepository.getInstance().setTrialNumber(1);
-        GeneralInformationRepository.getInstance().setGameNumber(RefereeSite.getInstance().getGamePoints().size() + 1);
-        GeneralInformationRepository.getInstance().printGameHeader();
+        generalInformationRepository.setFlagPosition(0);
+        generalInformationRepository.setTrialNumber(1);
+        generalInformationRepository.setGameNumber(refereeSite.getGamePoints().size() + 1);
+        generalInformationRepository.printGameHeader();
         this.setRefereeState(RefereeState.START_OF_A_GAME);
-        GeneralInformationRepository.getInstance().printLineUpdate();
+        generalInformationRepository.printLineUpdate();
     }
 
     /**
@@ -101,14 +129,14 @@ public class Referee extends Thread {
      * wake him.
      */
     private void callTrial() {
-        GeneralInformationRepository.getInstance().setTrialNumber(RefereeSite.getInstance().getTrialPoints().size() + 1);
+        generalInformationRepository.setTrialNumber(refereeSite.getTrialPoints().size() + 1);
         
-        List<ContestantsBench> benchs = ContestantsBench.getInstances();
+        List<Bench> benchs = bench.getBenches();
         
-        for(ContestantsBench bench : benchs)
+        for(Bench bench : benchs)
             bench.pickYourTeam();
         
-        RefereeSite.getInstance().bothTeamsReady();
+        refereeSite.bothTeamsReady();
     }
 
     /**
@@ -117,7 +145,7 @@ public class Referee extends Thread {
      * pulled the rope.
      */
     private void startTrial() {
-        Playground.getInstance().startPulling();
+        playground.startPulling();
     }
 
     /**
@@ -125,23 +153,23 @@ public class Referee extends Thread {
      * @return true if all trials over, false if more trials to play
      */
     private void assertTrialDecision() {
-        int lastFlagPosition = Playground.getInstance().getLastFlagPosition();
-        int flagPosition = Playground.getInstance().getFlagPosition();
+        int lastFlagPosition = playground.getLastFlagPosition();
+        int flagPosition = playground.getFlagPosition();
         
         if(flagPosition - lastFlagPosition == 0) {
-            RefereeSite.getInstance().addTrialPoint(TrialScore.DRAW);
+            refereeSite.addTrialPoint(TrialScore.DRAW);
         } else if(flagPosition - lastFlagPosition < 0) {
-            RefereeSite.getInstance().addTrialPoint(TrialScore.VICTORY_TEAM_1);
+            refereeSite.addTrialPoint(TrialScore.VICTORY_TEAM_1);
         } else {
-            RefereeSite.getInstance().addTrialPoint(TrialScore.VICTORY_TEAM_2);
+            refereeSite.addTrialPoint(TrialScore.VICTORY_TEAM_2);
         }
         
-        GeneralInformationRepository.getInstance().setFlagPosition(flagPosition);
+        generalInformationRepository.setFlagPosition(flagPosition);
 
-        GeneralInformationRepository.getInstance().printLineUpdate();
-        GeneralInformationRepository.getInstance().resetTeamPlacement();
+        generalInformationRepository.printLineUpdate();
+        generalInformationRepository.resetTeamPlacement();
         
-        Playground.getInstance().resultAsserted();
+        playground.resultAsserted();
     }
     
     /**
@@ -149,17 +177,17 @@ public class Referee extends Thread {
      * @return true if more games to play, false if all games ended
      */
     private void declareGameWinner() {
-        List<TrialScore> trialPoints = RefereeSite.getInstance().getTrialPoints();
-        int flagPosition = Playground.getInstance().getFlagPosition();
+        List<TrialScore> trialPoints = refereeSite.getTrialPoints();
+        int flagPosition = playground.getFlagPosition();
         
         switch (flagPosition) {
             // To the left
             case -Constants.KNOCK_OUT_FLAG_POSITION:
-                RefereeSite.getInstance().addGamePoint(GameScore.VICTORY_TEAM_1_BY_KNOCKOUT);
+                refereeSite.addGamePoint(GameScore.VICTORY_TEAM_1_BY_KNOCKOUT);
                 break;
             // To the right
             case Constants.KNOCK_OUT_FLAG_POSITION:
-                RefereeSite.getInstance().addGamePoint(GameScore.VICTORY_TEAM_2_BY_KNOCKOUT);
+                refereeSite.addGamePoint(GameScore.VICTORY_TEAM_2_BY_KNOCKOUT);
                 break;
             default:
                 int team1 = 0;
@@ -174,19 +202,18 @@ public class Referee extends Thread {
                 }
                 
                 if(team1 == team2){
-                    RefereeSite.getInstance().addGamePoint(GameScore.DRAW);
+                    refereeSite.addGamePoint(GameScore.DRAW);
                 } else if(team1 > team2){
-                    RefereeSite.getInstance().addGamePoint(GameScore.VICTORY_TEAM_1_BY_POINTS);
+                    refereeSite.addGamePoint(GameScore.VICTORY_TEAM_1_BY_POINTS);
                 } else {
-                    RefereeSite.getInstance().addGamePoint(GameScore.VICTORY_TEAM_2_BY_POINTS);
+                    refereeSite.addGamePoint(GameScore.VICTORY_TEAM_2_BY_POINTS);
                 }   
                 break;
         }
         
         this.setRefereeState(RefereeState.END_OF_A_GAME);
-        GeneralInformationRepository.getInstance().printLineUpdate();
-        GeneralInformationRepository.getInstance().printGameResult(
-                RefereeSite.getInstance().getGamePoints().get(RefereeSite.getInstance().getGamePoints().size()-1));
+        generalInformationRepository.printLineUpdate();
+        generalInformationRepository.printGameResult(refereeSite.getGamePoints().get(refereeSite.getGamePoints().size()-1));
     }
 
     /**
@@ -194,12 +221,11 @@ public class Referee extends Thread {
      * Wakes up all other active entities and sends them home.
      */
     private void declareMatchWinner() {
-        RefereeSite site = RefereeSite.getInstance();
         
         int score1 = 0;
         int score2 = 0;
         
-        for(GameScore score : site.getGamePoints()) {
+        for(GameScore score : refereeSite.getGamePoints()) {
             if(score == GameScore.VICTORY_TEAM_1_BY_KNOCKOUT || score == GameScore.VICTORY_TEAM_1_BY_POINTS)
                 score1++;
             else if(score == GameScore.VICTORY_TEAM_2_BY_KNOCKOUT || score == GameScore.VICTORY_TEAM_2_BY_POINTS)
@@ -207,16 +233,16 @@ public class Referee extends Thread {
         }
         
         this.setRefereeState(RefereeState.END_OF_THE_MATCH);
-        GeneralInformationRepository.getInstance().printLineUpdate();
+        generalInformationRepository.printLineUpdate();
         
         if(score1 > score2)
-            GeneralInformationRepository.getInstance().printMatchWinner(1, score1, score2);
+            generalInformationRepository.printMatchWinner(1, score1, score2);
         else if(score2 > score1)
-            GeneralInformationRepository.getInstance().printMatchWinner(2, score1, score2);
+            generalInformationRepository.printMatchWinner(2, score1, score2);
         else
-            GeneralInformationRepository.getInstance().printMatchDraw();
+            generalInformationRepository.printMatchDraw();
         
-        site.setHasMatchEnded(true);
+        refereeSite.setHasMatchEnded(true);
     }
 
     /**
@@ -224,9 +250,9 @@ public class Referee extends Thread {
      * @return true if game has ended false if more games to play
      */
     private boolean checkForGameEnd() {
-        if(Math.abs(Playground.getInstance().getFlagPosition()) >= Constants.KNOCK_OUT_FLAG_POSITION)
+        if(Math.abs(playground.getFlagPosition()) >= Constants.KNOCK_OUT_FLAG_POSITION)
             return true;
-        else if(RefereeSite.getInstance().getRemainingTrials() == 0)
+        else if(refereeSite.getRemainingTrials() == 0)
             return true;
 
         return false;
@@ -237,8 +263,7 @@ public class Referee extends Thread {
      * @return true if match as ended.
      */
     private boolean checkForMatchEnd(){
-        RefereeSite site = RefereeSite.getInstance();
-        List<GameScore> gamePoints = site.getGamePoints();
+        List<GameScore> gamePoints = refereeSite.getGamePoints();
         
         int team1 = 0;
         int team2 = 0;
@@ -255,7 +280,7 @@ public class Referee extends Thread {
         
         return team1 == (Math.floor(Constants.NUMBER_OF_GAMES/2)+1) || 
                 team2 == (Math.floor(Constants.NUMBER_OF_GAMES/2)+1) || 
-                site.getRemainingGames() == 0;
+                refereeSite.getRemainingGames() == 0;
     }
     
     /**

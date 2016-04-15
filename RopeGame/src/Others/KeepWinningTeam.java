@@ -20,10 +20,10 @@ import java.util.Set;
 public class KeepWinningTeam implements CoachStrategy {
 
     @Override
-    public Set<Integer> pickTeam(ContestantsBench bench, RefereeSite site) {
+    public Set<Integer> pickTeam(Bench bench, RefereeSite site) {
         List<TrialScore> trialPoints = site.getTrialPoints();
 
-        int team = ((Coach) Thread.currentThread()).getCoachTeam();
+        int team = ((Coach) Thread.currentThread()).getTeam();
 
         boolean didWeLost = false;
         
@@ -50,7 +50,7 @@ public class KeepWinningTeam implements CoachStrategy {
                     break;
                 }
 
-                pickedTeam.add(contestant.getContestantId());
+                pickedTeam.add(contestant.getContestatId());
             }
 
             return pickedTeam;

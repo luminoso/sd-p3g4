@@ -6,6 +6,7 @@ import ClientSide.Contestant;
 import ClientSide.Contestant.ContestantState;
 import ClientSide.Referee;
 import ClientSide.Referee.RefereeState;
+import Others.GIR;
 import Others.Tuple;
 import ServerSide.RefereeSite.GameScore;
 import ServerSide.RefereeSite.TrialScore;
@@ -16,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import Others.InterfaceGeneralInformationRepository;
 
 
 /**
@@ -24,7 +26,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class GeneralInformationRepository {
+public class GeneralInformationRepository extends GIR implements InterfaceGeneralInformationRepository {
     private static GeneralInformationRepository instance;
     
     private final Lock lock;
@@ -80,6 +82,7 @@ public class GeneralInformationRepository {
      * Adds a Referee to General Information Repository
      * @param referee Referee to add
      */
+    @Override
     public void addReferee(Referee referee) {
         lock.lock();
         
@@ -92,13 +95,14 @@ public class GeneralInformationRepository {
      * Adds a Referee to General Information Repository
      * @param contestant Contestant to add
      */
+    @Override
     public void addContestant(Contestant contestant) {
         lock.lock();
         
-        int team = contestant.getContestantTeam() - 1;
-        int id = contestant.getContestantId() - 1; 
+        int team = contestant.getTeam() - 1;
+        int id = contestant.getContestatId() - 1; 
         
-        this.teamsState.get(team)[id] = new Tuple<>(contestant.getContestantState(), contestant.getContestantStrength());
+        this.teamsState.get(team)[id] = new Tuple<>(contestant.getContestantState(), contestant.getStrength());
         
         lock.unlock();
     }
@@ -107,10 +111,11 @@ public class GeneralInformationRepository {
      * Adds a Coach to General Information Repository
      * @param coach coach that will be added to the information repository
      */
+    @Override
     public void addCoach(Coach coach) {
         lock.lock();
         
-        int team = coach.getCoachTeam() - 1;
+        int team = coach.getTeam() - 1;
         
         this.coachesState[team] = coach.getCoachState();
         
@@ -121,6 +126,7 @@ public class GeneralInformationRepository {
      * Sets a game score
      * @param gameNumber
      */
+    @Override
     public void setGameNumber(int gameNumber) {
         lock.lock();
         
@@ -134,6 +140,7 @@ public class GeneralInformationRepository {
      * 
      * @param trialNumber
      */
+    @Override
     public void setTrialNumber(int trialNumber) {
         lock.lock();
         
@@ -146,6 +153,7 @@ public class GeneralInformationRepository {
      * Sets flag position
      * @param flagPosition to set
      */
+    @Override
     public void setFlagPosition(int flagPosition) {
         lock.lock();
         
@@ -157,15 +165,16 @@ public class GeneralInformationRepository {
     /**
      * Sets a team placement
      */
+    @Override
     public void setTeamPlacement() {
         Contestant contestant = (Contestant) Thread.currentThread();
         
         lock.lock();
         
-        if(contestant.getContestantTeam() == 1)
-            team1Placement.add(contestant.getContestantId());
-        else if(contestant.getContestantTeam() == 2)
-            team2Placement.add(contestant.getContestantId());
+        if(contestant.getTeam() == 1)
+            team1Placement.add(contestant.getContestatId());
+        else if(contestant.getTeam() == 2)
+            team2Placement.add(contestant.getContestatId());
     
         lock.unlock();
     }
@@ -173,6 +182,7 @@ public class GeneralInformationRepository {
     /**
      * Resets team placement
      */
+    @Override
     public void resetTeamPlacement() {
         lock.lock();
         
@@ -185,6 +195,7 @@ public class GeneralInformationRepository {
     /**
      * Print game header
      */
+    @Override
     public void printGameHeader() {
         lock.lock();
         
@@ -198,6 +209,7 @@ public class GeneralInformationRepository {
     /**
      * Fully prints a line with all the updates
      */
+    @Override
     public void printLineUpdate() {
         Thread thread = Thread.currentThread();
         
@@ -221,6 +233,7 @@ public class GeneralInformationRepository {
     /**
      * Fully prints the game result
      */
+    @Override
     public void printGameResult(GameScore score) {
         lock.lock();
         
@@ -251,6 +264,7 @@ public class GeneralInformationRepository {
      * @param score1 score team 1
      * @param score2 score team 2
      */
+    @Override
     public void printMatchWinner(int team, int score1, int score2) {
         lock.lock();
         
@@ -263,6 +277,7 @@ public class GeneralInformationRepository {
     /**
      * Prints that was a draw
      */
+    @Override
     public void printMatchDraw() {
         lock.lock();
         
@@ -275,6 +290,7 @@ public class GeneralInformationRepository {
     /**
      * Prints game logger legend
      */
+    @Override
     public void printLegend() {
         lock.lock();
         
@@ -294,6 +310,7 @@ public class GeneralInformationRepository {
     /**
      * Print General Information Repository header
      */
+    @Override
     public void printHeader(){
         lock.lock();
         
@@ -427,6 +444,7 @@ public class GeneralInformationRepository {
     /**
      * Closes log file
      */
+    @Override
     public void close() {
         lock.lock();
         

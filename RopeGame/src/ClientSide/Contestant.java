@@ -1,5 +1,9 @@
 package ClientSide;
 
+import Others.Bench;
+import Others.Ground;
+import Others.InterfaceContestant;
+import Others.Site;
 import ServerSide.ContestantsBench;
 import ServerSide.GeneralInformationRepository;
 import ServerSide.Playground;
@@ -12,37 +16,64 @@ import ServerSide.RefereeSite;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class Contestant extends Thread implements Comparable<Contestant>{
+public class Contestant extends Thread implements Comparable<Contestant>, InterfaceContestant{
     
-    // Final fields
-    private final int team;                 // Contestant team
-    private final int id;                   // Contestant identification in team
+
+    private final Bench bench;
+    private final Ground playground;
+    private final Site refereeSite;
     
-    // Internal state fields
+ // Internal state fields
     private ContestantState state;          // Contestant state
     private int strength;                   // Contestant strength
+    private int team;                 // Contestant team
+    private int id;                   // Contestant identification in team
     
     /**
-     * Creates a Contestant instantiation 
+     * Creates a Contestant instantiation for running local
      * @param name Name of the contestant
      * @param team Team of the contestant
      * @param id Id of the contestant
      * @param strength Strength of the contestant
      */
     public Contestant(String name, int team, int id, int strength) {
+        this(name,team,id,strength,true);
+    }
+    
+    /**
+     * Creates a Contestant instantiation for running in a distributed enviroment
+     *
+     * @param name Name of the contestant
+     * @param team Team of the contestant
+     * @param id Id of the contestant
+     * @param strength Strength of the contestant
+     * @param runlocal
+     */
+    public Contestant(String name, int team, int id, int strength, boolean runlocal) {
         super(name);
-        
+
         state = ContestantState.SEAT_AT_THE_BENCH;
-        
+
         this.team = team;
         this.id = id;
         this.strength = strength;
+
+        if (runlocal) {
+            this.bench = ContestantsBench.getInstance(team);
+            this.refereeSite = RefereeSite.getInstance();
+            this.playground = Playground.getInstance();
+        } else {
+            this.bench = ContestantsBenchStub.getInstance(team);
+            this.refereeSite = RefereeSiteStub.getInstance();
+            this.playground = PlaygroundStub.getInstance();
+        }
     }
 
     /**
      * Get the current Contestant state
      * @return Contestant state
      */
+    @Override
     public ContestantState getContestantState() {
         return state;
     }
@@ -51,7 +82,8 @@ public class Contestant extends Thread implements Comparable<Contestant>{
      * Sets the current Contestant state
      * @param state ContestantState
      */
-    public void setContestantState(ContestantState state) {
+    @Override
+    public void setState(ContestantState state) {
         this.state = state;
     }
 
@@ -59,23 +91,44 @@ public class Contestant extends Thread implements Comparable<Contestant>{
      * Gets the Contestant team number
      * @return contestant team number
      */
-    public int getContestantTeam() {
+    @Override
+    public int getTeam() {
         return team;
     }
 
+     /**
+     * Sets the current Contestant team
+     * @param team of the contestant
+     */
+    @Override
+    public void setTeam(int team) {
+        this.team = team;
+    }
+    
     /**
      * Gets the Contestant id
      * @return contestant id number
      */
-    public int getContestantId() {
+    @Override
+    public int getContestatId() {
         return id;
+    }
+
+    /**
+     * Sets the current Contestant id
+     * @param id of the contestant
+     */
+    @Override
+    public void setContestantId(int id) {
+        this.id = id;
     }
 
     /**
      * Gets the Contestant strength
      * @return contestant strength 
      */
-    public int getContestantStrength() {
+    @Override
+    public int getStrength() {
         return strength;
     }
     
@@ -83,7 +136,8 @@ public class Contestant extends Thread implements Comparable<Contestant>{
      * Sets the Contestant strength
      * @param strength contestant strength
      */
-    public void setContestantStrength(int strength) {
+    @Override
+    public void setStrength(int strength) {
         this.strength = strength;
     }
     
@@ -94,7 +148,7 @@ public class Contestant extends Thread implements Comparable<Contestant>{
     public void run() {
         seatDown();
         
-        while(!RefereeSite.getInstance().hasMatchEnded()) {
+        while(!refereeSite.hasMatchEnded()) {
             switch(state) {
                 case SEAT_AT_THE_BENCH:
                     followCoachAdvice();
@@ -115,10 +169,10 @@ public class Contestant extends Thread implements Comparable<Contestant>{
      * If so, goes to the playground.
      */
     private void followCoachAdvice() {
-        ContestantsBench.getInstance().getContestant();
+        bench.getContestant();
         
-        if(!RefereeSite.getInstance().hasMatchEnded())
-            Playground.getInstance().addContestant();
+        if(!refereeSite.hasMatchEnded())
+            playground.addContestant();
     }
     
     /**
@@ -126,7 +180,7 @@ public class Contestant extends Thread implements Comparable<Contestant>{
      * Changes the Contestant state to DO_YOUR_BEST
      */
     private void getReady() {
-        this.setContestantState(ContestantState.DO_YOUR_BEST);
+        this.setState(ContestantState.DO_YOUR_BEST);
         GeneralInformationRepository.getInstance().printLineUpdate();
     }
  
@@ -134,7 +188,7 @@ public class Contestant extends Thread implements Comparable<Contestant>{
      * Contestant pulls the rope
      */
     private void pullTheRope() {
-        Playground.getInstance().pullRope();
+        playground.pullRope();
     }
 
     /**
@@ -142,8 +196,8 @@ public class Contestant extends Thread implements Comparable<Contestant>{
      * state to SEAT_AT_THE_BENCH
      */
     private void seatDown() {
-        Playground.getInstance().getContestant();
-        ContestantsBench.getInstance().addContestant();
+        playground.getContestant();
+        bench.addContestant();
     }
 
     /**

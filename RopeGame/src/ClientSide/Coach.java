@@ -1,6 +1,10 @@
 package ClientSide;
 
+import Others.Bench;
+import Others.InterfaceCoach;
 import Others.CoachStrategy;
+import Others.Ground;
+import Others.Site;
 import ServerSide.ContestantsBench;
 import ServerSide.Playground;
 import ServerSide.RefereeSite;
@@ -12,29 +16,48 @@ import java.util.Set;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class Coach extends Thread implements Comparable<Coach>{
+public class Coach extends Thread implements Comparable<Coach>, InterfaceCoach {
     private CoachState state;           // Coach state
-    private final int team;                   // Coach team
-    private final CoachStrategy strategy;     // Team picking strategy
-    
+    private int team;                   // Coach team
+    private CoachStrategy strategy;     // Team picking strategy
+    private final Bench bench;
+    private final Site refereeSite;
+    private final Ground playground;
+ 
+    public Coach(String name, int team, CoachStrategy strategy) {
+        this(name, team, strategy, true);
+    }
+
     /**
      * Initialises a Coach instance
      * @param name Name of the coach
      * @param team Team of the coach
      * @param strategy Coach strategy
+     * @param runlocal
      */
-    public Coach(String name, int team, CoachStrategy strategy) {
+    public Coach(String name, int team, CoachStrategy strategy, boolean runlocal) {
         super(name);                    // Giving name to thread
         // Initial state
         this.state = CoachState.WAIT_FOR_REFEREE_COMMAND;
         this.team = team;               // Team assignement
         this.strategy = strategy;       // Team picking strategy
+
+        if (runlocal) {
+           this.bench = ContestantsBench.getInstance(team);
+            this.refereeSite = RefereeSite.getInstance();
+            this.playground = Playground.getInstance();
+        } else {
+            this.bench = ContestantsBenchStub.getInstance(team);
+            this.refereeSite = RefereeSiteStub.getInstance();
+            this.playground = PlaygroundStub.getInstance();
+        }
     }
 
     /**
      * Get the current Coach state
      * @return CoachState
      */
+    @Override
     public CoachState getCoachState() {
         return state;
     }
@@ -43,6 +66,7 @@ public class Coach extends Thread implements Comparable<Coach>{
      *  Sets the current Coach state
      * @param state CoachState
      */
+    @Override
     public void setCoachState(CoachState state) {
         this.state = state;
     }
@@ -51,18 +75,47 @@ public class Coach extends Thread implements Comparable<Coach>{
      * Gets the coach team number
      * @return coach team number
      */
-    public int getCoachTeam() {
+    @Override
+    public int getTeam() {
         return team;
     }
+
+    /**
+     *  Sets the current Coach team
+     * @param team of the coach
+     */
+    @Override
+    public void setTeam(int team) {
+        this.team = team;
+    }
+
+    /**
+     * Gets the coach strategy
+     * @return coach strategy
+     */
+    @Override
+    public CoachStrategy getStrategy() {
+        return strategy;
+    }
+
+    /**
+     *  Sets the current Coach state
+     * @param strategy of the coach
+     */
+    @Override
+    public void setStrategy(CoachStrategy strategy) {
+        this.strategy = strategy;
+    }
+    
     
     /**
      * Runs this object thread
      */
     @Override
     public void run() {
-        ContestantsBench.getInstance().waitForNextTrial();
+        this.bench.waitForNextTrial();
         
-        while(!RefereeSite.getInstance().hasMatchEnded()) {
+        while(!refereeSite.hasMatchEnded()) {
             switch(state) {
                 case WAIT_FOR_REFEREE_COMMAND:
                     callContestants();
@@ -82,9 +135,6 @@ public class Coach extends Thread implements Comparable<Coach>{
      * and updates selectedContestants array at the Bench
      */
     private void callContestants() {
-        // Contestants bench
-        ContestantsBench bench = ContestantsBench.getInstance();
-        
         // Referee site
         RefereeSite site = RefereeSite.getInstance();
         
@@ -94,15 +144,15 @@ public class Coach extends Thread implements Comparable<Coach>{
         // Setting the selected team
         bench.setSelectedContestants(pickedContestants);
         
-        Playground.getInstance().checkTeamPlacement();
+        playground.checkTeamPlacement();
     }
 
     /**
      * Informs the Referee and watches the trial
      */
     private void informReferee() {
-        RefereeSite.getInstance().informReferee();
-        Playground.getInstance().watchTrial();
+        refereeSite.informReferee();
+        playground.watchTrial();
     }
 
     /**
@@ -110,20 +160,19 @@ public class Coach extends Thread implements Comparable<Coach>{
      * updates their strength
      */
     private void reviewNotes() {
-        ContestantsBench bench = ContestantsBench.getInstance();
         Set<Integer> selectedContestants = bench.getSelectedContestants();
         Set<Contestant> allContestants = bench.getBench();
         
         if(allContestants != null) {
             for(Contestant contestant : allContestants) {
-                if(selectedContestants.contains(contestant.getContestantId())) {
-                    contestant.setContestantStrength(contestant.getContestantStrength() - 1);
+                if(selectedContestants.contains(contestant.getContestatId())) {
+                    contestant.setStrength(contestant.getStrength() - 1);
                 } else {
-                    contestant.setContestantStrength(contestant.getContestantStrength() + 1);
+                    contestant.setStrength(contestant.getStrength() + 1);
                 }
             }
         }
-        ContestantsBench.getInstance().waitForNextTrial();
+        bench.waitForNextTrial();
     }
 
     /**

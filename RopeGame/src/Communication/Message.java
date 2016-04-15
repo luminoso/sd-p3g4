@@ -32,7 +32,28 @@ public class Message implements Serializable {
     // message variables
     private messageType type;
     
+    // initialization for Contestant
+    public Message(int team, int id, ContestantState contestantState, int strength) {
+        this.team = team;
+        this.id = id;
+        this.contestantState = contestantState;
+        this.strength = strength;
+    }
+
+    // initialization for Coach
+    public Message(int team, CoachState coachState) {
+        this.team = team;
+        this.coachState = coachState;
+    }
+
+    // initialization for Contestant
+    public Message(String name, Referee.RefereeState refereeState) {
+        this.refereeState = refereeState;
+        this.name = name;
+    }
+    
     public enum messageType{
+        
         
     }
     

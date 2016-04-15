@@ -1,5 +1,7 @@
 package ServerSide;
 
+import Others.Site;
+import Others.InterfaceRefereeSite;
 import ClientSide.Referee;
 import ClientSide.Referee.RefereeState;
 import RopeGame.Constants;
@@ -17,7 +19,7 @@ import java.util.logging.Logger;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class RefereeSite {
+public class RefereeSite extends Site implements InterfaceRefereeSite {
     private static RefereeSite instance;
     private final Lock lock;
     private final Condition informReferee;              // condition for referee wait for the coaches
@@ -60,6 +62,7 @@ public class RefereeSite {
      * 
      * @return Game points.
      */
+    @Override
     public List<GameScore> getGamePoints() {
         List<GameScore> gamePoints;
         
@@ -77,6 +80,7 @@ public class RefereeSite {
      * 
      * @return Trial points.
      */
+    @Override
     public List<TrialScore> getTrialPoints() {
         List<TrialScore> trialPoints;
         
@@ -92,6 +96,7 @@ public class RefereeSite {
     /**
      * Resets the trial points
      */
+    @Override
     public void resetTrialPoints(){
         lock.lock();
         
@@ -103,6 +108,7 @@ public class RefereeSite {
      * Gets how many trials are remaining to play
      * @return number of remaining trials left
      */
+    @Override
     public int getRemainingTrials() {
         int remaining;
         
@@ -119,6 +125,7 @@ public class RefereeSite {
      * Gets how many games are remaining to play
      * @return number of remaining games left
      */
+    @Override
     public int getRemainingGames() {
         int remaining;
         
@@ -136,6 +143,7 @@ public class RefereeSite {
      * 
      * @param score Game points of both teams.
      */
+    @Override
     public void addGamePoint(GameScore score) {
         lock.lock();
         
@@ -150,6 +158,7 @@ public class RefereeSite {
      * 
      * @param score Trial points of both teams.
      */
+    @Override
     public void addTrialPoint(TrialScore score) {
         lock.lock();
         
@@ -161,6 +170,7 @@ public class RefereeSite {
     /**
      * Synchronization point where the Referee waits for both teams to be ready
      */
+    @Override
     public void bothTeamsReady(){
         Referee referee = (Referee) Thread.currentThread();
         
@@ -183,6 +193,7 @@ public class RefereeSite {
     /**
      * Synchronisation point where the Coaches inform the Referee that they're ready
      */
+    @Override
     public void informReferee() {
         lock.lock();
         
@@ -198,6 +209,7 @@ public class RefereeSite {
      * Checks if the match has ended
      * @return True if no more matches to play. False if otherwise.
      */
+    @Override
     public boolean hasMatchEnded() {
         boolean hasEnded;
         lock.lock();
@@ -210,6 +222,7 @@ public class RefereeSite {
      * Changes the information at RefereeSite if the match as ended
      * @param hasMatchEnded true if match ended
      */
+    @Override
     public void setHasMatchEnded(boolean hasMatchEnded) {
         lock.lock();
         this.hasMatchEnded = hasMatchEnded;
