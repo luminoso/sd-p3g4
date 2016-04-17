@@ -155,10 +155,12 @@ public class Message implements Serializable {
         return this.contestantState;
     }
     
-    
-      
+    public MessageCategory getMessageCategory() {
+        return this.type.getCategory();
+    }
+
     public enum MessageType {
-        
+
         OK,
         BENCH,
         SELECTEDCONTESTANTS,
@@ -230,6 +232,10 @@ public class Message implements Serializable {
         
         MessageType(MessageCategory category){
             this.category = category;
+        }
+        
+        public MessageCategory getCategory(){
+            return category;
         }
   
     }

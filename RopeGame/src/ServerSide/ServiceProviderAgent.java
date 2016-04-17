@@ -25,34 +25,39 @@ public class ServiceProviderAgent extends Thread {
             PlaygroundInterface pgi,
             RefereeSiteInterface rsi,
             GeneralInformationRepositoryInterface giri) {
+
         super(Integer.toString(id++));
         this.cbi = cbi;
         this.pgi = pgi;
         this.rsi = rsi;
         this.giri = giri;
     }
-    
-    
-    
+
     @Override
     public void run() {
         Message inMessage, outMessage = null;
-        
+
         inMessage = (Message) sconi.readObject();
-        
-        try{
-            outMessage = cbi.processAndReply(inMessage);
-        } catch(Exception e) {
+
+        try {
+            switch (inMessage.getMessageCategory()) {
+                case CB:
+                    outMessage = cbi.processAndReply(inMessage);
+                case PG:
+                    outMessage = pgi.processAndReply(inMessage);
+                case GIR:
+                    outMessage = giri.processAndReply(inMessage);
+                case RS:
+                    outMessage = rsi.processAndReply(inMessage);
+                default:
+            }
+        } catch (Exception e) {
             //TODO deal with error;
         }
-        
+
         sconi.writeObject(outMessage);
         sconi.close();
-        
+
     }
 
-    
-
-    
-   
 }

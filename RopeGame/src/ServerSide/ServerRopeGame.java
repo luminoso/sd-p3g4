@@ -44,11 +44,7 @@ public class ServerRopeGame {
 
         while (true) {
             sconi = scon.accept();                            // entrada em processo de escuta
-            sps = new ServiceProviderAgent(sconi,
-                    cbi,
-                    pgi,
-                    rsi,
-                    giri);
+            sps = new ServiceProviderAgent(sconi, cbi, pgi, rsi, giri);
             sps.start();
         }
     }
