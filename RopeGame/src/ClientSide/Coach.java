@@ -67,7 +67,7 @@ public class Coach extends Thread implements Comparable<Coach>, InterfaceCoach {
      * @param state CoachState
      */
     @Override
-    public void setCoachState(CoachState state) {
+    public void setState(CoachState state) {
         this.state = state;
     }
     

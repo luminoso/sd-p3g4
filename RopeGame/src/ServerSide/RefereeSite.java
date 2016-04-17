@@ -176,7 +176,7 @@ public class RefereeSite extends Site implements InterfaceRefereeSite {
         
         lock.lock();
         try {
-            referee.setRefereeState(RefereeState.TEAMS_READY);
+            referee.setState(RefereeState.TEAMS_READY);
             GeneralInformationRepository.getInstance().printLineUpdate();
             
             if(informRefereeCounter != 2)

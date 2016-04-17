@@ -242,7 +242,7 @@ public class ContestantsBench extends Bench implements InterfaceContestantsBench
         
         lock.lock();
         
-        coach.setCoachState(CoachState.WAIT_FOR_REFEREE_COMMAND);
+        coach.setState(CoachState.WAIT_FOR_REFEREE_COMMAND);
         GeneralInformationRepository.getInstance().printLineUpdate();
         
         coachWaiting = true;

@@ -25,7 +25,7 @@ public class ServiceProviderAgent extends Thread implements InterfaceReferee, In
     }
 
     @Override
-    public void setRefereeState(Referee.RefereeState state) {
+    public void setState(Referee.RefereeState state) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -45,7 +45,7 @@ public class ServiceProviderAgent extends Thread implements InterfaceReferee, In
     }
 
     @Override
-    public void setCoachState(Coach.CoachState state) {
+    public void setState(Coach.CoachState state) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -89,6 +89,4 @@ public class ServiceProviderAgent extends Thread implements InterfaceReferee, In
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-
-    
 }

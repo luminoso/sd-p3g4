@@ -23,6 +23,6 @@ public interface InterfaceReferee {
      * Sets the current Referee state
      * @param state RefereeState
      */
-    void setRefereeState(RefereeState state);
+    void setState(RefereeState state);
     
 }

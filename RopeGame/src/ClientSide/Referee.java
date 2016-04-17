@@ -65,7 +65,7 @@ public class Referee extends Thread implements InterfaceReferee {
      * @param state RefereeState
      */
     @Override
-    public void setRefereeState(RefereeState state) {
+    public void setState(RefereeState state) {
         this.state = state;
     }
     
@@ -119,7 +119,7 @@ public class Referee extends Thread implements InterfaceReferee {
         generalInformationRepository.setTrialNumber(1);
         generalInformationRepository.setGameNumber(refereeSite.getGamePoints().size() + 1);
         generalInformationRepository.printGameHeader();
-        this.setRefereeState(RefereeState.START_OF_A_GAME);
+        this.setState(RefereeState.START_OF_A_GAME);
         generalInformationRepository.printLineUpdate();
     }
 
@@ -211,7 +211,7 @@ public class Referee extends Thread implements InterfaceReferee {
                 break;
         }
         
-        this.setRefereeState(RefereeState.END_OF_A_GAME);
+        this.setState(RefereeState.END_OF_A_GAME);
         generalInformationRepository.printLineUpdate();
         generalInformationRepository.printGameResult(refereeSite.getGamePoints().get(refereeSite.getGamePoints().size()-1));
     }
@@ -232,7 +232,7 @@ public class Referee extends Thread implements InterfaceReferee {
                 score2++;
         }
         
-        this.setRefereeState(RefereeState.END_OF_THE_MATCH);
+        this.setState(RefereeState.END_OF_THE_MATCH);
         generalInformationRepository.printLineUpdate();
         
         if(score1 > score2)

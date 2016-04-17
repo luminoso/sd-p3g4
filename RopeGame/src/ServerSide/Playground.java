@@ -105,7 +105,7 @@ public class Playground extends Ground implements InterfacePlayground {
         
         lock.lock();
         
-        coach.setCoachState(CoachState.ASSEMBLE_TEAM);
+        coach.setState(CoachState.ASSEMBLE_TEAM);
         GeneralInformationRepository.getInstance().printLineUpdate();
         
         try {
@@ -129,7 +129,7 @@ public class Playground extends Ground implements InterfacePlayground {
         
         lock.lock();
         
-        coach.setCoachState(CoachState.WATCH_TRIAL);
+        coach.setState(CoachState.WATCH_TRIAL);
         GeneralInformationRepository.getInstance().printLineUpdate();
                 
         try {
@@ -195,7 +195,7 @@ public class Playground extends Ground implements InterfacePlayground {
         
         this.startTrial.signalAll();
         
-        referee.setRefereeState(RefereeState.WAIT_FOR_TRIAL_CONCLUSION);
+        referee.setState(RefereeState.WAIT_FOR_TRIAL_CONCLUSION);
         GeneralInformationRepository.getInstance().printLineUpdate();
         
         if(pullCounter != 2 * Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND)

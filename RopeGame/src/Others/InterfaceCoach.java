@@ -36,7 +36,7 @@ public interface InterfaceCoach {
      *  Sets the current Coach state
      * @param state CoachState
      */
-    void setCoachState(CoachState state);
+    void setState(CoachState state);
 
     /**
      *  Sets the current Coach state
