@@ -5,7 +5,6 @@ import ClientSide.Contestant.ContestantState;
 import ClientSide.Referee;
 import ClientSide.Referee.RefereeState;
 import Others.CoachStrategy;
-import Others.InterfaceRefereeSite;
 import ServerSide.RefereeSite;
 import java.io.Serializable;
 import java.util.List;
@@ -188,6 +187,7 @@ public class Message implements Serializable {
         PG_getContestant(MessageCategory.PG),
         PG_getFlagPosition(MessageCategory.PG),
         PG_getLastFlagPosition(MessageCategory.PG),
+        PG_pullRope(MessageCategory.PG),
         PG_resultAsserted(MessageCategory.PG), 
         PG_setFlagPosition(MessageCategory.PG),
         PG_startPulling(MessageCategory.PG),

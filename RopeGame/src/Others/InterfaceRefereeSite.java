@@ -43,12 +43,14 @@ public interface InterfaceRefereeSite {
 
     /**
      * Gets how many games are remaining to play
+     *
      * @return number of remaining games left
      */
     int getRemainingGames();
 
     /**
      * Gets how many trials are remaining to play
+     *
      * @return number of remaining trials left
      */
     int getRemainingTrials();
@@ -62,12 +64,14 @@ public interface InterfaceRefereeSite {
 
     /**
      * Checks if the match has ended
+     *
      * @return True if no more matches to play. False if otherwise.
      */
     boolean hasMatchEnded();
 
     /**
-     * Synchronisation point where the Coaches inform the Referee that they're ready
+     * Synchronisation point where the Coaches inform the Referee that they're
+     * ready
      */
     void informReferee();
 
@@ -78,8 +82,9 @@ public interface InterfaceRefereeSite {
 
     /**
      * Changes the information at RefereeSite if the match as ended
+     *
      * @param hasMatchEnded true if match ended
      */
     void setHasMatchEnded(boolean hasMatchEnded);
-    
+
 }

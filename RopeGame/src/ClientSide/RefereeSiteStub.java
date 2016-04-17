@@ -16,28 +16,28 @@ import java.util.List;
  * @author luminoso
  */
 public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
-    
+
     private static RefereeSiteStub instance;
 
     /**
      * The method returns the RefereeSite object. The method is thread-safe and
      * uses the implicit monitor of the class.
-     * 
+     *
      * @return RefereeSite object to be used.
      */
     public static synchronized RefereeSiteStub getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new RefereeSiteStub();
         }
-        
+
         return instance;
     }
-    
+
     /**
      * Private constructor to be used in singleton.
      */
     private RefereeSiteStub() {
-        
+
     }
 
     private ClientCom initiateConnection() {
@@ -51,8 +51,7 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
 
         return con;
     }
-    
-    
+
     @Override
     public void addGamePoint(RefereeSite.GameScore score) {
         Referee referee = (Referee) Thread.currentThread();
@@ -79,7 +78,7 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
 
     @Override
     public void addTrialPoint(RefereeSite.TrialScore score) {
-                Referee referee = (Referee) Thread.currentThread();
+        Referee referee = (Referee) Thread.currentThread();
 
         ClientCom con = initiateConnection();
 
@@ -90,7 +89,7 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
                 referee.getName());
 
         outMessage.setTrialScore(score);
-        
+
         con.writeObject(outMessage);
 
         inMessage = (Message) con.readObject();
@@ -123,7 +122,7 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
             // TODO: handle error
             System.exit(1);
         }
-        
+
         referee.setState(inMessage.getRefereeState());
 
         con.close();
@@ -149,11 +148,11 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
             // TODO: handle error
             System.exit(1);
         }
-        
+
         con.close();
-        
+
         List gamePoints = inMessage.getGamePoints();
-        
+
         return gamePoints;
     }
 
@@ -179,7 +178,7 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         }
 
         con.close();
-        
+
         return inMessage.getRemainingGames();
     }
 
@@ -205,7 +204,7 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         }
 
         con.close();
-        
+
         return inMessage.getRemainingtTrials();
     }
 
@@ -213,7 +212,7 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
     public List<RefereeSite.TrialScore> getTrialPoints() {
         Referee referee = (Referee) Thread.currentThread();
         //TODO: OU KEEPWINNINGTEAM
-        
+
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
@@ -230,27 +229,27 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
             // TODO: handle error
             System.exit(1);
         }
-        
+
         con.close();
-        
+
         List<RefereeSite.TrialScore> trialPoints = inMessage.getTrialPoints();
-        
+
         return trialPoints;
-        
+
     }
 
     @Override
     public boolean hasMatchEnded() {
-       // coach
-       // contestant
-       // contestantBench 
-        
+        // coach
+        // contestant
+        // contestantBench 
+
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_hasMatchEnded);
-        
+
         con.writeObject(outMessage);
 
         inMessage = (Message) con.readObject();
@@ -259,9 +258,9 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
             // TODO: handle error
             System.exit(1);
         }
-        
+
         con.close();
-        
+
         return inMessage.getHasMatchEnded();
     }
 
@@ -338,5 +337,5 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
 
         con.close();
     }
-    
+
 }

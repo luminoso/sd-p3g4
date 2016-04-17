@@ -14,7 +14,7 @@ import java.util.Set;
  * @author luminoso
  * @param <T>
  */
-public interface InterfaceContestantsBench{
+public interface InterfaceContestantsBench {
 
     //FIXME: duvida a tirar com eduardo
     //public List<T> getBenches();

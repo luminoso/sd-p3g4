@@ -15,14 +15,16 @@ public interface InterfaceReferee {
 
     /**
      * Get the current Referee state
+     *
      * @return Referee state
      */
     RefereeState getRefereeState();
 
     /**
      * Sets the current Referee state
+     *
      * @param state RefereeState
      */
     void setState(RefereeState state);
-    
+
 }

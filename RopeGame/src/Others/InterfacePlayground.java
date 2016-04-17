@@ -22,6 +22,7 @@ public interface InterfacePlayground {
 
     /**
      * Checks if all contestants are ready to pull the rope
+     *
      * @return true if every Contestant is in place to pull the rope
      */
     boolean checkAllContestantsReady();
@@ -38,8 +39,8 @@ public interface InterfacePlayground {
     void getContestant();
 
     /**
-     * The method returns the flag position in relation to the middle.
-     * Middle = 0.
+     * The method returns the flag position in relation to the middle. Middle =
+     * 0.
      *
      * @return Position of the flag.
      */
@@ -47,12 +48,14 @@ public interface InterfacePlayground {
 
     /**
      * Gets the last flag position
+     *
      * @return the flag position before the current position
      */
     int getLastFlagPosition();
 
     /**
      * Gets the current teams in the playground
+     *
      * @return List containing both teams Contestants in the playground
      */
     List<Contestant>[] getTeams();
@@ -74,6 +77,7 @@ public interface InterfacePlayground {
 
     /**
      * Sets the flag position
+     *
      * @param flagPosition position of the flag
      */
     void setFlagPosition(int flagPosition);
@@ -87,5 +91,5 @@ public interface InterfacePlayground {
      * Synchronisation point for watching the trial in progress
      */
     void watchTrial();
-    
+
 }

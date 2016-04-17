@@ -16,23 +16,23 @@ import java.util.List;
  * @author luminoso
  */
 public class PlaygroundStub extends Ground implements InterfacePlayground {
+
     private static PlaygroundStub instance;
-    
-    
+
     /**
-     * The method returns the Playground object. This method is thread-safe and 
+     * The method returns the Playground object. This method is thread-safe and
      * uses the implicit monitor of the class.
-     * 
+     *
      * @return Playground object to be used.
      */
     public static synchronized PlaygroundStub getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new PlaygroundStub();
         }
-        
+
         return instance;
     }
-    
+
     /**
      * Private constructor to be used in the singleton.
      */
@@ -51,13 +51,12 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         return con;
     }
 
-
     @Override
     public void addContestant() {
         Contestant contestant = (Contestant) Thread.currentThread();
-        
+
         ClientCom con = initiateConnection();
-        
+
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.PG_addContestant,
@@ -74,11 +73,11 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
             // TODO: handle error
             System.exit(1);
         }
-        
+
         contestant.setState(inMessage.getContestantState());
-        
+
         con.close();
-        
+
     }
 
     @Override
@@ -111,7 +110,7 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         }
 
         coach.setState(inMessage.getCoachState());
-        
+
         con.close();
     }
 
@@ -139,7 +138,7 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
             // TODO: handle error
             System.exit(1);
         }
-        
+
     }
 
     @Override
@@ -164,7 +163,7 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         }
 
         con.close();
-        
+
         return inMessage.getFlagPostion();
     }
 
@@ -190,7 +189,7 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         }
 
         con.close();
-        
+
         return inMessage.getLastFlagPostion();
     }
 
@@ -214,7 +213,7 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.PG_getContestant,
+        outMessage = new Message(Message.MessageType.PG_pullRope,
                 contestant.getContestantState(),
                 contestant.getTeam(),
                 contestant.getContestatId(),
@@ -256,21 +255,21 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
     @Override
     public void setFlagPosition(int flagPosition) {
         Referee referee = (Referee) Thread.currentThread();
-        
+
         ClientCom con = initiateConnection();
-        
+
         Message inMessage, outMessage;
-        
+
         outMessage = new Message(Message.MessageType.PG_setFlagPosition,
                 referee.getRefereeState(),
                 referee.getName());
-        
+
         outMessage.setFlagPosition(flagPosition);
-        
+
         con.writeObject(outMessage);
-        
+
         inMessage = (Message) con.readObject();
-        
+
         if (inMessage.getType() != Message.MessageType.OK) {
             // TODO: handle error
             System.exit(1);
@@ -282,9 +281,8 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
     @Override
     public void startPulling() {
         Referee referee = (Referee) Thread.currentThread();
-        
-        // Referee state changes
 
+        // Referee state changes
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
@@ -301,7 +299,7 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
             // TODO: handle error
             System.exit(1);
         }
-        
+
         referee.setState(inMessage.getRefereeState());
 
         con.close();
@@ -331,8 +329,8 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         }
 
         con.close();
-        
+
         coach.setState(inMessage.getCoachState());
     }
-    
+
 }

@@ -18,18 +18,21 @@ public interface InterfaceGeneralInformationRepository {
 
     /**
      * Adds a Coach to General Information Repository
+     *
      * @param coach coach that will be added to the information repository
      */
     void addCoach(Coach coach);
 
     /**
      * Adds a Referee to General Information Repository
+     *
      * @param contestant Contestant to add
      */
     void addContestant(Contestant contestant);
 
     /**
      * Adds a Referee to General Information Repository
+     *
      * @param referee Referee to add
      */
     void addReferee(Referee referee);
@@ -71,6 +74,7 @@ public interface InterfaceGeneralInformationRepository {
 
     /**
      * Print Match winner
+     *
      * @param team that won
      * @param score1 score team 1
      * @param score2 score team 2
@@ -84,12 +88,14 @@ public interface InterfaceGeneralInformationRepository {
 
     /**
      * Sets flag position
+     *
      * @param flagPosition to set
      */
     void setFlagPosition(int flagPosition);
 
     /**
      * Sets a game score
+     *
      * @param gameNumber
      */
     void setGameNumber(int gameNumber);
@@ -105,5 +111,5 @@ public interface InterfaceGeneralInformationRepository {
      * @param trialNumber
      */
     void setTrialNumber(int trialNumber);
-    
+
 }

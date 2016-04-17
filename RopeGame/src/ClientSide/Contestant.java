@@ -10,38 +10,39 @@ import ServerSide.Playground;
 import ServerSide.RefereeSite;
 
 /**
- * General Description:
- * This is an active class implements the Contestant and his interactions in the passive classes
- * 
+ * General Description: This is an active class implements the Contestant and
+ * his interactions in the passive classes
+ *
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class Contestant extends Thread implements Comparable<Contestant>, InterfaceContestant{
-    
+public class Contestant extends Thread implements Comparable<Contestant>, InterfaceContestant {
 
     private final Bench bench;
     private final Ground playground;
     private final Site refereeSite;
-    
- // Internal state fields
+
+    // Internal state fields
     private ContestantState state;          // Contestant state
     private int strength;                   // Contestant strength
     private int team;                 // Contestant team
     private int id;                   // Contestant identification in team
-    
+
     /**
      * Creates a Contestant instantiation for running local
+     *
      * @param name Name of the contestant
      * @param team Team of the contestant
      * @param id Id of the contestant
      * @param strength Strength of the contestant
      */
     public Contestant(String name, int team, int id, int strength) {
-        this(name,team,id,strength,true);
+        this(name, team, id, strength, true);
     }
-    
+
     /**
-     * Creates a Contestant instantiation for running in a distributed enviroment
+     * Creates a Contestant instantiation for running in a distributed
+     * enviroment
      *
      * @param name Name of the contestant
      * @param team Team of the contestant
@@ -71,6 +72,7 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
 
     /**
      * Get the current Contestant state
+     *
      * @return Contestant state
      */
     @Override
@@ -80,6 +82,7 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
 
     /**
      * Sets the current Contestant state
+     *
      * @param state ContestantState
      */
     @Override
@@ -89,6 +92,7 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
 
     /**
      * Gets the Contestant team number
+     *
      * @return contestant team number
      */
     @Override
@@ -96,17 +100,19 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
         return team;
     }
 
-     /**
+    /**
      * Sets the current Contestant team
+     *
      * @param team of the contestant
      */
     @Override
     public void setTeam(int team) {
         this.team = team;
     }
-    
+
     /**
      * Gets the Contestant id
+     *
      * @return contestant id number
      */
     @Override
@@ -116,6 +122,7 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
 
     /**
      * Sets the current Contestant id
+     *
      * @param id of the contestant
      */
     @Override
@@ -125,31 +132,33 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
 
     /**
      * Gets the Contestant strength
-     * @return contestant strength 
+     *
+     * @return contestant strength
      */
     @Override
     public int getStrength() {
         return strength;
     }
-    
+
     /**
      * Sets the Contestant strength
+     *
      * @param strength contestant strength
      */
     @Override
     public void setStrength(int strength) {
         this.strength = strength;
     }
-    
+
     /**
      * Runs this object thread
      */
     @Override
     public void run() {
         seatDown();
-        
-        while(!refereeSite.hasMatchEnded()) {
-            switch(state) {
+
+        while (!refereeSite.hasMatchEnded()) {
+            switch (state) {
                 case SEAT_AT_THE_BENCH:
                     followCoachAdvice();
                     break;
@@ -163,27 +172,27 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
             }
         }
     }
-    
+
     /**
-     * Contestant checks if is selected to the game. 
-     * If so, goes to the playground.
+     * Contestant checks if is selected to the game. If so, goes to the
+     * playground.
      */
     private void followCoachAdvice() {
         bench.getContestant();
-        
-        if(!refereeSite.hasMatchEnded())
+
+        if (!refereeSite.hasMatchEnded()) {
             playground.addContestant();
+        }
     }
-    
+
     /**
-     * Contestant gets ready.
-     * Changes the Contestant state to DO_YOUR_BEST
+     * Contestant gets ready. Changes the Contestant state to DO_YOUR_BEST
      */
     private void getReady() {
         this.setState(ContestantState.DO_YOUR_BEST);
         GeneralInformationRepository.getInstance().printLineUpdate();
     }
- 
+
     /**
      * Contestant pulls the rope
      */
@@ -192,8 +201,8 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
     }
 
     /**
-     * If contestant was playing moves to his bench and changes his 
-     * state to SEAT_AT_THE_BENCH
+     * If contestant was playing moves to his bench and changes his state to
+     * SEAT_AT_THE_BENCH
      */
     private void seatDown() {
         playground.getContestant();
@@ -201,8 +210,9 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
     }
 
     /**
-     * Compares this Contestant to another Contestant.
-     * Comparable implementation.
+     * Compares this Contestant to another Contestant. Comparable
+     * implementation.
+     *
      * @param contestant another Contestant to compare to
      * @return contestant difference
      */
@@ -210,20 +220,21 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
     public int compareTo(Contestant contestant) {
         return this.id - contestant.id;
     }
-    
+
     /**
      * Enums of possible Contestant states
      */
     public enum ContestantState {
-        SEAT_AT_THE_BENCH (1, "STB"),
-        STAND_IN_POSITION (2, "SIP"),
-        DO_YOUR_BEST (3, "DYB");
-        
+        SEAT_AT_THE_BENCH(1, "STB"),
+        STAND_IN_POSITION(2, "SIP"),
+        DO_YOUR_BEST(3, "DYB");
+
         private final int id;
         private final String state;
-        
+
         /**
          * Create a ContestantState enum
+         *
          * @param id of the enum Contestant state
          * @param state Initials of the Contestant state
          */
@@ -234,6 +245,7 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
 
         /**
          * Gets the ID of the ContestantState enum
+         *
          * @return id of the Contestant state
          */
         public int getId() {
@@ -242,14 +254,16 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
 
         /**
          * Gets the enum Contestant state
+         *
          * @return Contestant state enum string
          */
         public String getState() {
             return state;
         }
-        
+
         /**
          * Converts current Contestant state to String
+         *
          * @return String describing Contestant sate
          */
         @Override

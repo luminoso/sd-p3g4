@@ -10,5 +10,5 @@ package Others;
  * @author luminoso
  */
 public abstract class GIR implements InterfaceGeneralInformationRepository {
-    
+
 }
