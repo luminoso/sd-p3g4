@@ -14,7 +14,7 @@ import java.util.List;
 public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
 
     /**
-     * 
+     *
      */
     private static RefereeSiteStub instance;
 
@@ -40,8 +40,8 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     private ClientCom initiateConnection() {
         ClientCom con = new ClientCom(ClientRopeGame.getServerHostName(),
@@ -56,8 +56,8 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
     }
 
     /**
-     * 
-     * @param score 
+     *
+     * @param score
      */
     @Override
     public void addGamePoint(RefereeSite.GameScore score) {
@@ -68,8 +68,10 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_addGamePoint,
-                referee.getRefereeState(),
-                referee.getName());
+                referee.getName(),
+                referee.getRefereeState());
+
+        outMessage.setGamePoint(score);
 
         con.writeObject(outMessage);
 
@@ -84,8 +86,8 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
     }
 
     /**
-     * 
-     * @param score 
+     *
+     * @param score
      */
     @Override
     public void addTrialPoint(RefereeSite.TrialScore score) {
@@ -96,8 +98,8 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_addTrialPoint,
-                referee.getRefereeState(),
-                referee.getName());
+                referee.getName(),
+                referee.getRefereeState());
 
         outMessage.setTrialScore(score);
 
@@ -114,7 +116,7 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void bothTeamsReady() {
@@ -125,8 +127,8 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_bothTeamsReady,
-                referee.getRefereeState(),
-                referee.getName());
+                referee.getName(),
+                referee.getRefereeState());
 
         con.writeObject(outMessage);
 
@@ -143,8 +145,8 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public List<RefereeSite.GameScore> getGamePoints() {
@@ -155,8 +157,8 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_getGamePoints,
-                referee.getRefereeState(),
-                referee.getName());
+                referee.getName(),
+                referee.getRefereeState());
 
         con.writeObject(outMessage);
 
@@ -175,8 +177,8 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public int getRemainingGames() {
@@ -187,8 +189,8 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_getRemainingGames,
-                referee.getRefereeState(),
-                referee.getName());
+                referee.getName(),
+                referee.getRefereeState());
 
         con.writeObject(outMessage);
 
@@ -205,8 +207,8 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public int getRemainingTrials() {
@@ -217,8 +219,8 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_getRemainingTrials,
-                referee.getRefereeState(),
-                referee.getName());
+                referee.getName(),
+                referee.getRefereeState());
 
         con.writeObject(outMessage);
 
@@ -235,8 +237,8 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public List<RefereeSite.TrialScore> getTrialPoints() {
@@ -248,8 +250,8 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_getTrialPoints,
-                referee.getRefereeState(),
-                referee.getName());
+                referee.getName(),
+                referee.getRefereeState());
 
         con.writeObject(outMessage);
 
@@ -269,8 +271,8 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public boolean hasMatchEnded() {
@@ -299,7 +301,7 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void informReferee() {
@@ -310,6 +312,7 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_informReferee,
+                coach.getName(),
                 coach.getCoachState(),
                 coach.getTeam(),
                 coach.getStrategy());
@@ -327,7 +330,7 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void resetTrialPoints() {
@@ -338,8 +341,8 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_resetTrialPoints,
-                referee.getRefereeState(),
-                referee.getName());
+                referee.getName(),
+                referee.getRefereeState());
 
         con.writeObject(outMessage);
 
@@ -355,8 +358,8 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
     }
 
     /**
-     * 
-     * @param hasMatchEnded 
+     *
+     * @param hasMatchEnded
      */
     @Override
     public void setHasMatchEnded(boolean hasMatchEnded) {
@@ -367,8 +370,10 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_setHasMatchEnded,
-                referee.getRefereeState(),
-                referee.getName());
+                referee.getName(),
+                referee.getRefereeState());
+
+        outMessage.setHasMatchEnded(hasMatchEnded);
 
         con.writeObject(outMessage);
 

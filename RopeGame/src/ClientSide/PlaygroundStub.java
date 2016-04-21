@@ -14,7 +14,7 @@ import java.util.List;
 public class PlaygroundStub extends Ground implements InterfacePlayground {
 
     /**
-     * 
+     *
      */
     private static PlaygroundStub instance;
 
@@ -39,8 +39,8 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     private ClientCom initiateConnection() {
         ClientCom con = new ClientCom(ClientRopeGame.getServerHostName(),
@@ -55,7 +55,7 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void addContestant() {
@@ -66,6 +66,7 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.PG_addContestant,
+                contestant.getName(),
                 contestant.getContestantState(),
                 contestant.getTeam(),
                 contestant.getContestatId(),
@@ -87,8 +88,8 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public boolean checkAllContestantsReady() {
@@ -97,7 +98,7 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void checkTeamPlacement() {
@@ -109,6 +110,7 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.PG_checkTeamPlacement,
+                coach.getName(),
                 coach.getCoachState(),
                 coach.getTeam(),
                 coach.getStrategy());
@@ -128,7 +130,7 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void getContestant() {
@@ -141,6 +143,7 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.PG_getContestant,
+                contestant.getName(),
                 contestant.getContestantState(),
                 contestant.getTeam(),
                 contestant.getContestatId(),
@@ -158,8 +161,8 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public int getFlagPosition() {
@@ -170,8 +173,8 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.PG_getFlagPosition,
-                referee.getRefereeState(),
-                referee.getName());
+                referee.getName(),
+                referee.getRefereeState());;
 
         con.writeObject(outMessage);
 
@@ -188,8 +191,8 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public int getLastFlagPosition() {
@@ -200,8 +203,8 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.PG_getLastFlagPosition,
-                referee.getRefereeState(),
-                referee.getName());
+                referee.getName(),
+                referee.getRefereeState());
 
         con.writeObject(outMessage);
 
@@ -218,8 +221,8 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public List<Contestant>[] getTeams() {
@@ -228,7 +231,7 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void haveAllPulled() {
@@ -237,7 +240,7 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void pullRope() {
@@ -248,6 +251,7 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.PG_pullRope,
+                contestant.getName(),
                 contestant.getContestantState(),
                 contestant.getTeam(),
                 contestant.getContestatId(),
@@ -263,7 +267,7 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void resultAsserted() {
@@ -274,8 +278,8 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.PG_resultAsserted,
-                referee.getRefereeState(),
-                referee.getName());
+                referee.getName(),
+                referee.getRefereeState());
 
         con.writeObject(outMessage);
 
@@ -290,8 +294,8 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
     }
 
     /**
-     * 
-     * @param flagPosition 
+     *
+     * @param flagPosition
      */
     @Override
     public void setFlagPosition(int flagPosition) {
@@ -302,8 +306,8 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.PG_setFlagPosition,
-                referee.getRefereeState(),
-                referee.getName());
+                referee.getName(),
+                referee.getRefereeState());
 
         outMessage.setFlagPosition(flagPosition);
 
@@ -320,7 +324,7 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void startPulling() {
@@ -332,8 +336,8 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.PG_startPulling,
-                referee.getRefereeState(),
-                referee.getName());
+                referee.getName(),
+                referee.getRefereeState());
 
         con.writeObject(outMessage);
 
@@ -350,7 +354,7 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void watchTrial() {
@@ -362,6 +366,7 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.PG_watchTrial,
+                coach.getName(),
                 coach.getCoachState(),
                 coach.getTeam(),
                 coach.getStrategy());

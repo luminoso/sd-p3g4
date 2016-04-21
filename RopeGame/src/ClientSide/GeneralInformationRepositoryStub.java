@@ -13,13 +13,13 @@ import ServerSide.RefereeSite;
 public class GeneralInformationRepositoryStub extends GIR implements InterfaceGeneralInformationRepository {
 
     /**
-     * 
+     *
      */
     private static GeneralInformationRepositoryStub instance;
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public static synchronized GeneralInformationRepositoryStub getInstance() {
         if (instance == null) {
@@ -30,8 +30,8 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     private ClientCom initiateConnection() {
         ClientCom con = new ClientCom(ClientRopeGame.getServerHostName(),
@@ -46,8 +46,8 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
     }
 
     /**
-     * 
-     * @param coach 
+     *
+     * @param coach
      */
     @Override
     public void addCoach(Coach coach) {
@@ -55,7 +55,10 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
 
         Message inMessage, outMessage;
 
+        // Problably defining a variable coach was better?
+        // handled in GeneralRepositoryInterface in the same way
         outMessage = new Message(Message.MessageType.GIR_addCoach,
+                coach.getName(),
                 coach.getCoachState(),
                 coach.getTeam(),
                 coach.getStrategy());
@@ -73,8 +76,8 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
     }
 
     /**
-     * 
-     * @param contestant 
+     *
+     * @param contestant
      */
     @Override
     public void addContestant(Contestant contestant) {
@@ -83,6 +86,7 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.GIR_addContestant,
+                contestant.getName(),
                 contestant.getContestantState(),
                 contestant.getTeam(),
                 contestant.getContestatId(),
@@ -101,8 +105,8 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
     }
 
     /**
-     * 
-     * @param referee 
+     *
+     * @param referee
      */
     @Override
     public void addReferee(Referee referee) {
@@ -111,8 +115,8 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.GIR_addReferee,
-                referee.getRefereeState(),
-                referee.getName());
+                referee.getName(),
+                referee.getRefereeState());
 
         con.writeObject(outMessage);
 
@@ -127,7 +131,7 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void close() {
@@ -150,7 +154,7 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void printGameHeader() {
@@ -173,8 +177,8 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
     }
 
     /**
-     * 
-     * @param score 
+     *
+     * @param score
      */
     @Override
     public void printGameResult(RefereeSite.GameScore score) {
@@ -184,7 +188,7 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
 
         outMessage = new Message(Message.MessageType.GIR_printGameResult);
 
-        outMessage.setGameScore(score);
+        outMessage.setGameResult(score);
 
         con.writeObject(outMessage);
 
@@ -199,7 +203,7 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void printHeader() {
@@ -222,7 +226,7 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void printLegend() {
@@ -245,7 +249,7 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void printLineUpdate() {
@@ -258,6 +262,7 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         if (thread.getClass() == Contestant.class) {
             Contestant contestant = (Contestant) thread;
             outMessage = new Message(Message.MessageType.GIR_printLegend,
+                    contestant.getName(),
                     contestant.getContestantState(),
                     contestant.getTeam(),
                     contestant.getContestatId(),
@@ -265,13 +270,14 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         } else if (thread.getClass() == Coach.class) {
             Coach coach = (Coach) thread;
             outMessage = new Message(Message.MessageType.GIR_printLegend,
+                    coach.getName(),
                     coach.getCoachState(),
                     coach.getTeam(),
                     coach.getStrategy());
         } else {
             Referee referee = (Referee) thread;
             outMessage = new Message(Message.MessageType.GIR_printLegend,
-                    referee.getRefereeState(), referee.getName());
+                    referee.getName(), referee.getRefereeState());
         }
 
         con.writeObject(outMessage);
@@ -287,7 +293,7 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void printMatchDraw() {
@@ -310,10 +316,10 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
     }
 
     /**
-     * 
+     *
      * @param team
      * @param score1
-     * @param score2 
+     * @param score2
      */
     @Override
     public void printMatchWinner(int team, int score1, int score2) {
@@ -340,7 +346,7 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void resetTeamPlacement() {
@@ -363,8 +369,8 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
     }
 
     /**
-     * 
-     * @param flagPosition 
+     *
+     * @param flagPosition
      */
     @Override
     public void setFlagPosition(int flagPosition) {
@@ -389,8 +395,8 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
     }
 
     /**
-     * 
-     * @param gameNumber 
+     *
+     * @param gameNumber
      */
     @Override
     public void setGameNumber(int gameNumber) {
@@ -415,7 +421,7 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void setTeamPlacement() {
@@ -426,6 +432,7 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.GIR_setTeamPlacement,
+                contestant.getName(),
                 contestant.getContestantState(),
                 contestant.getTeam(),
                 contestant.getContestatId(),
@@ -444,8 +451,8 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
     }
 
     /**
-     * 
-     * @param trialNumber 
+     *
+     * @param trialNumber
      */
     @Override
     public void setTrialNumber(int trialNumber) {

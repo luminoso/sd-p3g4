@@ -16,12 +16,12 @@ import java.util.Set;
 public class ContestantsBenchStub extends Bench implements InterfaceContestantsBench {
 
     /**
-     * 
+     *
      */
     private static final ContestantsBenchStub[] instances = new ContestantsBenchStub[2];    // Doubleton containing the two teams benches
-    
+
     /**
-     * 
+     *
      */
     private final int team;
 
@@ -42,8 +42,8 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public static synchronized List<ContestantsBenchStub> getInstances() {
         List<ContestantsBenchStub> temp = new LinkedList<>();
@@ -69,8 +69,8 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     private ClientCom initiateConnection() {
         ClientCom con = new ClientCom(ClientRopeGame.getServerHostName(),
@@ -85,7 +85,7 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
     }
 
     /**
-     * 
+     *
      */
     public void addContestant() {
         Contestant contestant = (Contestant) Thread.currentThread();
@@ -95,6 +95,7 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.CB_addContestant,
+                contestant.getName(),
                 contestant.getContestantState(),
                 contestant.getTeam(),
                 contestant.getContestatId(),
@@ -115,8 +116,8 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public Set<Contestant> getBench() {
@@ -129,6 +130,7 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.CB_getBench,
+                coach.getName(),
                 coach.getCoachState(),
                 coach.getTeam(),
                 coach.getStrategy());
@@ -147,7 +149,7 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void getContestant() {
@@ -158,6 +160,7 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.CB_getContestant,
+                contestant.getName(),
                 contestant.getContestantState(),
                 contestant.getTeam(),
                 contestant.getContestatId(),
@@ -174,8 +177,8 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public Set<Integer> getSelectedContestants() {
@@ -188,6 +191,7 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.CB_getSelectedContestants,
+                coach.getName(),
                 coach.getCoachState(),
                 coach.getTeam(),
                 coach.getStrategy());
@@ -206,7 +210,7 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void pickYourTeam() {
@@ -217,8 +221,11 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.CB_pickYourTeam,
-                referee.getRefereeState(),
-                referee.getName());
+                referee.getName(),
+                referee.getRefereeState());
+
+        // TODO: melhor metodo de lidar com este caso muito particular?
+        outMessage.setTeam(team);
 
         con.writeObject(outMessage);
 
@@ -233,8 +240,8 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
     }
 
     /**
-     * 
-     * @param selected 
+     *
+     * @param selected
      */
     @Override
     public void setSelectedContestants(Set<Integer> selected) {
@@ -246,6 +253,7 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.CB_setSelectedContestants,
+                coach.getName(),
                 coach.getCoachState(),
                 coach.getTeam(),
                 coach.getStrategy());
@@ -266,7 +274,7 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void waitForNextTrial() {
@@ -281,6 +289,7 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.CB_waitForNextTrial,
+                coach.getName(),
                 coach.getCoachState(),
                 coach.getTeam(),
                 coach.getStrategy());
@@ -301,8 +310,8 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public synchronized List<ContestantsBenchStub> getBenches() {

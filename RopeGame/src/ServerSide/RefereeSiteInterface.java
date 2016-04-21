@@ -1,7 +1,9 @@
 package ServerSide;
 
+import ClientSide.Referee;
 import Communication.Message;
 import static Communication.Message.MessageType.*;
+import Communication.MessageException;
 
 /**
  *
@@ -11,50 +13,86 @@ import static Communication.Message.MessageType.*;
 class RefereeSiteInterface {
 
     /**
-     * 
+     *
      */
-    private final RefereeSite rf;
+    private final RefereeSite rs;
 
     /**
-     * 
-     * @param rf 
+     *
+     * @param rf
      */
-    public RefereeSiteInterface(RefereeSite rf) {
-        this.rf = rf;
+    public RefereeSiteInterface(RefereeSite rs) {
+        this.rs = rs;
     }
 
     /**
-     * 
+     *
      * @param inMessage
-     * @return 
+     * @return
      */
-    public Message processAndReply(Message inMessage) {
+    public Message processAndReply(Message inMessage) throws MessageException {
         Message outMessage = null;
 
         switch (inMessage.getType()) {
-            case RS_addGamePoint:
+            case RS_addGamePoint: {
+                rs.addGamePoint(inMessage.getGamePoint());
                 outMessage = new Message(OK);
-            case RS_addTrialPoint:
+                break;
+            }
+            case RS_addTrialPoint: {
+                rs.addTrialPoint(inMessage.getTrialPoint());
                 outMessage = new Message(OK);
-            case RS_bothTeamsReady:
+                break;
+            }
+            case RS_bothTeamsReady: {
+                Referee referee = (Referee) Thread.currentThread();
+                rs.bothTeamsReady();
                 outMessage = new Message(REFEREE_STATE_CHANGE);
-            case RS_getGamePoints:
+                outMessage.setRefereeState(referee.getRefereeState());
+                break;
+            }
+            case RS_getGamePoints: {
                 outMessage = new Message(GAMEPOINTS);
-            case RS_getRemainingGames:
+                outMessage.setGamePoints(rs.getGamePoints());
+                break;
+            }
+            case RS_getRemainingGames: {
                 outMessage = new Message(REMAININGGAMES);
-            case RS_getRemainingTrials:
+                outMessage.setRemainingGames(rs.getRemainingGames());
+                break;
+            }
+            case RS_getRemainingTrials: {
                 outMessage = new Message(REMAININGTRIALS);
-            case RS_getTrialPoints:
+                outMessage.setRemainingTrials(rs.getRemainingTrials());
+                break;
+            }
+            case RS_getTrialPoints: {
                 outMessage = new Message(TRIALPOINTS);
-            case RS_hasMatchEnded:
+                outMessage.setTrialPoints(rs.getTrialPoints());
+                break;
+            }
+            case RS_hasMatchEnded: {
                 outMessage = new Message(BOOLEAN);
-            case RS_informReferee:
+                outMessage.setHasMatchEnded(rs.hasMatchEnded());
+                break;
+            }
+            case RS_informReferee: {
+                rs.informReferee();
                 outMessage = new Message(OK);
-            case RS_resetTrialPoints:
+                break;
+            }
+            case RS_resetTrialPoints: {
+                rs.resetTrialPoints();
                 outMessage = new Message(OK);
-            case RS_setHasMatchEnded:
+                break;
+            }
+            case RS_setHasMatchEnded: {
+                rs.setHasMatchEnded(inMessage.getHasMatchEnded());
                 outMessage = new Message(OK);
+                break;
+            }
             default:
+                throw new MessageException("Method in RS not found", outMessage);
 
         }
 
