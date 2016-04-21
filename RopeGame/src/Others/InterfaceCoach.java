@@ -8,7 +8,7 @@ import ClientSide.Coach.CoachState;
  * @author Guilherme Cardoso
  */
 public interface InterfaceCoach {
-
+    
     /**
      * Get the current Coach state
      *
