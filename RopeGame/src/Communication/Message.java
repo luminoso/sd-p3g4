@@ -2,7 +2,6 @@ package Communication;
 
 import ClientSide.Coach.CoachState;
 import ClientSide.Contestant.ContestantState;
-import ClientSide.Referee;
 import ClientSide.Referee.RefereeState;
 import Others.CoachStrategy;
 import ServerSide.RefereeSite;
@@ -33,21 +32,12 @@ public class Message implements Serializable {
      */
     private int id;
     
-    /**
-     * 
-     */
-    private ContestantState contestantState;
     
     /**
      * 
      */
     private int strength;
     
-    // additional variables required to define the Coach
-    /**
-     * 
-     */
-    private CoachState coachState;
     
     /**
      * 
@@ -58,7 +48,7 @@ public class Message implements Serializable {
     /**
      * 
      */
-    private RefereeState refereeState;
+    private Enum state;
     
     /**
      * 
@@ -117,7 +107,7 @@ public class Message implements Serializable {
      */
     public Message(MessageType type, ContestantState state, int team, int id,  int strength) {
         this.type = type;
-        this.contestantState = state;
+        this.state = state;
         this.team = team;
         this.id = id;
         this.strength = strength;
@@ -133,7 +123,7 @@ public class Message implements Serializable {
      */
     public Message(MessageType type,CoachState state, int team,  CoachStrategy strategy) {
         this.type = type;
-        this.coachState = state;
+        this.state = state;
         this.team = team;
         this.strategy = strategy;
     }
@@ -145,9 +135,9 @@ public class Message implements Serializable {
      * @param state
      * @param name 
      */
-    public Message(MessageType type, Referee.RefereeState state, String name ) {
+    public Message(MessageType type, RefereeState state, String name ) {
         this.type = type;
-        this.refereeState = refereeState;
+        this.state = state;
         this.name = name;
     }
 
@@ -196,7 +186,7 @@ public class Message implements Serializable {
      * @return 
      */
     public CoachState getCoachState() {
-        return coachState;
+        return (CoachState) state;
     }
     
     /**
@@ -227,8 +217,8 @@ public class Message implements Serializable {
      * 
      * @return 
      */
-    public Referee.RefereeState getRefereeState() {
-        return this.refereeState;
+    public RefereeState getRefereeState() {
+        return (RefereeState) this.state;
     }
  
     /**
@@ -324,7 +314,7 @@ public class Message implements Serializable {
      * @return 
      */
     public ContestantState getContestantState() {
-        return this.contestantState;
+        return (ContestantState) this.state;
     }
     
     /**
