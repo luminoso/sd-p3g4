@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ClientSide;
 
 import Communication.Message;
@@ -15,11 +10,19 @@ import java.util.Set;
 
 /**
  *
- * @author luminoso
+ * @author Eduardo Sousa
+ * @author Guilherme Cardoso
  */
 public class ContestantsBenchStub extends Bench implements InterfaceContestantsBench {
 
+    /**
+     * 
+     */
     private static final ContestantsBenchStub[] instances = new ContestantsBenchStub[2];    // Doubleton containing the two teams benches
+    
+    /**
+     * 
+     */
     private final int team;
 
     /**
@@ -38,6 +41,10 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
         return instances[team - 1];
     }
 
+    /**
+     * 
+     * @return 
+     */
     public static synchronized List<ContestantsBenchStub> getInstances() {
         List<ContestantsBenchStub> temp = new LinkedList<>();
 
@@ -61,6 +68,10 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
         this.team = team;
     }
 
+    /**
+     * 
+     * @return 
+     */
     private ClientCom initiateConnection() {
         ClientCom con = new ClientCom(ClientRopeGame.getServerHostName(),
                 ClientRopeGame.getServerPortNumb());
@@ -73,6 +84,9 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
         return con;
     }
 
+    /**
+     * 
+     */
     public void addContestant() {
         Contestant contestant = (Contestant) Thread.currentThread();
 
@@ -100,6 +114,10 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
         con.close();
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Override
     public Set<Contestant> getBench() {
         //TODO: Coach strategies also access this function
@@ -128,6 +146,9 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
         return bench;
     }
 
+    /**
+     * 
+     */
     @Override
     public void getContestant() {
         Contestant contestant = (Contestant) Thread.currentThread();
@@ -152,6 +173,10 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
 
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Override
     public Set<Integer> getSelectedContestants() {
         //TODO: KeepWinningTeam also access this function
@@ -180,6 +205,9 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
         return selectedContestants;
     }
 
+    /**
+     * 
+     */
     @Override
     public void pickYourTeam() {
         Referee referee = (Referee) Thread.currentThread();
@@ -204,6 +232,10 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
         con.close();
     }
 
+    /**
+     * 
+     * @param selected 
+     */
     @Override
     public void setSelectedContestants(Set<Integer> selected) {
         Coach coach = (Coach) Thread.currentThread();
@@ -233,6 +265,9 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
 
     }
 
+    /**
+     * 
+     */
     @Override
     public void waitForNextTrial() {
 
@@ -265,6 +300,10 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
 
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Override
     public synchronized List<ContestantsBenchStub> getBenches() {
 
@@ -281,5 +320,4 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
         return temp;
 
     }
-
 }

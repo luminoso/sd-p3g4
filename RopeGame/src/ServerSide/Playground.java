@@ -19,21 +19,61 @@ import java.util.logging.Logger;
 
 /**
  * General Description: 
- * This is an passive class that describes the Playground
+ * This is an passive class that describes the Playground.
+ * 
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
 public class Playground extends Ground implements InterfacePlayground {
+    
+    /**
+     * 
+     */
     private static Playground instance;
     
+    /**
+     * 
+     */
     private final Lock lock;
+    
+    /**
+     * 
+     */
     private final Condition startTrial;                   // condition for waiting the trial start
+    
+    /**
+     * 
+     */
     private final Condition teamsInPosition;              // condition for waiting to the teams to be in position
+    
+    /**
+     * 
+     */
     private final Condition finishedPulling;              // condition for waiting the contestants finished pulling the rope
+    
+    /**
+     * 
+     */
     private final Condition resultAssert;                 // condition for waiting for the result to be asserted
+    
+    /**
+     * 
+     */
     private int pullCounter;                              // how many pulls the contestants made
+    
+    /**
+     * 
+     */
     private int flagPosition;                             // current flag position
+    
+    /**
+     * 
+     */
     private int lastFlagPosition;                         // last flag position
+    
+    /**
+     * 
+     */
     private final List<Contestant>[] teams;               // list containing the Contestant in both teams
     
     /**

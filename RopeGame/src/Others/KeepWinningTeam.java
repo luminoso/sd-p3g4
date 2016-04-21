@@ -2,7 +2,6 @@ package Others;
 
 import ClientSide.Coach;
 import ClientSide.Contestant;
-import ServerSide.ContestantsBench;
 import ServerSide.RefereeSite;
 import ServerSide.RefereeSite.TrialScore;
 import RopeGame.Constants;
@@ -13,12 +12,19 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * This strategy keeps the Contestants in game if they won or picks a random players if they lost
+ * This strategy keeps the Contestants in game if they won or picks a random players if they lost.
+ * 
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
 public class KeepWinningTeam implements CoachStrategy {
 
+    /**
+     * 
+     * @param bench
+     * @param site
+     * @return 
+     */
     @Override
     public Set<Integer> pickTeam(Bench bench, RefereeSite site) {
         List<TrialScore> trialPoints = site.getTrialPoints();

@@ -1,25 +1,52 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ServerSide;
 
 import Communication.Message;
 
 /**
  *
- * @author luminoso
+ * @author Eduardo Sousa
+ * @author Guilherme Cardoso
  */
 public class ServiceProviderAgent extends Thread {
 
+    /**
+     * 
+     */
     private ServerCom sconi;
+    
+    /**
+     * 
+     */
     private static int id = 0;
+    
+    /**
+     * 
+     */
     private final ContestantsBenchInterface cbi;
+    
+    /**
+     * 
+     */
     private final PlaygroundInterface pgi;
+    
+    /**
+     * 
+     */
     private final RefereeSiteInterface rsi;
+    
+    /**
+     * 
+     */
     private final GeneralInformationRepositoryInterface giri;
 
+    /**
+     * 
+     * @param sconi
+     * @param cbi
+     * @param pgi
+     * @param rsi
+     * @param giri 
+     */
     ServiceProviderAgent(ServerCom sconi,
             ContestantsBenchInterface cbi,
             PlaygroundInterface pgi,
@@ -33,6 +60,9 @@ public class ServiceProviderAgent extends Thread {
         this.giri = giri;
     }
 
+    /**
+     * 
+     */
     @Override
     public void run() {
         Message inMessage, outMessage = null;
@@ -57,7 +87,5 @@ public class ServiceProviderAgent extends Thread {
 
         sconi.writeObject(outMessage);
         sconi.close();
-
     }
-
 }

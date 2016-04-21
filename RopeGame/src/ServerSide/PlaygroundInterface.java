@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ServerSide;
 
 import Communication.Message;
@@ -10,16 +5,29 @@ import static Communication.Message.MessageType.*;
 
 /**
  *
- * @author luminoso
+ * @author Eduardo Sousa
+ * @author Guilherme Cardoso
  */
 class PlaygroundInterface {
-
+    
+    /**
+     * 
+     */
     private final Playground pg;
 
+    /**
+     * 
+     * @param pg 
+     */
     public PlaygroundInterface(Playground pg) {
         this.pg = pg;
     }
 
+    /**
+     * 
+     * @param inMessage
+     * @return 
+     */
     public Message processAndReply(Message inMessage) {
         Message outMessage = null;
 
@@ -48,7 +56,5 @@ class PlaygroundInterface {
         }
 
         return outMessage;
-
     }
-
 }

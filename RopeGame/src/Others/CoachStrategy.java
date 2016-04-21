@@ -11,5 +11,11 @@ import java.util.Set;
  */
 public interface CoachStrategy {
 
+    /**
+     * 
+     * @param bench
+     * @param site
+     * @return 
+     */
     public Set<Integer> pickTeam(Bench bench, RefereeSite site);
 }

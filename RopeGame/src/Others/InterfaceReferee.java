@@ -1,15 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Others;
 
 import ClientSide.Referee.RefereeState;
 
 /**
  *
- * @author luminoso
+ * @author Eduardo Sousa
+ * @author Guilherme Cardoso
  */
 public interface InterfaceReferee {
 
@@ -26,5 +22,4 @@ public interface InterfaceReferee {
      * @param state RefereeState
      */
     void setState(RefereeState state);
-
 }

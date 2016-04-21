@@ -24,17 +24,44 @@ import java.util.List;
  */
 public class Referee extends Thread implements InterfaceReferee {
 
+    /**
+     * 
+     */
     private RefereeState state;     // Referee state
 
+    /**
+     * 
+     */
     private final Bench bench;
+    
+    /**
+     * 
+     */
     private final Site refereeSite;
+    
+    /**
+     * 
+     */
     private final Ground playground;
+    
+    /**
+     * 
+     */
     private GIR generalInformationRepository;
 
+    /**
+     * 
+     * @param name 
+     */
     public Referee(String name) {
         this(name, true);
     }
 
+    /**
+     * 
+     * @param name
+     * @param runlocal 
+     */
     public Referee(String name, boolean runlocal) {
         super(name);
 

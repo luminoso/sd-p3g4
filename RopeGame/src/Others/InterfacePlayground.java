@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Others;
 
 import ClientSide.Contestant;
@@ -10,7 +5,8 @@ import java.util.List;
 
 /**
  *
- * @author luminoso
+ * @author Eduardo Sousa
+ * @author Guilherme Cardoso
  */
 public interface InterfacePlayground {
 
@@ -91,5 +87,4 @@ public interface InterfacePlayground {
      * Synchronisation point for watching the trial in progress
      */
     void watchTrial();
-
 }

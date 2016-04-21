@@ -24,19 +24,55 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class ContestantsBench extends Bench implements InterfaceContestantsBench {
 
+    /**
+     * 
+     */
     private static final ContestantsBench[] instances = new ContestantsBench[2];    // Doubleton containing the two teams benches
 
     // Final fields
+    /**
+     * 
+     */
     private final int team;                                                         // Team identifier
+    
+    /**
+     * 
+     */
     private final Lock lock;
+    
+    /**
+     * 
+     */
     private final Condition allPlayersSeated;
+    
+    /**
+     * 
+     */
     private final Condition playersSelected;
+    
+    /**
+     * 
+     */
     private final Condition waitForNextTrial;
+    
+    /**
+     * 
+     */
     private final Condition waitForCoach;
 
+    /**
+     * 
+     */
     private final Set<Contestant> bench;                                            // Structure that contains the players in the bench
+    
+    /**
+     * 
+     */
     private final Set<Integer> selectedContestants;                                 // Selected contestants to play the trial
 
+    /**
+     * 
+     */
     private boolean coachWaiting;
 
     /**
@@ -73,6 +109,10 @@ public class ContestantsBench extends Bench implements InterfaceContestantsBench
         return temp;
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Override
     public synchronized List<Bench> getBenches() {
 
@@ -289,5 +329,4 @@ public class ContestantsBench extends Bench implements InterfaceContestantsBench
     private boolean checkAllPlayersSeated() {
         return bench.size() == Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH;
     }
-
 }

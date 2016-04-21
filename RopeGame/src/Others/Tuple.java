@@ -1,7 +1,8 @@
 package Others;
 
 /**
- * Generic Tuple implementation
+ * Generic Tuple implementation.
+ * 
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */

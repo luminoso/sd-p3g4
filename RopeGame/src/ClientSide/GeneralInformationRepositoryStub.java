@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ClientSide;
 
 import Communication.Message;
@@ -12,12 +7,20 @@ import ServerSide.RefereeSite;
 
 /**
  *
- * @author luminoso
+ * @author Eduardo Sousa
+ * @author Guilherme Cardoso
  */
 public class GeneralInformationRepositoryStub extends GIR implements InterfaceGeneralInformationRepository {
 
+    /**
+     * 
+     */
     private static GeneralInformationRepositoryStub instance;
 
+    /**
+     * 
+     * @return 
+     */
     public static synchronized GeneralInformationRepositoryStub getInstance() {
         if (instance == null) {
             instance = new GeneralInformationRepositoryStub();
@@ -26,6 +29,10 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         return instance;
     }
 
+    /**
+     * 
+     * @return 
+     */
     private ClientCom initiateConnection() {
         ClientCom con = new ClientCom(ClientRopeGame.getServerHostName(),
                 ClientRopeGame.getServerPortNumb());
@@ -38,6 +45,10 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         return con;
     }
 
+    /**
+     * 
+     * @param coach 
+     */
     @Override
     public void addCoach(Coach coach) {
         ClientCom con = initiateConnection();
@@ -61,6 +72,10 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         con.close();
     }
 
+    /**
+     * 
+     * @param contestant 
+     */
     @Override
     public void addContestant(Contestant contestant) {
         ClientCom con = initiateConnection();
@@ -85,6 +100,10 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         con.close();
     }
 
+    /**
+     * 
+     * @param referee 
+     */
     @Override
     public void addReferee(Referee referee) {
         ClientCom con = initiateConnection();
@@ -107,6 +126,9 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         con.close();
     }
 
+    /**
+     * 
+     */
     @Override
     public void close() {
         ClientCom con = initiateConnection();
@@ -127,6 +149,9 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         con.close();
     }
 
+    /**
+     * 
+     */
     @Override
     public void printGameHeader() {
         ClientCom con = initiateConnection();
@@ -147,6 +172,10 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         con.close();
     }
 
+    /**
+     * 
+     * @param score 
+     */
     @Override
     public void printGameResult(RefereeSite.GameScore score) {
         ClientCom con = initiateConnection();
@@ -169,6 +198,9 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         con.close();
     }
 
+    /**
+     * 
+     */
     @Override
     public void printHeader() {
         ClientCom con = initiateConnection();
@@ -189,6 +221,9 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         con.close();
     }
 
+    /**
+     * 
+     */
     @Override
     public void printLegend() {
         ClientCom con = initiateConnection();
@@ -209,6 +244,9 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         con.close();
     }
 
+    /**
+     * 
+     */
     @Override
     public void printLineUpdate() {
         Thread thread = Thread.currentThread();
@@ -248,6 +286,9 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         con.close();
     }
 
+    /**
+     * 
+     */
     @Override
     public void printMatchDraw() {
         ClientCom con = initiateConnection();
@@ -268,6 +309,12 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         con.close();
     }
 
+    /**
+     * 
+     * @param team
+     * @param score1
+     * @param score2 
+     */
     @Override
     public void printMatchWinner(int team, int score1, int score2) {
         ClientCom con = initiateConnection();
@@ -292,6 +339,9 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         con.close();
     }
 
+    /**
+     * 
+     */
     @Override
     public void resetTeamPlacement() {
         ClientCom con = initiateConnection();
@@ -312,6 +362,10 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         con.close();
     }
 
+    /**
+     * 
+     * @param flagPosition 
+     */
     @Override
     public void setFlagPosition(int flagPosition) {
         ClientCom con = initiateConnection();
@@ -334,6 +388,10 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         con.close();
     }
 
+    /**
+     * 
+     * @param gameNumber 
+     */
     @Override
     public void setGameNumber(int gameNumber) {
         ClientCom con = initiateConnection();
@@ -356,6 +414,9 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         con.close();
     }
 
+    /**
+     * 
+     */
     @Override
     public void setTeamPlacement() {
         Contestant contestant = (Contestant) Thread.currentThread();
@@ -382,6 +443,10 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
         con.close();
     }
 
+    /**
+     * 
+     * @param trialNumber 
+     */
     @Override
     public void setTrialNumber(int trialNumber) {
         ClientCom con = initiateConnection();
@@ -403,5 +468,4 @@ public class GeneralInformationRepositoryStub extends GIR implements InterfaceGe
 
         con.close();
     }
-
 }

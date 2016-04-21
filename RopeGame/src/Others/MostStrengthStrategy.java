@@ -1,7 +1,6 @@
 package Others;
 
 import ClientSide.Contestant;
-import ServerSide.ContestantsBench;
 import ServerSide.RefereeSite;
 import RopeGame.Constants;
 import java.util.Comparator;
@@ -12,7 +11,8 @@ import java.util.Set;
 
 /**
  * General Description:
- * Coach strategy implementation that picks the players with the most strength
+ * Coach strategy implementation that picks the players with the most strength.
+ * 
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */

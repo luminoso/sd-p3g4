@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ServerSide;
 
 import Communication.Message;
@@ -10,13 +5,26 @@ import static Communication.Message.MessageType.*;
 
 /**
  *
- * @author luminoso
+ * @author Eduardo Sousa
+ * @author Guilherme Cardoso
  */
 class ContestantsBenchInterface {
 
+    /**
+     * 
+     */
     private final ContestantsBench cb1;
+    
+    /**
+     * 
+     */
     private final ContestantsBench cb2;
 
+    /**
+     * 
+     * @param cb1
+     * @param cb2 
+     */
     public ContestantsBenchInterface(ContestantsBench cb1, ContestantsBench cb2) {
 
         this.cb1 = cb1;
@@ -24,6 +32,11 @@ class ContestantsBenchInterface {
 
     }
 
+    /**
+     * 
+     * @param inMessage
+     * @return 
+     */
     public Message processAndReply(Message inMessage) {
         Message outMessage = null;
 
@@ -47,5 +60,4 @@ class ContestantsBenchInterface {
 
         return outMessage;
     }
-
 }

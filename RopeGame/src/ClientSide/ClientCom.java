@@ -8,6 +8,9 @@ import java.net.*;
  * uma comunicação baseada em passagem de mensagens sobre sockets usando o
  * protocolo TCP. A transferência de dados é baseada em objectos, um objecto de
  * cada vez.
+ * 
+ * @author Eduardo Sousa
+ * @author Guilherme Cardoso
  */
 public class ClientCom {
 

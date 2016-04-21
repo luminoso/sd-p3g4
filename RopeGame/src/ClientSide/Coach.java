@@ -19,13 +19,42 @@ import java.util.Set;
  */
 public class Coach extends Thread implements Comparable<Coach>, InterfaceCoach {
 
+    /**
+     * 
+     */
     private CoachState state;           // Coach state
+    
+    /**
+     * 
+     */
     private int team;                   // Coach team
+    
+    /**
+     * 
+     */
     private CoachStrategy strategy;     // Team picking strategy
+    
+    /**
+     * 
+     */
     private final Bench bench;
+    
+    /**
+     * 
+     */
     private final Site refereeSite;
+    
+    /**
+     * 
+     */
     private final Ground playground;
 
+    /**
+     * 
+     * @param name
+     * @param team
+     * @param strategy 
+     */
     public Coach(String name, int team, CoachStrategy strategy) {
         this(name, team, strategy, true);
     }
@@ -198,11 +227,30 @@ public class Coach extends Thread implements Comparable<Coach>, InterfaceCoach {
      * Enums of possible Coach states
      */
     public enum CoachState {
+        
+        /**
+         * 
+         */
         WAIT_FOR_REFEREE_COMMAND(1, "WFRC"),
+        
+        /**
+         * 
+         */
         ASSEMBLE_TEAM(2, "AETM"),
+        
+        /**
+         * 
+         */
         WATCH_TRIAL(3, "WHTL");
 
+        /**
+         * 
+         */
         private final int id;
+        
+        /**
+         * 
+         */
         private final String state;
 
         /**

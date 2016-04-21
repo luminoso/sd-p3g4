@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ServerSide;
 
 import Communication.Message;
@@ -10,21 +5,33 @@ import static Communication.Message.MessageType.*;
 
 /**
  *
- * @author luminoso
+ * @author Eduardo Sousa
+ * @author Guilherme Cardoso
  */
 class RefereeSiteInterface {
 
+    /**
+     * 
+     */
     private final RefereeSite rf;
 
+    /**
+     * 
+     * @param rf 
+     */
     public RefereeSiteInterface(RefereeSite rf) {
         this.rf = rf;
     }
 
+    /**
+     * 
+     * @param inMessage
+     * @return 
+     */
     public Message processAndReply(Message inMessage) {
         Message outMessage = null;
 
         switch (inMessage.getType()) {
-
             case RS_addGamePoint:
                 outMessage = new Message(OK);
             case RS_addTrialPoint:
@@ -52,7 +59,5 @@ class RefereeSiteInterface {
         }
 
         return outMessage;
-
     }
-
 }

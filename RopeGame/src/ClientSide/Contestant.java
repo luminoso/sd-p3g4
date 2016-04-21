@@ -18,14 +18,40 @@ import ServerSide.RefereeSite;
  */
 public class Contestant extends Thread implements Comparable<Contestant>, InterfaceContestant {
 
+    /**
+     * 
+     */
     private final Bench bench;
+    
+    /**
+     * 
+     */
     private final Ground playground;
+    
+    /**
+     * 
+     */
     private final Site refereeSite;
 
     // Internal state fields
+    /**
+     * 
+     */
     private ContestantState state;          // Contestant state
+    
+    /**
+     * 
+     */
     private int strength;                   // Contestant strength
+    
+    /**
+     * 
+     */
     private int team;                 // Contestant team
+    
+    /**
+     * 
+     */
     private int id;                   // Contestant identification in team
 
     /**
@@ -225,11 +251,30 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
      * Enums of possible Contestant states
      */
     public enum ContestantState {
+        
+        /**
+         * 
+         */
         SEAT_AT_THE_BENCH(1, "STB"),
+        
+        /**
+         * 
+         */
         STAND_IN_POSITION(2, "SIP"),
+        
+        /**
+         * 
+         */
         DO_YOUR_BEST(3, "DYB");
 
+        /**
+         * 
+         */
         private final int id;
+        
+        /**
+         * 
+         */
         private final String state;
 
         /**

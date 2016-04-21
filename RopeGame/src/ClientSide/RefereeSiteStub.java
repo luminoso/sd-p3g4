@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ClientSide;
 
 import Communication.Message;
@@ -13,10 +8,14 @@ import java.util.List;
 
 /**
  *
- * @author luminoso
+ * @author Eduardo Sousa
+ * @author Guilherme Cardoso
  */
 public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
 
+    /**
+     * 
+     */
     private static RefereeSiteStub instance;
 
     /**
@@ -40,6 +39,10 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
 
     }
 
+    /**
+     * 
+     * @return 
+     */
     private ClientCom initiateConnection() {
         ClientCom con = new ClientCom(ClientRopeGame.getServerHostName(),
                 ClientRopeGame.getServerPortNumb());
@@ -52,6 +55,10 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         return con;
     }
 
+    /**
+     * 
+     * @param score 
+     */
     @Override
     public void addGamePoint(RefereeSite.GameScore score) {
         Referee referee = (Referee) Thread.currentThread();
@@ -76,6 +83,10 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         con.close();
     }
 
+    /**
+     * 
+     * @param score 
+     */
     @Override
     public void addTrialPoint(RefereeSite.TrialScore score) {
         Referee referee = (Referee) Thread.currentThread();
@@ -102,6 +113,9 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         con.close();
     }
 
+    /**
+     * 
+     */
     @Override
     public void bothTeamsReady() {
         Referee referee = (Referee) Thread.currentThread();
@@ -128,6 +142,10 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         con.close();
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Override
     public List<RefereeSite.GameScore> getGamePoints() {
         Referee referee = (Referee) Thread.currentThread();
@@ -156,6 +174,10 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         return gamePoints;
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Override
     public int getRemainingGames() {
         Referee referee = (Referee) Thread.currentThread();
@@ -182,6 +204,10 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         return inMessage.getRemainingGames();
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Override
     public int getRemainingTrials() {
         Referee referee = (Referee) Thread.currentThread();
@@ -208,6 +234,10 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         return inMessage.getRemainingtTrials();
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Override
     public List<RefereeSite.TrialScore> getTrialPoints() {
         Referee referee = (Referee) Thread.currentThread();
@@ -238,6 +268,10 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
 
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Override
     public boolean hasMatchEnded() {
         // coach
@@ -264,6 +298,9 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         return inMessage.getHasMatchEnded();
     }
 
+    /**
+     * 
+     */
     @Override
     public void informReferee() {
         Coach coach = (Coach) Thread.currentThread();
@@ -289,6 +326,9 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         con.close();
     }
 
+    /**
+     * 
+     */
     @Override
     public void resetTrialPoints() {
         Referee referee = (Referee) Thread.currentThread();
@@ -314,6 +354,10 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
 
     }
 
+    /**
+     * 
+     * @param hasMatchEnded 
+     */
     @Override
     public void setHasMatchEnded(boolean hasMatchEnded) {
         Referee referee = (Referee) Thread.currentThread();
@@ -337,5 +381,4 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
 
         con.close();
     }
-
 }

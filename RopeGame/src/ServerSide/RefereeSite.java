@@ -15,18 +15,46 @@ import java.util.logging.Logger;
 
 /**
  * General Description: 
- * This is an passive class that describes the Referee site
+ * This is an passive class that describes the Referee site.
+ * 
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
 public class RefereeSite extends Site implements InterfaceRefereeSite {
+    
+    /**
+     * 
+     */
     private static RefereeSite instance;
+    
+    /**
+     * 
+     */
     private final Lock lock;
+    
+    /**
+     * 
+     */
     private final Condition informReferee;              // condition for referee wait for the coaches
+    
+    /**
+     * 
+     */
     private int informRefereeCounter;                   // counter of how many coaches informed the referee
+    
+    /**
+     * 
+     */
     private boolean hasMatchEnded;
     
+    /**
+     * 
+     */
     private List<TrialScore> trialStatus;               // current trial status
+    
+    /**
+     * 
+     */
     private final List<GameScore> gameStatus;           // current game status
     
     /**
@@ -229,47 +257,123 @@ public class RefereeSite extends Site implements InterfaceRefereeSite {
         lock.unlock();
     }
     
+    /**
+     * 
+     */
     public enum TrialScore {
+        /**
+         * 
+         */
         DRAW(0, "D"),
+        
+        /**
+         * 
+         */
         VICTORY_TEAM_1(1, "VT1"),
+        
+        /**
+         * 
+         */
         VICTORY_TEAM_2(2, "VT2");
         
+        /**
+         * 
+         */
         private final int id;
+        
+        /**
+         * 
+         */
         private final String status;
         
+        /**
+         * 
+         * @param id
+         * @param status 
+         */
         private TrialScore(int id, String status) {
             this.id = id;
             this.status = status;
         }
         
+        /**
+         * 
+         * @return 
+         */
         public int getId() {
             return this.id;
         }
         
+        /**
+         * 
+         * @return 
+         */
         public String getStatus() {
             return this.status;
         }
     }
     
+    /**
+     * 
+     */
     public enum GameScore {
+        /**
+         * 
+         */
         DRAW(0, "D"),
+        
+        /**
+         * 
+         */
         VICTORY_TEAM_1_BY_POINTS(1, "VT1PT"),
+        
+        /**
+         * 
+         */
         VICTORY_TEAM_1_BY_KNOCKOUT(2, "VT1KO"),
+        
+        /**
+         * 
+         */
         VICTORY_TEAM_2_BY_POINTS(3, "VT2PT"),
+        
+        /**
+         * 
+         */
         VICTORY_TEAM_2_BY_KNOCKOUT(4, "VT2KO");
         
+        /**
+         * 
+         */
         private final int id;
+        
+        /**
+         * 
+         */
         private final String status;
         
+        /**
+         * 
+         * @param id
+         * @param status 
+         */
         private GameScore(int id, String status) {
             this.id = id;
             this.status = status;
         }
         
+        /**
+         * 
+         * @return 
+         */
         public int getId() {
             return this.id;
         }
         
+        /**
+         * 
+         * @return 
+         */
         public String getStatus() {
             return this.status;
         }

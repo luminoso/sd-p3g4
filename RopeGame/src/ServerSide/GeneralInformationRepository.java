@@ -26,23 +26,65 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class GeneralInformationRepository extends GIR implements InterfaceGeneralInformationRepository {
 
+    /**
+     * 
+     */
     private static GeneralInformationRepository instance;
 
+    /**
+     * 
+     */
     private final Lock lock;
+    
+    /**
+     * 
+     */
     private PrintWriter printer;
 
+    /**
+     * 
+     */
     private final List<Tuple<ContestantState, Integer>[]> teamsState;
+    
+    /**
+     * 
+     */
     private final CoachState[] coachesState;
+    
+    /**
+     * 
+     */
     private RefereeState refereeState;
 
+    /**
+     * 
+     */
     private final List<Integer> team1Placement;     // list containing team contestants
+    
+    /**
+     * 
+     */
     private final List<Integer> team2Placement;     // list containing team contestants
 
+    /**
+     * 
+     */
     private int gameNumber;                         // list containing scores of the game
+    
+    /**
+     * 
+     */
     private int trialNumber;                        // list containing scores of the trial
 
+    /**
+     * 
+     */
     private int flagPosition;                       // current flag position
 
+    /**
+     * 
+     * @return 
+     */
     public static synchronized GeneralInformationRepository getInstance() {
         if (instance == null) {
             instance = new GeneralInformationRepository();

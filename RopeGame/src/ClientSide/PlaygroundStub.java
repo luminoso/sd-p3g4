@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ClientSide;
 
 import Communication.Message;
@@ -13,10 +8,14 @@ import java.util.List;
 
 /**
  *
- * @author luminoso
+ * @author Eduardo Sousa
+ * @author Guilherme Cardoso
  */
 public class PlaygroundStub extends Ground implements InterfacePlayground {
 
+    /**
+     * 
+     */
     private static PlaygroundStub instance;
 
     /**
@@ -39,6 +38,10 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
     private PlaygroundStub() {
     }
 
+    /**
+     * 
+     * @return 
+     */
     private ClientCom initiateConnection() {
         ClientCom con = new ClientCom(ClientRopeGame.getServerHostName(),
                 ClientRopeGame.getServerPortNumb());
@@ -51,6 +54,9 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         return con;
     }
 
+    /**
+     * 
+     */
     @Override
     public void addContestant() {
         Contestant contestant = (Contestant) Thread.currentThread();
@@ -80,12 +86,19 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
 
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Override
     public boolean checkAllContestantsReady() {
         //TODO: not used? delete from interface, etc
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * 
+     */
     @Override
     public void checkTeamPlacement() {
         Coach coach = (Coach) Thread.currentThread();
@@ -114,6 +127,9 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         con.close();
     }
 
+    /**
+     * 
+     */
     @Override
     public void getContestant() {
         Contestant contestant = (Contestant) Thread.currentThread();
@@ -141,6 +157,10 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
 
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Override
     public int getFlagPosition() {
         Referee referee = (Referee) Thread.currentThread();
@@ -167,6 +187,10 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         return inMessage.getFlagPostion();
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Override
     public int getLastFlagPosition() {
         Referee referee = (Referee) Thread.currentThread();
@@ -193,18 +217,28 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         return inMessage.getLastFlagPostion();
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Override
     public List<Contestant>[] getTeams() {
         // unused function?
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * 
+     */
     @Override
     public void haveAllPulled() {
         // unused function?
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * 
+     */
     @Override
     public void pullRope() {
         Contestant contestant = (Contestant) Thread.currentThread();
@@ -228,6 +262,9 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         }
     }
 
+    /**
+     * 
+     */
     @Override
     public void resultAsserted() {
         Referee referee = (Referee) Thread.currentThread();
@@ -252,6 +289,10 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         con.close();
     }
 
+    /**
+     * 
+     * @param flagPosition 
+     */
     @Override
     public void setFlagPosition(int flagPosition) {
         Referee referee = (Referee) Thread.currentThread();
@@ -278,6 +319,9 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         con.close();
     }
 
+    /**
+     * 
+     */
     @Override
     public void startPulling() {
         Referee referee = (Referee) Thread.currentThread();
@@ -305,6 +349,9 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
         con.close();
     }
 
+    /**
+     * 
+     */
     @Override
     public void watchTrial() {
         Coach coach = (Coach) Thread.currentThread();
@@ -332,5 +379,4 @@ public class PlaygroundStub extends Ground implements InterfacePlayground {
 
         coach.setState(inMessage.getCoachState());
     }
-
 }
