@@ -39,7 +39,9 @@ public class ServerRopeGame {
 
         out.println("Service started");
         out.println("Server is listining for connections at :" + portNumb);
-        informationRepository.printHeader();
+        
+        // wait for everyone connected?!
+        // informationRepository.printHeader();
 
         while (true) {
             sconi = scon.accept();                            // entrada em processo de escuta

@@ -89,6 +89,7 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
             GeneralInformationRepositoryInterface giri) {
 
         super(Integer.toString(serviceProviderAgentId++));
+        this.sconi = sconi;
         this.cbi = cbi;
         this.pgi = pgi;
         this.rsi = rsi;
@@ -107,7 +108,8 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
      */
     @Override
     public void run() {
-        Message inMessage, outMessage = null;
+        Message inMessage = null,
+                outMessage = null;
 
         inMessage = (Message) sconi.readObject();
 
@@ -129,12 +131,16 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
             switch (inMessage.getMessageCategory()) {
                 case CB:
                     outMessage = cbi.processAndReply(inMessage);
+                    break;
                 case PG:
                     outMessage = pgi.processAndReply(inMessage);
+                    break;
                 case GIR:
                     outMessage = giri.processAndReply(inMessage);
+                    break;
                 case RS:
                     outMessage = rsi.processAndReply(inMessage);
+                    break;
                 default:
             }
         } catch (Exception e) {
