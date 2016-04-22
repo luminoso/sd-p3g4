@@ -115,8 +115,11 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
 
         // TODO: validate message
         // Adapt current thread to message running conditions
+        // TODO: move to inside each cbi, pgi, rsi?
         // Contestant
-        this.setName(inMessage.getName());
+        if(inMessage.getName() != null)
+            this.setName(inMessage.getName());
+        
         this.state = inMessage.getState();
         this.team = inMessage.getTeam();
         this.contestantId = inMessage.getId();
