@@ -33,11 +33,11 @@ public class ClientRopeGame {
         // estatico para já
         // inicializar todos os jogadores, arbitro e coaches
         // Instantiating all active entities
-        Referee rf = new Referee("Arbit", true);
+        Referee rf = new Referee("Arbit", false);
 
         Coach[] coaches = new Coach[2];
-        coaches[0] = new Coach("Coach: 1", 1, new MostStrengthStrategy(), true);
-        coaches[1] = new Coach("Coach: 2", 2, new KeepWinningTeam(), true);
+        coaches[0] = new Coach("Coach: 1", 1, new MostStrengthStrategy(), false);
+        coaches[1] = new Coach("Coach: 2", 2, new KeepWinningTeam(), false);
 
         Contestant[][] contestants = new Contestant[2][Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH];
 
