@@ -145,7 +145,7 @@ public class Message implements Serializable {
      *
      * @param messageType
      */
-    public Message(MessageType messageType) {
+    public Message(MessageType type) {
         this.type = type;
     }
 
