@@ -1,8 +1,8 @@
 package Others;
 
 import ClientSide.Contestant;
-import ServerSide.RefereeSite;
 import RopeGame.Constants;
+import ServerSide.RefereeSite;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -16,18 +16,16 @@ import java.util.Set;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class MostStrengthStrategy implements CoachStrategy {
-    
+public class MostStrengthStrategy implements CoachStrategy, Comparator<Contestant> {
+
     /**
      * Comparator to sort the Contestant accordingly to this strategy
      */
-    private final Comparator<Contestant> comparator = new Comparator<Contestant>() {
-        @Override
-        public int compare(Contestant o1, Contestant o2) {
-            return o2.getStrength()- o1.getStrength();
-        }
-    };
-    
+    @Override
+    public int compare(Contestant o1, Contestant o2) {
+        return o2.getStrength()- o1.getStrength();
+    }
+        
     /**
      * Picks a team using the most strength strategy
      * @param bench Bench containing all Contestants to pick from
@@ -39,7 +37,7 @@ public class MostStrengthStrategy implements CoachStrategy {
         Set<Integer> pickedTeam = new HashSet<>();
         
         List<Contestant> contestants = new LinkedList<>(bench.getBench());
-        contestants.sort(comparator);
+        contestants.sort(this);
         
         for(Contestant cont : contestants) {
             if(pickedTeam.size() == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND) {

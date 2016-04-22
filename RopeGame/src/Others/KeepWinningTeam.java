@@ -2,9 +2,9 @@ package Others;
 
 import ClientSide.Coach;
 import ClientSide.Contestant;
+import RopeGame.Constants;
 import ServerSide.RefereeSite;
 import ServerSide.RefereeSite.TrialScore;
-import RopeGame.Constants;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -18,7 +18,7 @@ import java.util.Set;
  * @author Guilherme Cardoso
  */
 public class KeepWinningTeam implements CoachStrategy {
-
+    
     /**
      * 
      * @param bench
@@ -45,7 +45,7 @@ public class KeepWinningTeam implements CoachStrategy {
         }
 
         // if we lost of if it is the first game we're going to pick random Contestants
-        if (didWeLost || trialPoints.size() == 0) {
+        if (didWeLost || trialPoints.isEmpty()) {
             List<Contestant> contestants = new LinkedList<>(bench.getBench());
             Collections.shuffle(contestants);
 
