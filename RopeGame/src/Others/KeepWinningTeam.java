@@ -1,9 +1,6 @@
 package Others;
 
-import ClientSide.Coach;
-import ClientSide.Contestant;
 import RopeGame.Constants;
-import ServerSide.RefereeSite;
 import ServerSide.RefereeSite.TrialScore;
 import java.util.Collections;
 import java.util.HashSet;
@@ -26,10 +23,10 @@ public class KeepWinningTeam implements CoachStrategy {
      * @return 
      */
     @Override
-    public Set<Integer> pickTeam(Bench bench, RefereeSite site) {
+    public Set<Integer> pickTeam(InterfaceContestantsBench bench, InterfaceRefereeSite site) {
         List<TrialScore> trialPoints = site.getTrialPoints();
 
-        int team = ((Coach) Thread.currentThread()).getTeam();
+        int team = ((InterfaceCoach) Thread.currentThread()).getCoachTeam();
 
         boolean didWeLost = false;
         
@@ -46,17 +43,17 @@ public class KeepWinningTeam implements CoachStrategy {
 
         // if we lost of if it is the first game we're going to pick random Contestants
         if (didWeLost || trialPoints.isEmpty()) {
-            List<Contestant> contestants = new LinkedList<>(bench.getBench());
+            List<InterfaceContestant> contestants = new LinkedList<>(bench.getBench());
             Collections.shuffle(contestants);
 
             Set<Integer> pickedTeam = new HashSet<>();
 
-            for (Contestant contestant : contestants) {
+            for (InterfaceContestant contestant : contestants) {
                 if (pickedTeam.size() == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND) {
                     break;
                 }
 
-                pickedTeam.add(contestant.getContestatId());
+                pickedTeam.add(contestant.getContestantId());
             }
 
             return pickedTeam;

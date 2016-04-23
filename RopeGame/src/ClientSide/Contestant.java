@@ -1,13 +1,10 @@
 package ClientSide;
 
-import Others.Bench;
-import Others.Ground;
 import Others.InterfaceContestant;
-import Others.Site;
-import ServerSide.ContestantsBench;
+import Others.InterfaceContestantsBench;
+import Others.InterfacePlayground;
+import Others.InterfaceRefereeSite;
 import ServerSide.GeneralInformationRepository;
-import ServerSide.Playground;
-import ServerSide.RefereeSite;
 
 /**
  * General Description: This is an active class implements the Contestant and
@@ -16,22 +13,22 @@ import ServerSide.RefereeSite;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class Contestant extends Thread implements Comparable<Contestant>, InterfaceContestant {
+public class Contestant extends Thread implements Comparable<InterfaceContestant>, InterfaceContestant {
 
     /**
      * 
      */
-    private final Bench bench;
+    private final InterfaceContestantsBench bench;
     
     /**
      * 
      */
-    private final Ground playground;
+    private final InterfacePlayground playground;
     
     /**
      * 
      */
-    private final Site refereeSite;
+    private final InterfaceRefereeSite refereeSite;
 
     // Internal state fields
     /**
@@ -84,16 +81,10 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
         this.team = team;
         this.id = id;
         this.strength = strength;
-
-        if (runlocal) {
-            this.bench = ContestantsBench.getInstance(team);
-            this.refereeSite = RefereeSite.getInstance();
-            this.playground = Playground.getInstance();
-        } else {
-            this.bench = ContestantsBenchStub.getInstance(team);
-            this.refereeSite = RefereeSiteStub.getInstance();
-            this.playground = PlaygroundStub.getInstance();
-        }
+        
+        this.bench = new ContestantsBenchStub(team);
+        this.playground = new PlaygroundStub();
+        this.refereeSite = new RefereeSiteStub();
     }
 
     /**
@@ -112,7 +103,7 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
      * @param state ContestantState
      */
     @Override
-    public void setState(ContestantState state) {
+    public void setContestantState(ContestantState state) {
         this.state = state;
     }
 
@@ -122,7 +113,7 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
      * @return contestant team number
      */
     @Override
-    public int getTeam() {
+    public int getContestantTeam() {
         return team;
     }
 
@@ -132,7 +123,7 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
      * @param team of the contestant
      */
     @Override
-    public void setTeam(int team) {
+    public void setContestantTeam(int team) {
         this.team = team;
     }
 
@@ -142,7 +133,7 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
      * @return contestant id number
      */
     @Override
-    public int getContestatId() {
+    public int getContestantId() {
         return id;
     }
 
@@ -162,7 +153,7 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
      * @return contestant strength
      */
     @Override
-    public int getStrength() {
+    public int getContestantStrength() {
         return strength;
     }
 
@@ -172,7 +163,7 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
      * @param strength contestant strength
      */
     @Override
-    public void setStrength(int strength) {
+    public void setContestantStrength(int strength) {
         this.strength = strength;
     }
 
@@ -215,7 +206,7 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
      * Contestant gets ready. Changes the Contestant state to DO_YOUR_BEST
      */
     private void getReady() {
-        this.setState(ContestantState.DO_YOUR_BEST);
+        this.setContestantState(ContestantState.DO_YOUR_BEST);
         GeneralInformationRepository.getInstance().printLineUpdate();
     }
 
@@ -243,8 +234,8 @@ public class Contestant extends Thread implements Comparable<Contestant>, Interf
      * @return contestant difference
      */
     @Override
-    public int compareTo(Contestant contestant) {
-        return this.id - contestant.id;
+    public int compareTo(InterfaceContestant contestant) {
+        return this.id - contestant.getContestantId();
     }
 
     /**

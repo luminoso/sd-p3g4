@@ -1,18 +1,15 @@
 package ClientSide;
 
 import static ClientSide.Referee.RefereeState.END_OF_THE_MATCH;
-import Others.Bench;
-import Others.GIR;
-import Others.Ground;
+import Others.InterfaceContestantsBench;
+import Others.InterfaceGeneralInformationRepository;
+import Others.InterfacePlayground;
 import Others.InterfaceReferee;
-import Others.Site;
+import Others.InterfaceRefereeSite;
 import RopeGame.Constants;
-import ServerSide.ContestantsBench;
-import ServerSide.GeneralInformationRepository;
-import ServerSide.Playground;
-import ServerSide.RefereeSite;
 import ServerSide.RefereeSite.GameScore;
 import ServerSide.RefereeSite.TrialScore;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,22 +29,22 @@ public class Referee extends Thread implements InterfaceReferee {
     /**
      * 
      */
-    private final Bench bench;
+    private final List<InterfaceContestantsBench> benchs;
     
     /**
      * 
      */
-    private final Site refereeSite;
+    private final InterfaceRefereeSite refereeSite;
     
     /**
      * 
      */
-    private final Ground playground;
+    private final InterfacePlayground playground;
     
     /**
      * 
      */
-    private GIR generalInformationRepository;
+    private final InterfaceGeneralInformationRepository generalInformationRepository;
 
     /**
      * 
@@ -67,17 +64,14 @@ public class Referee extends Thread implements InterfaceReferee {
 
         state = RefereeState.START_OF_THE_MATCH;
 
-        if (runlocal) {
-            this.bench = ContestantsBench.getInstance(1);
-            this.refereeSite = RefereeSite.getInstance();
-            this.playground = Playground.getInstance();
-            this.generalInformationRepository = GeneralInformationRepository.getInstance();
-        } else {
-            this.bench = ContestantsBenchStub.getInstance(1);
-            this.refereeSite = RefereeSiteStub.getInstance();
-            this.playground = PlaygroundStub.getInstance();
-            this.generalInformationRepository = GeneralInformationRepositoryStub.getInstance();
-        }
+        this.benchs = new ArrayList<>();
+        
+        for(int i = 1; i <= 2; i++)
+            this.benchs.add(new ContestantsBenchStub(i));
+        
+        this.playground = new PlaygroundStub();
+        this.refereeSite = new RefereeSiteStub();
+        this.generalInformationRepository = new GeneralInformationRepositoryStub();
     }
 
     /**
@@ -96,7 +90,7 @@ public class Referee extends Thread implements InterfaceReferee {
      * @param state RefereeState
      */
     @Override
-    public void setState(RefereeState state) {
+    public void setRefereeState(RefereeState state) {
         this.state = state;
     }
 
@@ -150,7 +144,7 @@ public class Referee extends Thread implements InterfaceReferee {
         generalInformationRepository.setTrialNumber(1);
         generalInformationRepository.setGameNumber(refereeSite.getGamePoints().size() + 1);
         generalInformationRepository.printGameHeader();
-        this.setState(RefereeState.START_OF_A_GAME);
+        this.setRefereeState(RefereeState.START_OF_A_GAME);
         generalInformationRepository.printLineUpdate();
     }
 
@@ -161,9 +155,7 @@ public class Referee extends Thread implements InterfaceReferee {
     private void callTrial() {
         generalInformationRepository.setTrialNumber(refereeSite.getTrialPoints().size() + 1);
 
-        List<Bench> benchs = bench.getBenches();
-
-        for (Bench bench : benchs) {
+        for (InterfaceContestantsBench bench : benchs) {
             bench.pickYourTeam();
         }
 
@@ -244,7 +236,7 @@ public class Referee extends Thread implements InterfaceReferee {
                 break;
         }
 
-        this.setState(RefereeState.END_OF_A_GAME);
+        this.setRefereeState(RefereeState.END_OF_A_GAME);
         generalInformationRepository.printLineUpdate();
         generalInformationRepository.printGameResult(refereeSite.getGamePoints().get(refereeSite.getGamePoints().size() - 1));
     }
@@ -266,7 +258,7 @@ public class Referee extends Thread implements InterfaceReferee {
             }
         }
 
-        this.setState(RefereeState.END_OF_THE_MATCH);
+        this.setRefereeState(RefereeState.END_OF_THE_MATCH);
         generalInformationRepository.printLineUpdate();
 
         if (score1 > score2) {

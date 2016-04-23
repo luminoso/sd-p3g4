@@ -48,11 +48,6 @@ public class Message implements Serializable {
      */
     private Enum state;
 
-    /**
-     *
-     */
-    private String name;
-
     // message variables
     /**
      *
@@ -103,9 +98,8 @@ public class Message implements Serializable {
      * @param id
      * @param strength
      */
-    public Message(MessageType type, String name, ContestantState state, int team, int id, int strength) {
+    public Message(MessageType type, ContestantState state, int team, int id, int strength) {
         this.type = type;
-        this.name = name;
         this.state = state;
         this.team = team;
         this.id = id;
@@ -120,9 +114,8 @@ public class Message implements Serializable {
      * @param team
      * @param strategy
      */
-    public Message(MessageType type, String name, CoachState state, int team, CoachStrategy strategy) {
+    public Message(MessageType type, CoachState state, int team, CoachStrategy strategy) {
         this.type = type;
-        this.name = name;
         this.state = state;
         this.team = team;
         this.strategy = strategy;
@@ -135,9 +128,8 @@ public class Message implements Serializable {
      * @param state
      * @param name
      */
-    public Message(MessageType type, String name, RefereeState state) {
+    public Message(MessageType type, RefereeState state) {
         this.type = type;
-        this.name = name;
         this.state = state;
     }
 
@@ -353,10 +345,6 @@ public class Message implements Serializable {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public CoachStrategy getStrategy() {
         return strategy;
     }
@@ -437,31 +425,31 @@ public class Message implements Serializable {
         /**
          *
          */
-        SELECTEDCONTESTANTS,
+        SELECTED_CONTESTANTS,
         /**
          *
          */
-        FLAGPOSITION,
+        FLAG_POSITION,
         /**
          *
          */
-        LASTFLAGPOSITION,
+        LAST_FLAG_POSITION,
         /**
          *
          */
-        GAMEPOINTS,
+        GAME_POINTS,
         /**
          *
          */
-        TRIALPOINTS,
+        TRIAL_POINTS,
         /**
          *
          */
-        REMAININGGAMES,
+        REMAINING_GAMES,
         /**
          *
          */
-        REMAININGTRIALS,
+        REMAINING_TRIALS,
         /**
          *
          */

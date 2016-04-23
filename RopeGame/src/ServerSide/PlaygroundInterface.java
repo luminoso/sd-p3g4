@@ -1,18 +1,18 @@
 package ServerSide;
 
-import ClientSide.Coach;
-import ClientSide.Contestant;
-import ClientSide.Referee;
 import Communication.Message;
 import static Communication.Message.MessageType.*;
 import Communication.MessageException;
+import Others.InterfaceCoach;
+import Others.InterfaceContestant;
+import Others.InterfaceReferee;
 
 /**
  *
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-class PlaygroundInterface {
+class PlaygroundInterface implements ServerInterface {
 
     /**
      *
@@ -23,8 +23,8 @@ class PlaygroundInterface {
      *
      * @param pg
      */
-    public PlaygroundInterface(Playground pg) {
-        this.pg = pg;
+    public PlaygroundInterface() {
+        this.pg = Playground.getInstance();
     }
 
     /**
@@ -32,19 +32,20 @@ class PlaygroundInterface {
      * @param inMessage
      * @return
      */
+    @Override
     public Message processAndReply(Message inMessage) throws MessageException {
         Message outMessage = null;
 
         switch (inMessage.getType()) {
             case PG_addContestant: {
-                Contestant contestant = (Contestant) Thread.currentThread();
+                InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
                 pg.addContestant();
                 outMessage = new Message(CONTESTANT_STATE_CHANGE);
                 outMessage.setContestantState(contestant.getContestantState());
                 break;
             }
             case PG_checkTeamPlacement: {
-                Coach coach = (Coach) Thread.currentThread();
+                InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
                 pg.checkTeamPlacement();
                 outMessage = new Message(COACH_STATE_CHANGE);
                 outMessage.setContestantState(coach.getCoachState());
@@ -56,12 +57,12 @@ class PlaygroundInterface {
                 break;
             }
             case PG_getFlagPosition: {
-                outMessage = new Message(FLAGPOSITION);
+                outMessage = new Message(FLAG_POSITION);
                 outMessage.setFlagPosition(pg.getFlagPosition());
                 break;
             }
             case PG_getLastFlagPosition: {
-                outMessage = new Message(LASTFLAGPOSITION);
+                outMessage = new Message(LAST_FLAG_POSITION);
                 outMessage.setLastFlagPosition(pg.getLastFlagPosition());
                 break;
             }
@@ -81,14 +82,14 @@ class PlaygroundInterface {
                 break;
             }
             case PG_startPulling: {
-                Referee referee = (Referee) Thread.currentThread();
+                InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
                 pg.startPulling();
                 outMessage = new Message(REFEREE_STATE_CHANGE);
                 outMessage.setRefereeState(referee.getRefereeState());
                 break;
             }
             case PG_watchTrial: {
-                Coach coach = (Coach) Thread.currentThread();
+                InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
                 pg.watchTrial();
                 outMessage = new Message(COACH_STATE_CHANGE);
                 outMessage.setCoachState(coach.getCoachState());

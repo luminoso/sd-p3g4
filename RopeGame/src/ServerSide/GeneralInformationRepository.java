@@ -6,8 +6,10 @@ import ClientSide.Contestant;
 import ClientSide.Contestant.ContestantState;
 import ClientSide.Referee;
 import ClientSide.Referee.RefereeState;
-import Others.GIR;
+import Others.InterfaceCoach;
+import Others.InterfaceContestant;
 import Others.InterfaceGeneralInformationRepository;
+import Others.InterfaceReferee;
 import Others.Tuple;
 import RopeGame.Constants;
 import ServerSide.RefereeSite.GameScore;
@@ -24,7 +26,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class GeneralInformationRepository extends GIR implements InterfaceGeneralInformationRepository {
+public class GeneralInformationRepository implements InterfaceGeneralInformationRepository {
 
     /**
      * 
@@ -126,7 +128,7 @@ public class GeneralInformationRepository extends GIR implements InterfaceGenera
      * @param referee Referee to add
      */
     @Override
-    public void addReferee(Referee referee) {
+    public void addReferee(InterfaceReferee referee) {
         lock.lock();
 
         refereeState = referee.getRefereeState();
@@ -140,13 +142,13 @@ public class GeneralInformationRepository extends GIR implements InterfaceGenera
      * @param contestant Contestant to add
      */
     @Override
-    public void addContestant(Contestant contestant) {
+    public void addContestant(InterfaceContestant contestant) {
         lock.lock();
 
-        int team = contestant.getTeam() - 1;
-        int id = contestant.getContestatId() - 1;
+        int team = contestant.getContestantTeam()-1;
+        int id = contestant.getContestantId()-1;
 
-        this.teamsState.get(team)[id] = new Tuple<>(contestant.getContestantState(), contestant.getStrength());
+        this.teamsState.get(team)[id] = new Tuple<>(contestant.getContestantState(), contestant.getContestantStrength());
 
         lock.unlock();
     }
@@ -157,10 +159,10 @@ public class GeneralInformationRepository extends GIR implements InterfaceGenera
      * @param coach coach that will be added to the information repository
      */
     @Override
-    public void addCoach(Coach coach) {
+    public void addCoach(InterfaceCoach coach) {
         lock.lock();
 
-        int team = coach.getTeam() - 1;
+        int team = coach.getCoachTeam() - 1;
 
         this.coachesState[team] = coach.getCoachState();
 
@@ -214,14 +216,14 @@ public class GeneralInformationRepository extends GIR implements InterfaceGenera
      */
     @Override
     public void setTeamPlacement() {
-        Contestant contestant = (Contestant) Thread.currentThread();
+        InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
 
         lock.lock();
 
-        if (contestant.getTeam() == 1) {
-            team1Placement.add(contestant.getContestatId());
-        } else if (contestant.getTeam() == 2) {
-            team2Placement.add(contestant.getContestatId());
+        if (contestant.getContestantTeam() == 1) {
+            team1Placement.add(contestant.getContestantId());
+        } else if (contestant.getContestantTeam() == 2) {
+            team2Placement.add(contestant.getContestantId());
         }
 
         lock.unlock();
@@ -263,7 +265,7 @@ public class GeneralInformationRepository extends GIR implements InterfaceGenera
 
         lock.lock();
 
-        if (thread.getClass() == Contestant.class) {
+        if (thread.getClass() == InterfaceContestant.class) {
             addContestant((Contestant) thread);
         } else if (thread.getClass() == Coach.class) {
             addCoach((Coach) thread);

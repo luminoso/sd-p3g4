@@ -8,7 +8,6 @@ import ClientSide.Referee.RefereeState;
  * @author Guilherme Cardoso
  */
 public interface InterfaceReferee {
-
     /**
      * Get the current Referee state
      *
@@ -21,5 +20,5 @@ public interface InterfaceReferee {
      *
      * @param state RefereeState
      */
-    void setState(RefereeState state);
+    void setRefereeState(RefereeState state);
 }

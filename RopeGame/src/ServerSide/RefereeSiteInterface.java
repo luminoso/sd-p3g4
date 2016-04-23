@@ -1,16 +1,16 @@
 package ServerSide;
 
-import ClientSide.Referee;
 import Communication.Message;
 import static Communication.Message.MessageType.*;
 import Communication.MessageException;
+import Others.InterfaceReferee;
 
 /**
  *
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-class RefereeSiteInterface {
+class RefereeSiteInterface implements ServerInterface {
 
     /**
      *
@@ -21,8 +21,8 @@ class RefereeSiteInterface {
      *
      * @param rf
      */
-    public RefereeSiteInterface(RefereeSite rs) {
-        this.rs = rs;
+    public RefereeSiteInterface() {
+        this.rs = RefereeSite.getInstance();
     }
 
     /**
@@ -45,29 +45,29 @@ class RefereeSiteInterface {
                 break;
             }
             case RS_bothTeamsReady: {
-                Referee referee = (Referee) Thread.currentThread();
+                InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
                 rs.bothTeamsReady();
                 outMessage = new Message(REFEREE_STATE_CHANGE);
                 outMessage.setRefereeState(referee.getRefereeState());
                 break;
             }
             case RS_getGamePoints: {
-                outMessage = new Message(GAMEPOINTS);
+                outMessage = new Message(GAME_POINTS);
                 outMessage.setGamePoints(rs.getGamePoints());
                 break;
             }
             case RS_getRemainingGames: {
-                outMessage = new Message(REMAININGGAMES);
+                outMessage = new Message(REMAINING_GAMES);
                 outMessage.setRemainingGames(rs.getRemainingGames());
                 break;
             }
             case RS_getRemainingTrials: {
-                outMessage = new Message(REMAININGTRIALS);
+                outMessage = new Message(REMAINING_TRIALS);
                 outMessage.setRemainingTrials(rs.getRemainingTrials());
                 break;
             }
             case RS_getTrialPoints: {
-                outMessage = new Message(TRIALPOINTS);
+                outMessage = new Message(TRIAL_POINTS);
                 outMessage.setTrialPoints(rs.getTrialPoints());
                 break;
             }

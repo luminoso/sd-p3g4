@@ -1,8 +1,9 @@
 package ClientSide;
 
 import Communication.Message;
+import Others.InterfaceCoach;
+import Others.InterfaceReferee;
 import Others.InterfaceRefereeSite;
-import Others.Site;
 import ServerSide.RefereeSite;
 import java.util.List;
 
@@ -11,33 +12,11 @@ import java.util.List;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
-
-    /**
-     *
-     */
-    private static RefereeSiteStub instance;
-
-    /**
-     * The method returns the RefereeSite object. The method is thread-safe and
-     * uses the implicit monitor of the class.
-     *
-     * @return RefereeSite object to be used.
-     */
-    public static synchronized RefereeSiteStub getInstance() {
-        if (instance == null) {
-            instance = new RefereeSiteStub();
-        }
-
-        return instance;
-    }
-
+public class RefereeSiteStub implements InterfaceRefereeSite {
     /**
      * Private constructor to be used in singleton.
      */
-    private RefereeSiteStub() {
-
-    }
+    public RefereeSiteStub() {}
 
     /**
      *
@@ -61,14 +40,13 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
      */
     @Override
     public void addGamePoint(RefereeSite.GameScore score) {
-        Referee referee = (Referee) Thread.currentThread();
+        InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
 
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_addGamePoint,
-                referee.getName(),
                 referee.getRefereeState());
 
         outMessage.setGamePoint(score);
@@ -91,14 +69,13 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
      */
     @Override
     public void addTrialPoint(RefereeSite.TrialScore score) {
-        Referee referee = (Referee) Thread.currentThread();
+        InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
 
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_addTrialPoint,
-                referee.getName(),
                 referee.getRefereeState());
 
         outMessage.setTrialScore(score);
@@ -120,14 +97,13 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
      */
     @Override
     public void bothTeamsReady() {
-        Referee referee = (Referee) Thread.currentThread();
+        InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
 
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_bothTeamsReady,
-                referee.getName(),
                 referee.getRefereeState());
 
         con.writeObject(outMessage);
@@ -139,7 +115,7 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
             System.exit(1);
         }
 
-        referee.setState(inMessage.getRefereeState());
+        referee.setRefereeState(inMessage.getRefereeState());
 
         con.close();
     }
@@ -150,21 +126,20 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
      */
     @Override
     public List<RefereeSite.GameScore> getGamePoints() {
-        Referee referee = (Referee) Thread.currentThread();
+        InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
 
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_getGamePoints,
-                referee.getName(),
                 referee.getRefereeState());
 
         con.writeObject(outMessage);
 
         inMessage = (Message) con.readObject();
 
-        if (inMessage.getType() != Message.MessageType.GAMEPOINTS) {
+        if (inMessage.getType() != Message.MessageType.GAME_POINTS) {
             // TODO: handle error
             System.exit(1);
         }
@@ -182,21 +157,20 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
      */
     @Override
     public int getRemainingGames() {
-        Referee referee = (Referee) Thread.currentThread();
+        InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
 
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_getRemainingGames,
-                referee.getName(),
                 referee.getRefereeState());
 
         con.writeObject(outMessage);
 
         inMessage = (Message) con.readObject();
 
-        if (inMessage.getType() != Message.MessageType.REMAININGGAMES) {
+        if (inMessage.getType() != Message.MessageType.REMAINING_GAMES) {
             // TODO: handle error
             System.exit(1);
         }
@@ -212,21 +186,20 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
      */
     @Override
     public int getRemainingTrials() {
-        Referee referee = (Referee) Thread.currentThread();
+        InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
 
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_getRemainingTrials,
-                referee.getName(),
                 referee.getRefereeState());
 
         con.writeObject(outMessage);
 
         inMessage = (Message) con.readObject();
 
-        if (inMessage.getType() != Message.MessageType.REMAININGTRIALS) {
+        if (inMessage.getType() != Message.MessageType.REMAINING_TRIALS) {
             // TODO: handle error
             System.exit(1);
         }
@@ -242,7 +215,7 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
      */
     @Override
     public List<RefereeSite.TrialScore> getTrialPoints() {
-        Referee referee = (Referee) Thread.currentThread();
+        InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
         //TODO: OU KEEPWINNINGTEAM
 
         ClientCom con = initiateConnection();
@@ -250,14 +223,13 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_getTrialPoints,
-                referee.getName(),
                 referee.getRefereeState());
 
         con.writeObject(outMessage);
 
         inMessage = (Message) con.readObject();
 
-        if (inMessage.getType() != Message.MessageType.TRIALPOINTS) {
+        if (inMessage.getType() != Message.MessageType.TRIAL_POINTS) {
             // TODO: handle error
             System.exit(1);
         }
@@ -305,17 +277,16 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
      */
     @Override
     public void informReferee() {
-        Coach coach = (Coach) Thread.currentThread();
+        InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
 
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_informReferee,
-                coach.getName(),
                 coach.getCoachState(),
-                coach.getTeam(),
-                coach.getStrategy());
+                coach.getCoachTeam(),
+                coach.getCoachStrategy());
 
         con.writeObject(outMessage);
 
@@ -334,14 +305,13 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
      */
     @Override
     public void resetTrialPoints() {
-        Referee referee = (Referee) Thread.currentThread();
+        InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
 
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_resetTrialPoints,
-                referee.getName(),
                 referee.getRefereeState());
 
         con.writeObject(outMessage);
@@ -363,14 +333,13 @@ public class RefereeSiteStub extends Site implements InterfaceRefereeSite {
      */
     @Override
     public void setHasMatchEnded(boolean hasMatchEnded) {
-        Referee referee = (Referee) Thread.currentThread();
+        InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
 
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.RS_setHasMatchEnded,
-                referee.getName(),
                 referee.getRefereeState());
 
         outMessage.setHasMatchEnded(hasMatchEnded);

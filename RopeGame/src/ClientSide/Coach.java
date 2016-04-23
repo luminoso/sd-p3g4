@@ -1,12 +1,11 @@
 package ClientSide;
 
-import Others.Bench;
 import Others.CoachStrategy;
-import Others.Ground;
 import Others.InterfaceCoach;
-import Others.Site;
-import ServerSide.ContestantsBench;
-import ServerSide.Playground;
+import Others.InterfaceContestant;
+import Others.InterfaceContestantsBench;
+import Others.InterfacePlayground;
+import Others.InterfaceRefereeSite;
 import ServerSide.RefereeSite;
 import java.util.Set;
 
@@ -17,7 +16,7 @@ import java.util.Set;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class Coach extends Thread implements Comparable<Coach>, InterfaceCoach {
+public class Coach extends Thread implements Comparable<InterfaceCoach>, InterfaceCoach {
 
     /**
      * 
@@ -37,17 +36,17 @@ public class Coach extends Thread implements Comparable<Coach>, InterfaceCoach {
     /**
      * 
      */
-    private final Bench bench;
+    private final InterfaceContestantsBench bench;
     
     /**
      * 
      */
-    private final Site refereeSite;
+    private final InterfaceRefereeSite refereeSite;
     
     /**
      * 
      */
-    private final Ground playground;
+    private final InterfacePlayground playground;
 
     /**
      * 
@@ -74,15 +73,9 @@ public class Coach extends Thread implements Comparable<Coach>, InterfaceCoach {
         this.team = team;               // Team assignement
         this.strategy = strategy;       // Team picking strategy
 
-        if (runlocal) {
-            this.bench = ContestantsBench.getInstance(team);
-            this.refereeSite = RefereeSite.getInstance();
-            this.playground = Playground.getInstance();
-        } else {
-            this.bench = ContestantsBenchStub.getInstance(team);
-            this.refereeSite = RefereeSiteStub.getInstance();
-            this.playground = PlaygroundStub.getInstance();
-        }
+        this.bench = new ContestantsBenchStub(team);
+        this.refereeSite = new RefereeSiteStub();
+        this.playground = new PlaygroundStub();
     }
 
     /**
@@ -101,7 +94,7 @@ public class Coach extends Thread implements Comparable<Coach>, InterfaceCoach {
      * @param state CoachState
      */
     @Override
-    public void setState(CoachState state) {
+    public void setCoachState(CoachState state) {
         this.state = state;
     }
 
@@ -111,7 +104,7 @@ public class Coach extends Thread implements Comparable<Coach>, InterfaceCoach {
      * @return coach team number
      */
     @Override
-    public int getTeam() {
+    public int getCoachTeam() {
         return team;
     }
 
@@ -121,7 +114,7 @@ public class Coach extends Thread implements Comparable<Coach>, InterfaceCoach {
      * @param team of the coach
      */
     @Override
-    public void setTeam(int team) {
+    public void setCoachTeam(int team) {
         this.team = team;
     }
 
@@ -131,7 +124,7 @@ public class Coach extends Thread implements Comparable<Coach>, InterfaceCoach {
      * @return coach strategy
      */
     @Override
-    public CoachStrategy getStrategy() {
+    public CoachStrategy getCoachStrategy() {
         return strategy;
     }
 
@@ -141,7 +134,7 @@ public class Coach extends Thread implements Comparable<Coach>, InterfaceCoach {
      * @param strategy of the coach
      */
     @Override
-    public void setStrategy(CoachStrategy strategy) {
+    public void setCoachStrategy(CoachStrategy strategy) {
         this.strategy = strategy;
     }
 
@@ -198,14 +191,14 @@ public class Coach extends Thread implements Comparable<Coach>, InterfaceCoach {
      */
     private void reviewNotes() {
         Set<Integer> selectedContestants = bench.getSelectedContestants();
-        Set<Contestant> allContestants = bench.getBench();
+        Set<InterfaceContestant> allContestants = bench.getBench();
 
         if (allContestants != null) {
-            for (Contestant contestant : allContestants) {
-                if (selectedContestants.contains(contestant.getContestatId())) {
-                    contestant.setStrength(contestant.getStrength() - 1);
+            for (InterfaceContestant contestant : allContestants) {
+                if (selectedContestants.contains(contestant.getContestantId())) {
+                    contestant.setContestantStrength(contestant.getContestantStrength() - 1);
                 } else {
-                    contestant.setStrength(contestant.getStrength() + 1);
+                    contestant.setContestantStrength(contestant.getContestantStrength() + 1);
                 }
             }
         }
@@ -219,8 +212,8 @@ public class Coach extends Thread implements Comparable<Coach>, InterfaceCoach {
      * @return difference between two coaches
      */
     @Override
-    public int compareTo(Coach coach) {
-        return this.team - coach.team;
+    public int compareTo(InterfaceCoach coach) {
+        return this.team - coach.getCoachTeam();
     }
 
     /**

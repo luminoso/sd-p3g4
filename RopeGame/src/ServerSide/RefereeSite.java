@@ -1,9 +1,8 @@
 package ServerSide;
 
-import Others.Site;
 import Others.InterfaceRefereeSite;
-import ClientSide.Referee;
 import ClientSide.Referee.RefereeState;
+import Others.InterfaceReferee;
 import RopeGame.Constants;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,7 +19,7 @@ import java.util.logging.Logger;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class RefereeSite extends Site implements InterfaceRefereeSite {
+public class RefereeSite implements InterfaceRefereeSite {
     
     /**
      * 
@@ -200,11 +199,11 @@ public class RefereeSite extends Site implements InterfaceRefereeSite {
      */
     @Override
     public void bothTeamsReady(){
-        Referee referee = (Referee) Thread.currentThread();
+        InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
         
         lock.lock();
         try {
-            referee.setState(RefereeState.TEAMS_READY);
+            referee.setRefereeState(RefereeState.TEAMS_READY);
             GeneralInformationRepository.getInstance().printLineUpdate();
             
             if(informRefereeCounter != 2)

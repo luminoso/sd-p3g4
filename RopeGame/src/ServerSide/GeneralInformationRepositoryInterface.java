@@ -12,7 +12,7 @@ import Communication.MessageException;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-class GeneralInformationRepositoryInterface {
+class GeneralInformationRepositoryInterface implements ServerInterface {
 
     /**
      *
@@ -23,8 +23,8 @@ class GeneralInformationRepositoryInterface {
      *
      * @param informationRepository
      */
-    public GeneralInformationRepositoryInterface(GeneralInformationRepository informationRepository) {
-        ir = informationRepository;
+    public GeneralInformationRepositoryInterface() {
+        ir = GeneralInformationRepository.getInstance();
     }
 
     /**

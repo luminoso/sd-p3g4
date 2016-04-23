@@ -1,6 +1,5 @@
 package Others;
 
-import ClientSide.Contestant;
 import java.util.List;
 
 /**
@@ -54,7 +53,7 @@ public interface InterfacePlayground {
      *
      * @return List containing both teams Contestants in the playground
      */
-    List<Contestant>[] getTeams();
+    List<InterfaceContestant>[] getTeams();
 
     /**
      * Checks if everyone pulled the rope

@@ -1,7 +1,5 @@
 package Others;
 
-import ClientSide.Contestant;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -10,13 +8,6 @@ import java.util.Set;
  * @author Guilherme Cardoso
  */
 public interface InterfaceContestantsBench {
-
-    /**
-     * 
-     * @return 
-     */
-    List getBenches();
-
     /**
      * The method adds a contestant to the bench.
      *
@@ -28,7 +19,7 @@ public interface InterfaceContestantsBench {
      *
      * @return List of the contestants in the bench
      */
-    Set<Contestant> getBench();
+    Set<InterfaceContestant> getBench();
 
     /**
      * The method removes a contestant from the bench.

@@ -25,11 +25,6 @@ public class ClientRopeGame {
 
     public static void main(String[] args) {
 
-        ContestantsBenchStub.getInstances();
-        RefereeSiteStub.getInstance();
-        PlaygroundStub.getInstance();
-        GeneralInformationRepositoryStub informationRepository = GeneralInformationRepositoryStub.getInstance();
-
         // estatico para já
         // inicializar todos os jogadores, arbitro e coaches
         // Instantiating all active entities

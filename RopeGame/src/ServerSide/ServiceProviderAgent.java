@@ -32,22 +32,7 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
     /**
      *
      */
-    private final ContestantsBenchInterface cbi;
-
-    /**
-     *
-     */
-    private final PlaygroundInterface pgi;
-
-    /**
-     *
-     */
-    private final RefereeSiteInterface rsi;
-
-    /**
-     *
-     */
-    private final GeneralInformationRepositoryInterface giri;
+    private final ServerInterface servInterface;
 
     /**
      *
@@ -83,24 +68,17 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
      * @param giri
      */
     ServiceProviderAgent(ServerCom sconi,
-            ContestantsBenchInterface cbi,
-            PlaygroundInterface pgi,
-            RefereeSiteInterface rsi,
-            GeneralInformationRepositoryInterface giri) {
+            ServerInterface servInterface) {
 
         super(Integer.toString(serviceProviderAgentId++));
         this.sconi = sconi;
-        this.cbi = cbi;
-        this.pgi = pgi;
-        this.rsi = rsi;
-        this.giri = giri;
+        this.servInterface = servInterface;
 
         this.state = null;
         this.strength = 0;
         this.team = 0;
         this.contestantId = 0;
         this.strategy = null;
-
     }
 
     /**
@@ -117,9 +95,6 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
         // Adapt current thread to message running conditions
         // TODO: move to inside each cbi, pgi, rsi?
         // Contestant
-        if(inMessage.getName() != null)
-            this.setName(inMessage.getName());
-        
         this.state = inMessage.getState();
         this.team = inMessage.getTeam();
         this.contestantId = inMessage.getId();
@@ -131,21 +106,7 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
         // Referee (not neeeded)
         // process message in correct shared memory
         try {
-            switch (inMessage.getMessageCategory()) {
-                case CB:
-                    outMessage = cbi.processAndReply(inMessage);
-                    break;
-                case PG:
-                    outMessage = pgi.processAndReply(inMessage);
-                    break;
-                case GIR:
-                    outMessage = giri.processAndReply(inMessage);
-                    break;
-                case RS:
-                    outMessage = rsi.processAndReply(inMessage);
-                    break;
-                default:
-            }
+            outMessage = servInterface.processAndReply(inMessage);
         } catch (Exception e) {
             //TODO deal with error;
         }
@@ -154,38 +115,40 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
         sconi.close();
     }
 
+    // COACH METHODS
     @Override
     public CoachState getCoachState() {
         return (CoachState) state;
     }
 
     @Override
-    public int getTeam() {
+    public void setCoachState(CoachState state) {
+        this.state = state;
+    }
+    
+    @Override
+    public int getCoachTeam() {
         return team;
     }
 
     @Override
-    public CoachStrategy getStrategy() {
+    public void setCoachTeam(int team) {
+        this.team = team;
+    }
+    
+    @Override
+    public CoachStrategy getCoachStrategy() {
         return strategy;
     }
 
     @Override
-    public void setState(CoachState state) {
-        this.state = state;
-    }
-
-    @Override
-    public void setStrategy(CoachStrategy strategy) {
+    public void setCoachStrategy(CoachStrategy strategy) {
         this.strategy = strategy;
     }
 
+    // CONTESTANT METHODS
     @Override
-    public void setTeam(int team) {
-        this.team = team;
-    }
-
-    @Override
-    public int getContestatId() {
+    public int getContestantId() {
         return contestantId;
     }
 
@@ -200,28 +163,38 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
     }
 
     @Override
-    public void setState(Contestant.ContestantState state) {
+    public void setContestantState(Contestant.ContestantState state) {
         this.state = state;
     }
 
     @Override
-    public int getStrength() {
+    public int getContestantStrength() {
         return strength;
     }
 
     @Override
-    public void setStrength(int strength) {
+    public void setContestantStrength(int strength) {
         this.strength = strength;
     }
 
+    @Override
+    public int getContestantTeam() {
+        return team;
+    }
+    
+    @Override
+    public void setContestantTeam(int team) {
+        this.team = team;
+    }
+    
+    // REFEREE METHODS
     @Override
     public RefereeState getRefereeState() {
         return (RefereeState) state;
     }
 
     @Override
-    public void setState(RefereeState state) {
+    public void setRefereeState(RefereeState state) {
         this.state = state;
     }
-
 }

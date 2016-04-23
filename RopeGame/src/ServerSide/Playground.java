@@ -1,13 +1,12 @@
 package ServerSide;
 
 import Others.InterfacePlayground;
-import ClientSide.Coach;
 import ClientSide.Coach.CoachState;
-import ClientSide.Contestant;
 import ClientSide.Contestant.ContestantState;
-import ClientSide.Referee;
 import ClientSide.Referee.RefereeState;
-import Others.Ground;
+import Others.InterfaceCoach;
+import Others.InterfaceContestant;
+import Others.InterfaceReferee;
 import RopeGame.Constants;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,7 @@ import java.util.logging.Logger;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class Playground extends Ground implements InterfacePlayground {
+public class Playground implements InterfacePlayground {
     
     /**
      * 
@@ -74,7 +73,7 @@ public class Playground extends Ground implements InterfacePlayground {
     /**
      * 
      */
-    private final List<Contestant>[] teams;               // list containing the Contestant in both teams
+    private final List<InterfaceContestant>[] teams;               // list containing the Contestant in both teams
     
     /**
      * The method returns the Playground object. This method is thread-safe and 
@@ -113,18 +112,18 @@ public class Playground extends Ground implements InterfacePlayground {
      */
     @Override
     public void addContestant(){
-        Contestant contestant = (Contestant) Thread.currentThread();
+        InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
         
         lock.lock();
         
         try {
-            this.teams[contestant.getTeam()-1].add(contestant);
+            this.teams[contestant.getContestantTeam()-1].add(contestant);
             
-            contestant.setState(ContestantState.STAND_IN_POSITION);
+            contestant.setContestantState(ContestantState.STAND_IN_POSITION);
             GeneralInformationRepository.getInstance().setTeamPlacement();
             GeneralInformationRepository.getInstance().printLineUpdate();
             
-            if(isTeamInPlace(contestant.getTeam())) {
+            if(isTeamInPlace(contestant.getContestantTeam())) {
                 this.teamsInPosition.signalAll();
             }
             
@@ -141,15 +140,15 @@ public class Playground extends Ground implements InterfacePlayground {
      */
     @Override
     public void checkTeamPlacement() {
-        Coach coach = (Coach) Thread.currentThread();
+        InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
         
         lock.lock();
         
-        coach.setState(CoachState.ASSEMBLE_TEAM);
+        coach.setCoachState(CoachState.ASSEMBLE_TEAM);
         GeneralInformationRepository.getInstance().printLineUpdate();
         
         try {
-            while(!isTeamInPlace(coach.getTeam())) {
+            while(!isTeamInPlace(coach.getCoachTeam())) {
                 this.teamsInPosition.await();
             }
         } catch (InterruptedException ex) {
@@ -165,11 +164,11 @@ public class Playground extends Ground implements InterfacePlayground {
      */
     @Override
     public void watchTrial() {
-        Coach coach = (Coach) Thread.currentThread();
+        InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
         
         lock.lock();
         
-        coach.setState(CoachState.WATCH_TRIAL);
+        coach.setCoachState(CoachState.WATCH_TRIAL);
         GeneralInformationRepository.getInstance().printLineUpdate();
                 
         try {
@@ -229,13 +228,13 @@ public class Playground extends Ground implements InterfacePlayground {
      */
     @Override
     public void startPulling() {
-        Referee referee = (Referee) Thread.currentThread();
+        InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
         
         lock.lock();
         
         this.startTrial.signalAll();
         
-        referee.setState(RefereeState.WAIT_FOR_TRIAL_CONCLUSION);
+        referee.setRefereeState(RefereeState.WAIT_FOR_TRIAL_CONCLUSION);
         GeneralInformationRepository.getInstance().printLineUpdate();
         
         if(pullCounter != 2 * Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND)
@@ -256,11 +255,11 @@ public class Playground extends Ground implements InterfacePlayground {
      */
     @Override
     public void getContestant(){
-        Contestant contestant = (Contestant) Thread.currentThread();
+        InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
         
         lock.lock();
         
-        teams[contestant.getTeam()-1].remove(contestant);
+        teams[contestant.getContestantTeam()-1].remove(contestant);
         
         lock.unlock();
     }
@@ -348,8 +347,8 @@ public class Playground extends Ground implements InterfacePlayground {
      * @return List containing both teams Contestants in the playground
      */
     @Override
-    public List<Contestant>[] getTeams() {
-        List<Contestant>[] teamslist = new List[2];
+    public List<InterfaceContestant>[] getTeams() {
+        List<InterfaceContestant>[] teamslist = new List[2];
         
         lock.lock();
         
@@ -368,12 +367,12 @@ public class Playground extends Ground implements InterfacePlayground {
         int team1 = 0;
         int team2 = 0;
         
-        for(Contestant contestant : this.teams[0]) {
-            team1 += contestant.getStrength();
+        for(InterfaceContestant contestant : this.teams[0]) {
+            team1 += contestant.getContestantStrength();
         }
         
-        for(Contestant contestant : this.teams[1]) {
-            team2 += contestant.getStrength();
+        for(InterfaceContestant contestant : this.teams[1]) {
+            team2 += contestant.getContestantStrength();
         }
         
         lastFlagPosition = flagPosition;

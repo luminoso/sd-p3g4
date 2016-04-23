@@ -3,65 +3,66 @@ package Others;
 import ClientSide.Contestant.ContestantState;
 
 /**
- *
+ * Interface that defines the operations available over the objects that represent 
+ * the contestants.
+ * 
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
 public interface InterfaceContestant {
-
     /**
-     * Gets the Contestant id
+     * Gets the Contestant id.
      *
      * @return contestant id number
      */
-    int getContestatId();
+    public int getContestantId();
 
     /**
-     * Sets the current Contestant id
+     * Sets the current Contestant id.
      *
      * @param id of the contestant
      */
-    void setContestantId(int id);
-
+    public void setContestantId(int id);
+    
     /**
-     * Get the current Contestant state
+     * Get the current Contestant state.
      *
      * @return Contestant state
      */
-    ContestantState getContestantState();
+    public ContestantState getContestantState();
 
     /**
-     * Sets the current Contestant state
+     * Sets the current Contestant state.
      *
      * @param state ContestantState
      */
-    void setState(ContestantState state);
+    public void setContestantState(ContestantState state);
 
     /**
-     * Gets the Contestant strength
+     * Gets the Contestant strength.
      *
      * @return contestant strength
      */
-    int getStrength();
+    public int getContestantStrength();
 
     /**
-     * Sets the Contestant strength
+     * Sets the Contestant strength.
      *
      * @param strength contestant strength
      */
-    void setStrength(int strength);
+    public void setContestantStrength(int strength);
 
     /**
-     * Gets the Contestant team number
+     * Gets the Contestant team number.
      *
      * @return contestant team number
      */
-    int getTeam();
+    public int getContestantTeam();
 
     /**
-     * Sets the current Contestant team
+     * Sets the current Contestant team.
      *
      * @param team of the contestant
      */
-    void setTeam(int team);
+    public void setContestantTeam(int team);
 }

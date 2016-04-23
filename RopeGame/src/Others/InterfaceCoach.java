@@ -8,46 +8,45 @@ import ClientSide.Coach.CoachState;
  * @author Guilherme Cardoso
  */
 public interface InterfaceCoach {
-    
     /**
      * Get the current Coach state
      *
      * @return CoachState
      */
-    CoachState getCoachState();
-
-    /**
-     * Gets the coach team number
-     *
-     * @return coach team number
-     */
-    int getTeam();
-
-    /**
-     * Gets the coach strategy
-     *
-     * @return coach strategy
-     */
-    CoachStrategy getStrategy();
+    public CoachState getCoachState();
 
     /**
      * Sets the current Coach state
      *
      * @param state CoachState
      */
-    void setState(CoachState state);
-
+    public void setCoachState(CoachState state);
+    
     /**
-     * Sets the current Coach state
+     * Gets the coach team number
      *
-     * @param strategy of the coach
+     * @return coach team number
      */
-    void setStrategy(CoachStrategy strategy);
+    public int getCoachTeam();
 
     /**
      * Sets the current Coach team
      *
      * @param team of the coach
      */
-    void setTeam(int team);
+    public void setCoachTeam(int team);
+    
+    /**
+     * Gets the coach strategy
+     *
+     * @return coach strategy
+     */
+    public CoachStrategy getCoachStrategy();
+
+    /**
+     * Sets the current Coach state
+     *
+     * @param strategy of the coach
+     */
+    public void setCoachStrategy(CoachStrategy strategy);
 }

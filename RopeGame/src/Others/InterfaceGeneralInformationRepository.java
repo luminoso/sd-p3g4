@@ -11,62 +11,61 @@ import ServerSide.RefereeSite;
  * @author Guilherme Cardoso
  */
 public interface InterfaceGeneralInformationRepository {
-
     /**
      * Adds a Coach to General Information Repository
      *
      * @param coach coach that will be added to the information repository
      */
-    void addCoach(Coach coach);
+    public void addCoach(InterfaceCoach coach);
 
     /**
      * Adds a Referee to General Information Repository
      *
      * @param contestant Contestant to add
      */
-    void addContestant(Contestant contestant);
+    public void addContestant(InterfaceContestant contestant);
 
     /**
      * Adds a Referee to General Information Repository
      *
      * @param referee Referee to add
      */
-    void addReferee(Referee referee);
+    public void addReferee(InterfaceReferee referee);
 
     /**
      * Closes log file
      */
-    void close();
+    public void close();
 
     /**
      * Print game header
      */
-    void printGameHeader();
+    public void printGameHeader();
 
     /**
      * Fully prints the game result
      */
-    void printGameResult(RefereeSite.GameScore score);
+    public void printGameResult(RefereeSite.GameScore score);
 
     /**
      * Print General Information Repository header
      */
-    void printHeader();
+    public void printHeader();
 
     /**
      * Prints game logger legend
      */
-    void printLegend();
+    public void printLegend();
 
     /**
      * Fully prints a line with all the updates
      */
-    void printLineUpdate();
+    public void printLineUpdate();
 
     /**
      * Prints that was a draw
      */
-    void printMatchDraw();
+    public void printMatchDraw();
 
     /**
      * Print Match winner
@@ -75,36 +74,36 @@ public interface InterfaceGeneralInformationRepository {
      * @param score1 score team 1
      * @param score2 score team 2
      */
-    void printMatchWinner(int team, int score1, int score2);
+    public void printMatchWinner(int team, int score1, int score2);
 
     /**
      * Resets team placement
      */
-    void resetTeamPlacement();
+    public void resetTeamPlacement();
 
     /**
      * Sets flag position
      *
      * @param flagPosition to set
      */
-    void setFlagPosition(int flagPosition);
+    public void setFlagPosition(int flagPosition);
 
     /**
      * Sets a game score
      *
      * @param gameNumber
      */
-    void setGameNumber(int gameNumber);
+    public void setGameNumber(int gameNumber);
 
     /**
      * Sets a team placement
      */
-    void setTeamPlacement();
+    public void setTeamPlacement();
 
     /**
      * Sets a trial score score
      *
      * @param trialNumber
      */
-    void setTrialNumber(int trialNumber);
+    public void setTrialNumber(int trialNumber);
 }

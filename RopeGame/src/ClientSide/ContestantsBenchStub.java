@@ -1,11 +1,11 @@
 package ClientSide;
 
 import Communication.Message;
-import Others.Bench;
+import Others.InterfaceCoach;
+import Others.InterfaceContestant;
 import Others.InterfaceContestantsBench;
+import Others.InterfaceReferee;
 import static java.lang.System.out;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -13,58 +13,18 @@ import java.util.Set;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class ContestantsBenchStub extends Bench implements InterfaceContestantsBench {
-
-    /**
-     *
-     */
-    private static final ContestantsBenchStub[] instances = new ContestantsBenchStub[2];    // Doubleton containing the two teams benches
-
+public class ContestantsBenchStub implements InterfaceContestantsBench {
     /**
      *
      */
     private final int team;
 
     /**
-     * Method that returns a ContestantsBenchStub object. The method is
-     * thread-safe and uses the implicit monitor of the class.
-     *
-     * @return ContestantsBenchStub object specified by the team identifier
-     * passed.
-     */
-    public static synchronized ContestantsBenchStub getInstance(int team) {
-
-        if (instances[team - 1] == null) {
-            instances[team - 1] = new ContestantsBenchStub(team);
-        }
-
-        return instances[team - 1];
-    }
-
-    /**
-     *
-     * @return
-     */
-    public static synchronized List<ContestantsBenchStub> getInstances() {
-        List<ContestantsBenchStub> temp = new LinkedList<>();
-
-        for (int i = 0; i < instances.length; i++) {
-            if (instances[i] == null) {
-                instances[i] = new ContestantsBenchStub(i);
-            }
-
-            temp.add(instances[i]);
-        }
-
-        return temp;
-    }
-
-    /**
      * Private constructor to be used in the doubleton.
      *
      * @param team Team identifier.
      */
-    private ContestantsBenchStub(int team) {
+    public ContestantsBenchStub(int team) {
         this.team = team;
     }
 
@@ -88,18 +48,17 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
      *
      */
     public void addContestant() {
-        Contestant contestant = (Contestant) Thread.currentThread();
+        InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
 
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.CB_addContestant,
-                contestant.getName(),
                 contestant.getContestantState(),
-                contestant.getTeam(),
-                contestant.getContestatId(),
-                contestant.getStrength());
+                contestant.getContestantTeam(),
+                contestant.getContestantId(),
+                contestant.getContestantStrength());
 
         con.writeObject(outMessage);
 
@@ -110,7 +69,7 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
             System.exit(1);
         }
 
-        contestant.setState(inMessage.getContestantState());
+        contestant.setContestantState(inMessage.getContestantState());
 
         con.close();
     }
@@ -120,20 +79,19 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
      * @return
      */
     @Override
-    public Set<Contestant> getBench() {
+    public Set<InterfaceContestant> getBench() {
         //TODO: Coach strategies also access this function
         // instruction below may crash ? 
-        Coach coach = (Coach) Thread.currentThread();
+        InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
 
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.CB_getBench,
-                coach.getName(),
                 coach.getCoachState(),
-                coach.getTeam(),
-                coach.getStrategy());
+                coach.getCoachTeam(),
+                coach.getCoachStrategy());
 
         con.writeObject(outMessage);
 
@@ -143,7 +101,7 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
             out.println("Message type error");
         }
 
-        Set bench = inMessage.getBench();
+        Set<InterfaceContestant> bench = inMessage.getBench();
 
         return bench;
     }
@@ -153,18 +111,17 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
      */
     @Override
     public void getContestant() {
-        Contestant contestant = (Contestant) Thread.currentThread();
+        InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
 
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.CB_getContestant,
-                contestant.getName(),
                 contestant.getContestantState(),
-                contestant.getTeam(),
-                contestant.getContestatId(),
-                contestant.getStrength());
+                contestant.getContestantTeam(),
+                contestant.getContestantId(),
+                contestant.getContestantStrength());
 
         con.writeObject(outMessage);
 
@@ -184,23 +141,22 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
     public Set<Integer> getSelectedContestants() {
         //TODO: KeepWinningTeam also access this function
         // instruction below may crash ?
-        Coach coach = (Coach) Thread.currentThread();
+        InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
 
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.CB_getSelectedContestants,
-                coach.getName(),
                 coach.getCoachState(),
-                coach.getTeam(),
-                coach.getStrategy());
+                coach.getCoachTeam(),
+                coach.getCoachStrategy());
 
         con.writeObject(outMessage);
 
         inMessage = (Message) con.readObject();
 
-        if (inMessage.getType() != Message.MessageType.SELECTEDCONTESTANTS) {
+        if (inMessage.getType() != Message.MessageType.SELECTED_CONTESTANTS) {
             out.println("Message type error");
         }
 
@@ -214,14 +170,13 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
      */
     @Override
     public void pickYourTeam() {
-        Referee referee = (Referee) Thread.currentThread();
+        InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
 
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.CB_pickYourTeam,
-                referee.getName(),
                 referee.getRefereeState());
 
         // TODO: melhor metodo de lidar com este caso muito particular?
@@ -245,7 +200,7 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
      */
     @Override
     public void setSelectedContestants(Set<Integer> selected) {
-        Coach coach = (Coach) Thread.currentThread();
+        InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
 
         // coach team
         ClientCom con = initiateConnection();
@@ -253,10 +208,9 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.CB_setSelectedContestants,
-                coach.getName(),
                 coach.getCoachState(),
-                coach.getTeam(),
-                coach.getStrategy());
+                coach.getCoachTeam(),
+                coach.getCoachStrategy());
 
         outMessage.setSelectedContestants(selected);
 
@@ -278,10 +232,9 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
      */
     @Override
     public void waitForNextTrial() {
-
         // coach state changes!
         // GeneralInformationRepository.getInstance().printLineUpdate();
-        Coach coach = (Coach) Thread.currentThread();
+        InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
 
         // coach team
         ClientCom con = initiateConnection();
@@ -289,10 +242,9 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.CB_waitForNextTrial,
-                coach.getName(),
                 coach.getCoachState(),
-                coach.getTeam(),
-                coach.getStrategy());
+                coach.getCoachTeam(),
+                coach.getCoachStrategy());
 
         con.writeObject(outMessage);
 
@@ -303,30 +255,9 @@ public class ContestantsBenchStub extends Bench implements InterfaceContestantsB
             System.exit(1);
         }
 
-        coach.setState(inMessage.getCoachState());
+        coach.setCoachState(inMessage.getCoachState());
 
         con.close();
-
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public synchronized List<ContestantsBenchStub> getBenches() {
-
-        List<ContestantsBenchStub> temp = new LinkedList<>();
-
-        for (int i = 0; i < instances.length; i++) {
-            if (instances[i] == null) {
-                instances[i] = new ContestantsBenchStub(i);
-            }
-
-            temp.add(instances[i]);
-        }
-
-        return temp;
 
     }
 }

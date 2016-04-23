@@ -1,6 +1,5 @@
 package Others;
 
-import ServerSide.RefereeSite;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -11,12 +10,11 @@ import java.util.Set;
  * @author Guilherme Cardoso
  */
 public interface CoachStrategy extends Serializable {
-
     /**
      * 
      * @param bench
      * @param site
      * @return 
      */
-    public Set<Integer> pickTeam(Bench bench, RefereeSite site);
+    public Set<Integer> pickTeam(InterfaceContestantsBench bench, InterfaceRefereeSite site);
 }

@@ -1,8 +1,6 @@
 package Others;
 
-import ClientSide.Contestant;
 import RopeGame.Constants;
-import ServerSide.RefereeSite;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -16,14 +14,14 @@ import java.util.Set;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class MostStrengthStrategy implements CoachStrategy, Comparator<Contestant> {
+public class MostStrengthStrategy implements CoachStrategy, Comparator<InterfaceContestant> {
 
     /**
      * Comparator to sort the Contestant accordingly to this strategy
      */
     @Override
-    public int compare(Contestant o1, Contestant o2) {
-        return o2.getStrength()- o1.getStrength();
+    public int compare(InterfaceContestant o1, InterfaceContestant o2) {
+        return o2.getContestantStrength()- o1.getContestantStrength();
     }
         
     /**
@@ -33,18 +31,18 @@ public class MostStrengthStrategy implements CoachStrategy, Comparator<Contestan
      * @return Set of the picked Contestants
      */
     @Override
-    public Set<Integer> pickTeam(Bench bench, RefereeSite site) {
+    public Set<Integer> pickTeam(InterfaceContestantsBench bench, InterfaceRefereeSite site) {
         Set<Integer> pickedTeam = new HashSet<>();
         
-        List<Contestant> contestants = new LinkedList<>(bench.getBench());
+        List<InterfaceContestant> contestants = new LinkedList<>(bench.getBench());
         contestants.sort(this);
         
-        for(Contestant cont : contestants) {
+        for(InterfaceContestant cont : contestants) {
             if(pickedTeam.size() == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND) {
                 break;
             }
             
-            pickedTeam.add(cont.getContestatId());
+            pickedTeam.add(cont.getContestantId());
         }
         
         return pickedTeam;
