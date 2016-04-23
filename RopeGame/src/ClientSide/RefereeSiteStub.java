@@ -46,7 +46,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.RS_addGamePoint,
+        outMessage = new Message(Message.MessageType.RS_ADD_GAME_POINT,
                 referee.getRefereeState());
 
         outMessage.setGamePoint(score);
@@ -75,7 +75,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.RS_addTrialPoint,
+        outMessage = new Message(Message.MessageType.RS_ADD_TRIAL_POINT,
                 referee.getRefereeState());
 
         outMessage.setTrialScore(score);
@@ -103,7 +103,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.RS_bothTeamsReady,
+        outMessage = new Message(Message.MessageType.RS_BOTH_TEAMS_READY,
                 referee.getRefereeState());
 
         con.writeObject(outMessage);
@@ -132,7 +132,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.RS_getGamePoints,
+        outMessage = new Message(Message.MessageType.RS_GET_GAME_POINTS,
                 referee.getRefereeState());
 
         con.writeObject(outMessage);
@@ -163,7 +163,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.RS_getRemainingGames,
+        outMessage = new Message(Message.MessageType.RS_GET_REMAINING_GAMES,
                 referee.getRefereeState());
 
         con.writeObject(outMessage);
@@ -192,7 +192,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.RS_getRemainingTrials,
+        outMessage = new Message(Message.MessageType.RS_GET_REMAINING_TRIALS,
                 referee.getRefereeState());
 
         con.writeObject(outMessage);
@@ -222,7 +222,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.RS_getTrialPoints,
+        outMessage = new Message(Message.MessageType.RS_GET_TRIAL_POINTS,
                 referee.getRefereeState());
 
         con.writeObject(outMessage);
@@ -248,15 +248,11 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
      */
     @Override
     public boolean hasMatchEnded() {
-        // coach
-        // contestant
-        // contestantBench 
-
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.RS_hasMatchEnded);
+        outMessage = new Message(Message.MessageType.RS_HAS_MATCH_ENDED);
 
         con.writeObject(outMessage);
 
@@ -283,7 +279,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.RS_informReferee,
+        outMessage = new Message(Message.MessageType.RS_INFORM_REFEREE,
                 coach.getCoachState(),
                 coach.getCoachTeam(),
                 coach.getCoachStrategy());
@@ -311,7 +307,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.RS_resetTrialPoints,
+        outMessage = new Message(Message.MessageType.RS_RESET_TRIAL_POINTS,
                 referee.getRefereeState());
 
         con.writeObject(outMessage);
@@ -339,7 +335,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.RS_setHasMatchEnded,
+        outMessage = new Message(Message.MessageType.RS_SET_HAS_MATCH_ENDED,
                 referee.getRefereeState());
 
         outMessage.setHasMatchEnded(hasMatchEnded);

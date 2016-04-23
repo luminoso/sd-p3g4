@@ -27,45 +27,45 @@ class ContestantsBenchInterface implements ServerInterface {
         Message outMessage = null;
 
         switch (inMessage.getType()) {
-            case CB_addContestant: {
+            case CB_ADD_CONTESTANT: {
                 InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
                 benchs.get(contestant.getContestantTeam()-1).addContestant();
                 outMessage = new Message(CONTESTANT_STATE_CHANGE);
                 outMessage.setContestantState(contestant.getContestantState());
                 break;
             }
-            case CB_getBench: {
+            case CB_GET_BENCH: {
                 InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
                 Set<InterfaceContestant> bench = benchs.get(coach.getCoachTeam()-1).getBench();
                 outMessage = new Message(BENCH);
                 outMessage.setSet(bench);
                 break;
             }
-            case CB_getContestant: {
+            case CB_GET_CONTESTANT: {
                 InterfaceContestant contestant = (Contestant) Thread.currentThread();
                 benchs.get(contestant.getContestantTeam()-1).getContestant();
                 outMessage = new Message(OK);
                 break;
             }
-            case CB_getSelectedContestants: {
+            case CB_GET_SELECTED_CONTESTANTS: {
                 InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
                 Set<Integer> selectedContestants = benchs.get(coach.getCoachTeam()-1).getSelectedContestants();
                 outMessage = new Message(SELECTED_CONTESTANTS);
                 outMessage.setSelectedContestants(selectedContestants);
                 break;
             }
-            case CB_pickYourTeam: {
+            case CB_PICK_YOUR_TEAM: {
                 benchs.get(inMessage.getTeam()-1).pickYourTeam();
                 outMessage = new Message(OK);
                 break;
             }
-            case CB_setSelectedContestants: {
+            case CB_SET_SELECTED_CONTESTANTS: {
                 InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
                 benchs.get(coach.getCoachTeam()-1).setSelectedContestants(inMessage.getSelectedContestants());
                 outMessage = new Message(OK);
                 break;
             }
-            case CB_waitForNextTrial: {
+            case CB_WAIT_FOR_NEXT_TRIAL: {
                 InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
                 benchs.get(coach.getCoachTeam()-1).waitForNextTrial();
                 outMessage = new Message(COACH_STATE_CHANGE);

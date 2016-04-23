@@ -6,7 +6,6 @@ import Others.InterfaceContestant;
 import Others.InterfaceContestantsBench;
 import Others.InterfacePlayground;
 import Others.InterfaceRefereeSite;
-import ServerSide.RefereeSite;
 import java.util.Set;
 
 /**
@@ -17,22 +16,6 @@ import java.util.Set;
  * @author Guilherme Cardoso
  */
 public class Coach extends Thread implements Comparable<InterfaceCoach>, InterfaceCoach {
-
-    /**
-     * 
-     */
-    private CoachState state;           // Coach state
-    
-    /**
-     * 
-     */
-    private int team;                   // Coach team
-    
-    /**
-     * 
-     */
-    private CoachStrategy strategy;     // Team picking strategy
-    
     /**
      * 
      */
@@ -47,16 +30,21 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
      * 
      */
     private final InterfacePlayground playground;
-
+    
     /**
      * 
-     * @param name
-     * @param team
-     * @param strategy 
      */
-    public Coach(String name, int team, CoachStrategy strategy) {
-        this(name, team, strategy, true);
-    }
+    private CoachState state;           // Coach state
+    
+    /**
+     * 
+     */
+    private int team;                   // Coach team
+    
+    /**
+     * 
+     */
+    private CoachStrategy strategy;     // Team picking strategy
 
     /**
      * Initialises a Coach instance
@@ -66,16 +54,18 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
      * @param strategy Coach strategy
      * @param runlocal
      */
-    public Coach(String name, int team, CoachStrategy strategy, boolean runlocal) {
+    public Coach(String name, int team, CoachStrategy strategy) {
         super(name);                    // Giving name to thread
+        
         // Initial state
-        this.state = CoachState.WAIT_FOR_REFEREE_COMMAND;
+        state = CoachState.WAIT_FOR_REFEREE_COMMAND;
+        
         this.team = team;               // Team assignement
         this.strategy = strategy;       // Team picking strategy
 
-        this.bench = new ContestantsBenchStub(team);
-        this.refereeSite = new RefereeSiteStub();
-        this.playground = new PlaygroundStub();
+        bench = new ContestantsBenchStub(team);
+        refereeSite = new RefereeSiteStub();
+        playground = new PlaygroundStub();
     }
 
     /**
@@ -165,15 +155,8 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
      * selectedContestants array at the Bench
      */
     private void callContestants() {
-        // Referee site
-        RefereeSite site = RefereeSite.getInstance();
-
-        // Picking team
-        Set<Integer> pickedContestants = this.strategy.pickTeam(bench, site);
-
-        // Setting the selected team
+        Set<Integer> pickedContestants = this.strategy.pickTeam(bench, refereeSite);
         bench.setSelectedContestants(pickedContestants);
-
         playground.checkTeamPlacement();
     }
 
@@ -193,6 +176,7 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
         Set<Integer> selectedContestants = bench.getSelectedContestants();
         Set<InterfaceContestant> allContestants = bench.getBench();
 
+        // TODO: Redo update strength
         if (allContestants != null) {
             for (InterfaceContestant contestant : allContestants) {
                 if (selectedContestants.contains(contestant.getContestantId())) {
@@ -202,6 +186,7 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
                 }
             }
         }
+        
         bench.waitForNextTrial();
     }
 
@@ -213,14 +198,13 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
      */
     @Override
     public int compareTo(InterfaceCoach coach) {
-        return this.team - coach.getCoachTeam();
+        return getCoachTeam() - coach.getCoachTeam();
     }
 
     /**
      * Enums of possible Coach states
      */
     public enum CoachState {
-        
         /**
          * 
          */

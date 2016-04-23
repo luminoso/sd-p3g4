@@ -46,7 +46,7 @@ public class PlaygroundStub implements InterfacePlayground {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.PG_addContestant,
+        outMessage = new Message(Message.MessageType.PG_ADD_CONTESTANT,
                 contestant.getContestantState(),
                 contestant.getContestantTeam(),
                 contestant.getContestantId(),
@@ -89,7 +89,7 @@ public class PlaygroundStub implements InterfacePlayground {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.PG_checkTeamPlacement,
+        outMessage = new Message(Message.MessageType.PG_CHECK_TEAM_PLACEMENT,
                 coach.getCoachState(),
                 coach.getCoachTeam(),
                 coach.getCoachStrategy());
@@ -115,13 +115,11 @@ public class PlaygroundStub implements InterfacePlayground {
     public void getContestant() {
         InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
 
-        // contestant team
-        // contestant id
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.PG_getContestant,
+        outMessage = new Message(Message.MessageType.PG_GET_CONTESTANT,
                 contestant.getContestantState(),
                 contestant.getContestantTeam(),
                 contestant.getContestantId(),
@@ -150,7 +148,7 @@ public class PlaygroundStub implements InterfacePlayground {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.PG_getFlagPosition,
+        outMessage = new Message(Message.MessageType.PG_GET_FLAG_POSITION,
                 referee.getRefereeState());;
 
         con.writeObject(outMessage);
@@ -179,7 +177,7 @@ public class PlaygroundStub implements InterfacePlayground {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.PG_getLastFlagPosition,
+        outMessage = new Message(Message.MessageType.PG_GET_LAST_FLAG_POSITION,
                 referee.getRefereeState());
 
         con.writeObject(outMessage);
@@ -226,7 +224,7 @@ public class PlaygroundStub implements InterfacePlayground {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.PG_pullRope,
+        outMessage = new Message(Message.MessageType.PG_PULL_ROPE,
                 contestant.getContestantState(),
                 contestant.getContestantTeam(),
                 contestant.getContestantId(),
@@ -252,7 +250,7 @@ public class PlaygroundStub implements InterfacePlayground {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.PG_resultAsserted,
+        outMessage = new Message(Message.MessageType.PG_RESULT_ASSERTED,
                 referee.getRefereeState());
 
         con.writeObject(outMessage);
@@ -279,7 +277,7 @@ public class PlaygroundStub implements InterfacePlayground {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.PG_setFlagPosition,
+        outMessage = new Message(Message.MessageType.PG_SET_FLAG_POSITION,
                 referee.getRefereeState());
 
         outMessage.setFlagPosition(flagPosition);
@@ -308,7 +306,7 @@ public class PlaygroundStub implements InterfacePlayground {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.PG_startPulling,
+        outMessage = new Message(Message.MessageType.PG_START_PULLING,
                 referee.getRefereeState());
 
         con.writeObject(outMessage);
@@ -337,7 +335,7 @@ public class PlaygroundStub implements InterfacePlayground {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.PG_watchTrial,
+        outMessage = new Message(Message.MessageType.PG_WATCH_TRIAL,
                 coach.getCoachState(),
                 coach.getCoachTeam(),
                 coach.getCoachStrategy());

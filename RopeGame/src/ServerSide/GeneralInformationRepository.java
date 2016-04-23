@@ -265,7 +265,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
 
         lock.lock();
 
-        if (thread.getClass() == InterfaceContestant.class) {
+        if (thread.getClass() == Contestant.class) {
             addContestant((Contestant) thread);
         } else if (thread.getClass() == Coach.class) {
             addCoach((Coach) thread);

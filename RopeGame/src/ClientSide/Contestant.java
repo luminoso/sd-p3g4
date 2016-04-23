@@ -2,9 +2,9 @@ package ClientSide;
 
 import Others.InterfaceContestant;
 import Others.InterfaceContestantsBench;
+import Others.InterfaceGeneralInformationRepository;
 import Others.InterfacePlayground;
 import Others.InterfaceRefereeSite;
-import ServerSide.GeneralInformationRepository;
 
 /**
  * General Description: This is an active class implements the Contestant and
@@ -14,7 +14,6 @@ import ServerSide.GeneralInformationRepository;
  * @author Guilherme Cardoso
  */
 public class Contestant extends Thread implements Comparable<InterfaceContestant>, InterfaceContestant {
-
     /**
      * 
      */
@@ -30,7 +29,11 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
      */
     private final InterfaceRefereeSite refereeSite;
 
-    // Internal state fields
+    /**
+     * 
+     */
+    private final InterfaceGeneralInformationRepository informationRepository;
+    
     /**
      * 
      */
@@ -44,24 +47,12 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
     /**
      * 
      */
-    private int team;                 // Contestant team
+    private int team;                       // Contestant team
     
     /**
      * 
      */
-    private int id;                   // Contestant identification in team
-
-    /**
-     * Creates a Contestant instantiation for running local
-     *
-     * @param name Name of the contestant
-     * @param team Team of the contestant
-     * @param id Id of the contestant
-     * @param strength Strength of the contestant
-     */
-    public Contestant(String name, int team, int id, int strength) {
-        this(name, team, id, strength, true);
-    }
+    private int id;                         // Contestant identification in team
 
     /**
      * Creates a Contestant instantiation for running in a distributed
@@ -73,7 +64,7 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
      * @param strength Strength of the contestant
      * @param runlocal
      */
-    public Contestant(String name, int team, int id, int strength, boolean runlocal) {
+    public Contestant(String name, int team, int id, int strength) {
         super(name);
 
         state = ContestantState.SEAT_AT_THE_BENCH;
@@ -82,9 +73,10 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
         this.id = id;
         this.strength = strength;
         
-        this.bench = new ContestantsBenchStub(team);
-        this.playground = new PlaygroundStub();
-        this.refereeSite = new RefereeSiteStub();
+        bench = new ContestantsBenchStub(team);
+        playground = new PlaygroundStub();
+        refereeSite = new RefereeSiteStub();
+        informationRepository = new GeneralInformationRepositoryStub();
     }
 
     /**
@@ -206,8 +198,8 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
      * Contestant gets ready. Changes the Contestant state to DO_YOUR_BEST
      */
     private void getReady() {
-        this.setContestantState(ContestantState.DO_YOUR_BEST);
-        GeneralInformationRepository.getInstance().printLineUpdate();
+        setContestantState(ContestantState.DO_YOUR_BEST);
+        informationRepository.printLineUpdate();
     }
 
     /**
@@ -235,14 +227,13 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
      */
     @Override
     public int compareTo(InterfaceContestant contestant) {
-        return this.id - contestant.getContestantId();
+        return getContestantId() - contestant.getContestantId();
     }
 
     /**
      * Enums of possible Contestant states
      */
     public enum ContestantState {
-        
         /**
          * 
          */

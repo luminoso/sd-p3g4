@@ -413,7 +413,6 @@ public class Message implements Serializable {
      *
      */
     public enum MessageType {
-
         /**
          *
          */
@@ -469,179 +468,179 @@ public class Message implements Serializable {
         /**
          *
          */
-        CB_addContestant(MessageCategory.CB),
+        CB_ADD_CONTESTANT(MessageCategory.CB),
         /**
          *
          */
-        CB_getBench(MessageCategory.CB),
+        CB_GET_BENCH(MessageCategory.CB),
         /**
          *
          */
-        CB_getContestant(MessageCategory.CB),
+        CB_GET_CONTESTANT(MessageCategory.CB),
         /**
          *
          */
-        CB_getSelectedContestants(MessageCategory.CB),
+        CB_GET_SELECTED_CONTESTANTS(MessageCategory.CB),
         /**
          *
          */
-        CB_pickYourTeam(MessageCategory.CB),
+        CB_PICK_YOUR_TEAM(MessageCategory.CB),
         /**
          *
          */
-        CB_setSelectedContestants(MessageCategory.CB),
+        CB_SET_SELECTED_CONTESTANTS(MessageCategory.CB),
         /**
          *
          */
-        CB_waitForNextTrial(MessageCategory.CB),
+        CB_WAIT_FOR_NEXT_TRIAL(MessageCategory.CB),
         /**
          *
          */
-        PG_addContestant(MessageCategory.PG),
+        PG_ADD_CONTESTANT(MessageCategory.PG),
         /**
          *
          */
-        PG_checkTeamPlacement(MessageCategory.PG),
+        PG_CHECK_TEAM_PLACEMENT(MessageCategory.PG),
         /**
          *
          */
-        PG_getContestant(MessageCategory.PG),
+        PG_GET_CONTESTANT(MessageCategory.PG),
         /**
          *
          */
-        PG_getFlagPosition(MessageCategory.PG),
+        PG_GET_FLAG_POSITION(MessageCategory.PG),
         /**
          *
          */
-        PG_getLastFlagPosition(MessageCategory.PG),
+        PG_GET_LAST_FLAG_POSITION(MessageCategory.PG),
         /**
          *
          */
-        PG_pullRope(MessageCategory.PG),
+        PG_PULL_ROPE(MessageCategory.PG),
         /**
          *
          */
-        PG_resultAsserted(MessageCategory.PG),
+        PG_RESULT_ASSERTED(MessageCategory.PG),
         /**
          *
          */
-        PG_setFlagPosition(MessageCategory.PG),
+        PG_SET_FLAG_POSITION(MessageCategory.PG),
         /**
          *
          */
-        PG_startPulling(MessageCategory.PG),
+        PG_START_PULLING(MessageCategory.PG),
         /**
          *
          */
-        PG_watchTrial(MessageCategory.PG),
+        PG_WATCH_TRIAL(MessageCategory.PG),
         /**
          *
          */
-        GIR_addCoach(MessageCategory.GIR),
+        GIR_ADD_COACH(MessageCategory.GIR),
         /**
          *
          */
-        GIR_addContestant(MessageCategory.GIR),
+        GIR_ADD_CONTESTANT(MessageCategory.GIR),
         /**
          *
          */
-        GIR_addReferee(MessageCategory.GIR),
+        GIR_ADD_REFEREE(MessageCategory.GIR),
         /**
          *
          */
-        GIR_close(MessageCategory.GIR),
+        GIR_CLOSE(MessageCategory.GIR),
         /**
          *
          */
-        GIR_printGameHeader(MessageCategory.GIR),
+        GIR_PRINT_GAME_HEADER(MessageCategory.GIR),
         /**
          *
          */
-        GIR_printGameResult(MessageCategory.GIR),
+        GIR_PRINT_GAME_RESULT(MessageCategory.GIR),
         /**
          *
          */
-        GIR_printHeader(MessageCategory.GIR),
+        GIR_PRINT_HEADER(MessageCategory.GIR),
         /**
          *
          */
-        GIR_printLegend(MessageCategory.GIR),
+        GIR_PRINT_LEGEND(MessageCategory.GIR),
         /**
          *
          */
-        GIR_printLineUpdate(MessageCategory.GIR),
+        GIR_PRINT_LINE_UPDATE(MessageCategory.GIR),
         /**
          *
          */
-        GIR_printMatchDraw(MessageCategory.GIR),
+        GIR_PRINT_MATCH_DRAW(MessageCategory.GIR),
         /**
          *
          */
-        GIR_printMatchWinner(MessageCategory.GIR),
+        GIR_PRINT_MATCH_WINNER(MessageCategory.GIR),
         /**
          *
          */
-        GIR_resetTeamPlacement(MessageCategory.GIR),
+        GIR_RESET_TEAM_PLACEMENT(MessageCategory.GIR),
         /**
          *
          */
-        GIR_setFlagPosition(MessageCategory.GIR),
+        GIR_SET_FLAG_POSITION(MessageCategory.GIR),
         /**
          *
          */
-        GIR_setGameNumber(MessageCategory.GIR),
+        GIR_SET_GAME_NUMBER(MessageCategory.GIR),
         /**
          *
          */
-        GIR_setTeamPlacement(MessageCategory.GIR),
+        GIR_SET_TEAM_PLACEMENT(MessageCategory.GIR),
         /**
          *
          */
-        GIR_setTrialNumber(MessageCategory.GIR),
+        GIR_SET_TRIAL_NUMBER(MessageCategory.GIR),
         /**
          *
          */
-        RS_addGamePoint(MessageCategory.RS),
+        RS_ADD_GAME_POINT(MessageCategory.RS),
         /**
          *
          */
-        RS_addTrialPoint(MessageCategory.RS),
+        RS_ADD_TRIAL_POINT(MessageCategory.RS),
         /**
          *
          */
-        RS_bothTeamsReady(MessageCategory.RS),
+        RS_BOTH_TEAMS_READY(MessageCategory.RS),
         /**
          *
          */
-        RS_getGamePoints(MessageCategory.RS),
+        RS_GET_GAME_POINTS(MessageCategory.RS),
         /**
          *
          */
-        RS_getRemainingGames(MessageCategory.RS),
+        RS_GET_REMAINING_GAMES(MessageCategory.RS),
         /**
          *
          */
-        RS_getRemainingTrials(MessageCategory.RS),
+        RS_GET_REMAINING_TRIALS(MessageCategory.RS),
         /**
          *
          */
-        RS_getTrialPoints(MessageCategory.RS),
+        RS_GET_TRIAL_POINTS(MessageCategory.RS),
         /**
          *
          */
-        RS_hasMatchEnded(MessageCategory.RS),
+        RS_HAS_MATCH_ENDED(MessageCategory.RS),
         /**
          *
          */
-        RS_informReferee(MessageCategory.RS),
+        RS_INFORM_REFEREE(MessageCategory.RS),
         /**
          *
          */
-        RS_resetTrialPoints(MessageCategory.RS),
+        RS_RESET_TRIAL_POINTS(MessageCategory.RS),
         /**
          *
          */
-        RS_setHasMatchEnded(MessageCategory.RS);
+        RS_SET_HAS_MATCH_ENDED(MessageCategory.RS);
 
         /**
          *

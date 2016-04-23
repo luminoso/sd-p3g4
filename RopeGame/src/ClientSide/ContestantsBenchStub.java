@@ -54,7 +54,7 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.CB_addContestant,
+        outMessage = new Message(Message.MessageType.CB_ADD_CONTESTANT,
                 contestant.getContestantState(),
                 contestant.getContestantTeam(),
                 contestant.getContestantId(),
@@ -88,7 +88,7 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.CB_getBench,
+        outMessage = new Message(Message.MessageType.CB_GET_BENCH,
                 coach.getCoachState(),
                 coach.getCoachTeam(),
                 coach.getCoachStrategy());
@@ -117,7 +117,7 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.CB_getContestant,
+        outMessage = new Message(Message.MessageType.CB_GET_CONTESTANT,
                 contestant.getContestantState(),
                 contestant.getContestantTeam(),
                 contestant.getContestantId(),
@@ -147,7 +147,7 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.CB_getSelectedContestants,
+        outMessage = new Message(Message.MessageType.CB_GET_SELECTED_CONTESTANTS,
                 coach.getCoachState(),
                 coach.getCoachTeam(),
                 coach.getCoachStrategy());
@@ -176,7 +176,7 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.CB_pickYourTeam,
+        outMessage = new Message(Message.MessageType.CB_PICK_YOUR_TEAM,
                 referee.getRefereeState());
 
         // TODO: melhor metodo de lidar com este caso muito particular?
@@ -207,7 +207,7 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.CB_setSelectedContestants,
+        outMessage = new Message(Message.MessageType.CB_SET_SELECTED_CONTESTANTS,
                 coach.getCoachState(),
                 coach.getCoachTeam(),
                 coach.getCoachStrategy());
@@ -241,7 +241,7 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.CB_waitForNextTrial,
+        outMessage = new Message(Message.MessageType.CB_WAIT_FOR_NEXT_TRIAL,
                 coach.getCoachState(),
                 coach.getCoachTeam(),
                 coach.getCoachStrategy());

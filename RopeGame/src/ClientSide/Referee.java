@@ -20,17 +20,6 @@ import java.util.List;
  * @author Guilherme Cardoso
  */
 public class Referee extends Thread implements InterfaceReferee {
-
-    /**
-     * 
-     */
-    private RefereeState state;     // Referee state
-
-    /**
-     * 
-     */
-    private final List<InterfaceContestantsBench> benchs;
-    
     /**
      * 
      */
@@ -44,34 +33,35 @@ public class Referee extends Thread implements InterfaceReferee {
     /**
      * 
      */
-    private final InterfaceGeneralInformationRepository generalInformationRepository;
-
+    private final InterfaceGeneralInformationRepository informationRepository;
+    
     /**
      * 
-     * @param name 
      */
-    public Referee(String name) {
-        this(name, true);
-    }
+    private final List<InterfaceContestantsBench> benchs;
+    
+    /**
+     * 
+     */
+    private RefereeState state;     // Referee state
 
     /**
      * 
      * @param name
      * @param runlocal 
      */
-    public Referee(String name, boolean runlocal) {
+    public Referee(String name) {
         super(name);
 
         state = RefereeState.START_OF_THE_MATCH;
-
-        this.benchs = new ArrayList<>();
+        benchs = new ArrayList<>();
         
         for(int i = 1; i <= 2; i++)
-            this.benchs.add(new ContestantsBenchStub(i));
+            benchs.add(new ContestantsBenchStub(i));
         
-        this.playground = new PlaygroundStub();
-        this.refereeSite = new RefereeSiteStub();
-        this.generalInformationRepository = new GeneralInformationRepositoryStub();
+        playground = new PlaygroundStub();
+        refereeSite = new RefereeSiteStub();
+        informationRepository = new GeneralInformationRepositoryStub();
     }
 
     /**
@@ -140,12 +130,12 @@ public class Referee extends Thread implements InterfaceReferee {
         refereeSite.resetTrialPoints();
         playground.setFlagPosition(0);
 
-        generalInformationRepository.setFlagPosition(0);
-        generalInformationRepository.setTrialNumber(1);
-        generalInformationRepository.setGameNumber(refereeSite.getGamePoints().size() + 1);
-        generalInformationRepository.printGameHeader();
-        this.setRefereeState(RefereeState.START_OF_A_GAME);
-        generalInformationRepository.printLineUpdate();
+        informationRepository.setFlagPosition(0);
+        informationRepository.setTrialNumber(1);
+        informationRepository.setGameNumber(refereeSite.getGamePoints().size() + 1);
+        informationRepository.printGameHeader();
+        setRefereeState(RefereeState.START_OF_A_GAME);
+        informationRepository.printLineUpdate();
     }
 
     /**
@@ -153,7 +143,7 @@ public class Referee extends Thread implements InterfaceReferee {
      * to TEAMS_READY and blocks waiting for the coaches to wake him.
      */
     private void callTrial() {
-        generalInformationRepository.setTrialNumber(refereeSite.getTrialPoints().size() + 1);
+        informationRepository.setTrialNumber(refereeSite.getTrialPoints().size() + 1);
 
         for (InterfaceContestantsBench bench : benchs) {
             bench.pickYourTeam();
@@ -188,10 +178,9 @@ public class Referee extends Thread implements InterfaceReferee {
             refereeSite.addTrialPoint(TrialScore.VICTORY_TEAM_2);
         }
 
-        generalInformationRepository.setFlagPosition(flagPosition);
-
-        generalInformationRepository.printLineUpdate();
-        generalInformationRepository.resetTeamPlacement();
+        informationRepository.setFlagPosition(flagPosition);
+        informationRepository.printLineUpdate();
+        informationRepository.resetTeamPlacement();
 
         playground.resultAsserted();
     }
@@ -236,9 +225,9 @@ public class Referee extends Thread implements InterfaceReferee {
                 break;
         }
 
-        this.setRefereeState(RefereeState.END_OF_A_GAME);
-        generalInformationRepository.printLineUpdate();
-        generalInformationRepository.printGameResult(refereeSite.getGamePoints().get(refereeSite.getGamePoints().size() - 1));
+        setRefereeState(RefereeState.END_OF_A_GAME);
+        informationRepository.printLineUpdate();
+        informationRepository.printGameResult(refereeSite.getGamePoints().get(refereeSite.getGamePoints().size() - 1));
     }
 
     /**
@@ -246,7 +235,6 @@ public class Referee extends Thread implements InterfaceReferee {
      * all other active entities and sends them home.
      */
     private void declareMatchWinner() {
-
         int score1 = 0;
         int score2 = 0;
 
@@ -258,15 +246,15 @@ public class Referee extends Thread implements InterfaceReferee {
             }
         }
 
-        this.setRefereeState(RefereeState.END_OF_THE_MATCH);
-        generalInformationRepository.printLineUpdate();
+        setRefereeState(RefereeState.END_OF_THE_MATCH);
+        informationRepository.printLineUpdate();
 
         if (score1 > score2) {
-            generalInformationRepository.printMatchWinner(1, score1, score2);
+            informationRepository.printMatchWinner(1, score1, score2);
         } else if (score2 > score1) {
-            generalInformationRepository.printMatchWinner(2, score1, score2);
+            informationRepository.printMatchWinner(2, score1, score2);
         } else {
-            generalInformationRepository.printMatchDraw();
+            informationRepository.printMatchDraw();
         }
 
         refereeSite.setHasMatchEnded(true);
@@ -317,14 +305,44 @@ public class Referee extends Thread implements InterfaceReferee {
      * Enums of possible Referee states
      */
     public enum RefereeState {
+        /**
+         * 
+         */
         START_OF_THE_MATCH(1, "SOM"),
+        
+        /**
+         * 
+         */
         START_OF_A_GAME(2, "SOG"),
+        
+        /**
+         * 
+         */
         TEAMS_READY(3, "TRD"),
+        
+        /**
+         * 
+         */
         WAIT_FOR_TRIAL_CONCLUSION(4, "WTC"),
+        
+        /**
+         * 
+         */
         END_OF_A_GAME(5, "EOG"),
+        
+        /**
+         * 
+         */
         END_OF_THE_MATCH(6, "EOM");
 
+        /**
+         * 
+         */
         private final int id;
+        
+        /**
+         * 
+         */
         private final String state;
 
         /**
