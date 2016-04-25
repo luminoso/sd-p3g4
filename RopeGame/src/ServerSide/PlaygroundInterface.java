@@ -37,58 +37,58 @@ class PlaygroundInterface implements ServerInterface {
         Message outMessage = null;
 
         switch (inMessage.getType()) {
-            case PG_addContestant: {
+            case PG_ADD_CONTESTANT: {
                 InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
                 pg.addContestant();
                 outMessage = new Message(CONTESTANT_STATE_CHANGE);
                 outMessage.setContestantState(contestant.getContestantState());
                 break;
             }
-            case PG_checkTeamPlacement: {
+            case PG_CHECK_TEAM_PLACEMENT: {
                 InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
                 pg.checkTeamPlacement();
                 outMessage = new Message(COACH_STATE_CHANGE);
                 outMessage.setContestantState(coach.getCoachState());
                 break;
             }
-            case PG_getContestant: {
+            case PG_GET_CONTESTANT: {
                 pg.getContestant();
                 outMessage = new Message(OK);
                 break;
             }
-            case PG_getFlagPosition: {
+            case PG_GET_FLAG_POSITION: {
                 outMessage = new Message(FLAG_POSITION);
                 outMessage.setFlagPosition(pg.getFlagPosition());
                 break;
             }
-            case PG_getLastFlagPosition: {
+            case PG_GET_LAST_FLAG_POSITION: {
                 outMessage = new Message(LAST_FLAG_POSITION);
                 outMessage.setLastFlagPosition(pg.getLastFlagPosition());
                 break;
             }
-            case PG_pullRope: {
+            case PG_PULL_ROPE: {
                 pg.pullRope();
                 outMessage = new Message(OK);
                 break;
             }
-            case PG_resultAsserted: {
+            case PG_RESULT_ASSERTED: {
                 pg.resultAsserted();
                 outMessage = new Message(OK);
                 break;
             }
-            case PG_setFlagPosition: {
+            case PG_SET_FLAG_POSITION: {
                 pg.setFlagPosition(inMessage.getFlagPostion());
                 outMessage = new Message(OK);
                 break;
             }
-            case PG_startPulling: {
+            case PG_START_PULLING: {
                 InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
                 pg.startPulling();
                 outMessage = new Message(REFEREE_STATE_CHANGE);
                 outMessage.setRefereeState(referee.getRefereeState());
                 break;
             }
-            case PG_watchTrial: {
+            case PG_WATCH_TRIAL: {
                 InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
                 pg.watchTrial();
                 outMessage = new Message(COACH_STATE_CHANGE);

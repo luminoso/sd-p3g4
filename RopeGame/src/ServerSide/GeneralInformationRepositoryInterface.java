@@ -36,13 +36,13 @@ class GeneralInformationRepositoryInterface implements ServerInterface {
         Message outMessage = null;
 
         switch (inMessage.getType()) {
-            case GIR_addCoach: {
-                Coach coach = new Coach(inMessage.getName(), inMessage.getTeam(), inMessage.getStrategy());
+            case GIR_ADD_COACH: {
+                Coach coach = new Coach(inMessage.getTeam(), inMessage.getStrategy());
                 ir.addCoach(coach);
                 outMessage = new Message(OK);
                 break;
             }
-            case GIR_addContestant: {
+            case GIR_ADD_CONTESTANT: {
                 Contestant contestant = new Contestant(inMessage.getName(),
                         inMessage.getTeam(),
                         inMessage.getId(),
@@ -51,62 +51,62 @@ class GeneralInformationRepositoryInterface implements ServerInterface {
                 outMessage = new Message(OK);
                 break;
             }
-            case GIR_addReferee: {
+            case GIR_ADD_REFEREE: {
                 Referee rf = new Referee(inMessage.getName());
                 ir.addReferee(rf);
                 outMessage = new Message(OK);
                 break;
             }
-            case GIR_close:
+            case GIR_CLOSE:
                 ir.close();
                 outMessage = new Message(OK);
                 break;
-            case GIR_printGameHeader:
+            case GIR_PRINT_GAME_HEADER:
                 ir.printGameHeader();
                 outMessage = new Message(OK);
                 break;
-            case GIR_printGameResult:
+            case GIR_PRINT_GAME_RESULT:
                 ir.printGameResult(inMessage.getGameResult());
                 outMessage = new Message(OK);
                 break;
-            case GIR_printHeader:
+            case GIR_PRINT_HEADER:
                 ir.printHeader();
                 outMessage = new Message(OK);
                 break;
-            case GIR_printLegend:
+            case GIR_PRINT_LEGEND:
                 ir.printLegend();
                 outMessage = new Message(OK);
                 break;
-            case GIR_printLineUpdate:
+            case GIR_PRINT_LINE_UPDATE:
                 ir.printLineUpdate();
                 outMessage = new Message(OK);
                 break;
-            case GIR_printMatchDraw:
+            case GIR_PRINT_MATCH_DRAW:
                 ir.printMatchDraw();
                 outMessage = new Message(OK);
                 break;
-            case GIR_printMatchWinner:
+            case GIR_PRINT_MATCH_WINNER:
                 int[] numbers = inMessage.getNumbers();
                 ir.printMatchWinner(numbers[0], numbers[1], numbers[2]);
                 outMessage = new Message(OK);
                 break;
-            case GIR_resetTeamPlacement:
+            case GIR_RESET_TEAM_PLACEMENT:
                 ir.resetTeamPlacement();
                 outMessage = new Message(OK);
                 break;
-            case GIR_setFlagPosition:
+            case GIR_SET_FLAG_POSITION:
                 ir.setFlagPosition(inMessage.getFlagPostion());
                 outMessage = new Message(OK);
                 break;
-            case GIR_setGameNumber:
+            case GIR_SET_GAME_NUMBER:
                 ir.setGameNumber(inMessage.getGameNumber());
                 outMessage = new Message(OK);
                 break;
-            case GIR_setTeamPlacement:
+            case GIR_SET_TEAM_PLACEMENT:
                 ir.setTeamPlacement();
                 outMessage = new Message(OK);
                 break;
-            case GIR_setTrialNumber:
+            case GIR_SET_TRIAL_NUMBER:
                 ir.setTrialNumber(inMessage.getTrialNumber());
                 outMessage = new Message(OK);
                 break;

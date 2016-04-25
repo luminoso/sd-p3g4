@@ -34,59 +34,59 @@ class RefereeSiteInterface implements ServerInterface {
         Message outMessage = null;
 
         switch (inMessage.getType()) {
-            case RS_addGamePoint: {
+            case RS_ADD_GAME_POINT: {
                 rs.addGamePoint(inMessage.getGamePoint());
                 outMessage = new Message(OK);
                 break;
             }
-            case RS_addTrialPoint: {
+            case RS_ADD_TRIAL_POINT: {
                 rs.addTrialPoint(inMessage.getTrialPoint());
                 outMessage = new Message(OK);
                 break;
             }
-            case RS_bothTeamsReady: {
+            case RS_BOTH_TEAMS_READY: {
                 InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
                 rs.bothTeamsReady();
                 outMessage = new Message(REFEREE_STATE_CHANGE);
                 outMessage.setRefereeState(referee.getRefereeState());
                 break;
             }
-            case RS_getGamePoints: {
+            case RS_GET_GAME_POINTS: {
                 outMessage = new Message(GAME_POINTS);
                 outMessage.setGamePoints(rs.getGamePoints());
                 break;
             }
-            case RS_getRemainingGames: {
+            case RS_GET_REMAINING_GAMES: {
                 outMessage = new Message(REMAINING_GAMES);
                 outMessage.setRemainingGames(rs.getRemainingGames());
                 break;
             }
-            case RS_getRemainingTrials: {
+            case RS_GET_REMAINING_TRIALS: {
                 outMessage = new Message(REMAINING_TRIALS);
                 outMessage.setRemainingTrials(rs.getRemainingTrials());
                 break;
             }
-            case RS_getTrialPoints: {
+            case RS_GET_TRIAL_POINTS: {
                 outMessage = new Message(TRIAL_POINTS);
                 outMessage.setTrialPoints(rs.getTrialPoints());
                 break;
             }
-            case RS_hasMatchEnded: {
+            case RS_HAS_MATCH_ENDED: {
                 outMessage = new Message(BOOLEAN);
                 outMessage.setHasMatchEnded(rs.hasMatchEnded());
                 break;
             }
-            case RS_informReferee: {
+            case RS_INFORM_REFEREE: {
                 rs.informReferee();
                 outMessage = new Message(OK);
                 break;
             }
-            case RS_resetTrialPoints: {
+            case RS_RESET_TRIAL_POINTS: {
                 rs.resetTrialPoints();
                 outMessage = new Message(OK);
                 break;
             }
-            case RS_setHasMatchEnded: {
+            case RS_SET_HAS_MATCH_ENDED: {
                 rs.setHasMatchEnded(inMessage.getHasMatchEnded());
                 outMessage = new Message(OK);
                 break;
