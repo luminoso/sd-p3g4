@@ -5,6 +5,7 @@ import Others.InterfaceCoach;
 import Others.InterfaceContestant;
 import Others.InterfacePlayground;
 import Others.InterfaceReferee;
+import RopeGame.ServerConfigs;
 import static java.lang.System.out;
 import java.util.List;
 
@@ -24,8 +25,8 @@ public class PlaygroundStub implements InterfacePlayground {
      * @return
      */
     private ClientCom initiateConnection() {
-        ClientCom con = new ClientCom(ClientRopeGame.getServerHostName(),
-                ClientRopeGame.getServerPortNumb());
+        ClientCom con = new ClientCom(ServerConfigs.PLAYGROUND_ADDRESS,
+                ServerConfigs.PLAYGROUND_PORT);
 
         if (!con.open()) {
             // TODO: handle later

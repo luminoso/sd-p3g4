@@ -37,13 +37,13 @@ class GeneralInformationRepositoryInterface implements ServerInterface {
 
         switch (inMessage.getType()) {
             case GIR_ADD_COACH: {
-                Coach coach = new Coach(inMessage.getTeam(), inMessage.getStrategy());
+                Coach coach = new Coach("lol", inMessage.getTeam(), inMessage.getStrategy());
                 ir.addCoach(coach);
                 outMessage = new Message(OK);
                 break;
             }
             case GIR_ADD_CONTESTANT: {
-                Contestant contestant = new Contestant(inMessage.getName(),
+                Contestant contestant = new Contestant("llll",
                         inMessage.getTeam(),
                         inMessage.getId(),
                         inMessage.getStrength());
@@ -52,7 +52,7 @@ class GeneralInformationRepositoryInterface implements ServerInterface {
                 break;
             }
             case GIR_ADD_REFEREE: {
-                Referee rf = new Referee(inMessage.getName());
+                Referee rf = new Referee("referee");
                 ir.addReferee(rf);
                 outMessage = new Message(OK);
                 break;

@@ -5,6 +5,7 @@ import Others.InterfaceCoach;
 import Others.InterfaceContestant;
 import Others.InterfaceContestantsBench;
 import Others.InterfaceReferee;
+import RopeGame.ServerConfigs;
 import static java.lang.System.out;
 import java.util.Set;
 
@@ -33,8 +34,8 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
      * @return
      */
     private ClientCom initiateConnection() {
-        ClientCom con = new ClientCom(ClientRopeGame.getServerHostName(),
-                ClientRopeGame.getServerPortNumb());
+        ClientCom con = new ClientCom(ServerConfigs.CONTESTANTS_BENCH_ADDRESS,
+                ServerConfigs.CONTESTANTS_BENCH_PORT);
 
         if (!con.open()) {
             // TODO: handle later
