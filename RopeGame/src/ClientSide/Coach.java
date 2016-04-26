@@ -2,7 +2,7 @@ package ClientSide;
 
 import Others.CoachStrategy;
 import Others.InterfaceCoach;
-import Others.InterfaceContestant;
+import RopeGame.Constants;
 import Others.InterfaceContestantsBench;
 import Others.InterfacePlayground;
 import Others.InterfaceRefereeSite;
@@ -177,18 +177,13 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
         // Sugestion: update message where if the ID isn't in the set
         //              update with +1, else update with -1
         Set<Integer> selectedContestants = bench.getSelectedContestants();
-        Set<InterfaceContestant> allContestants = bench.getBench();
-
-        // TODO: Redo update strength
-        if (allContestants != null) {
-            for (InterfaceContestant contestant : allContestants) {
-                if (selectedContestants.contains(contestant.getContestantId())) {
-                    contestant.setContestantStrength(contestant.getContestantStrength() - 1);
-                } else {
-                    contestant.setContestantStrength(contestant.getContestantStrength() + 1);
-                }
+        
+        for(int i = 1; i <= Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH; i++)
+            if(selectedContestants.contains(i)) {
+                // CB_Stub.updateStrength(i, -1);
+            } else {
+                // CB_Stub.updateStrength(i, +1);
             }
-        }
         
         bench.waitForNextTrial();
     }
