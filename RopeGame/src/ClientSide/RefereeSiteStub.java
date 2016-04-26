@@ -4,6 +4,7 @@ import Communication.Message;
 import Others.InterfaceCoach;
 import Others.InterfaceReferee;
 import Others.InterfaceRefereeSite;
+import RopeGame.ServerConfigs;
 import ServerSide.RefereeSite;
 import java.util.List;
 
@@ -23,8 +24,8 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
      * @return
      */
     private ClientCom initiateConnection() {
-        ClientCom con = new ClientCom(ClientRopeGame.getServerHostName(),
-                ClientRopeGame.getServerPortNumb());
+        ClientCom con = new ClientCom(ServerConfigs.REFEREE_SITE_ADDRESS,
+                ServerConfigs.REFEREE_SITE_PORT);
 
         if (!con.open()) {
             // TODO: handle later

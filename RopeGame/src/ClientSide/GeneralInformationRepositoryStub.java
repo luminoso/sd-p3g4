@@ -5,6 +5,7 @@ import Others.InterfaceCoach;
 import Others.InterfaceContestant;
 import Others.InterfaceGeneralInformationRepository;
 import Others.InterfaceReferee;
+import RopeGame.ServerConfigs;
 import ServerSide.RefereeSite;
 
 /**
@@ -36,8 +37,8 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
      * @return
      */
     private ClientCom initiateConnection() {
-        ClientCom con = new ClientCom(ClientRopeGame.getServerHostName(),
-                ClientRopeGame.getServerPortNumb());
+        ClientCom con = new ClientCom(ServerConfigs.GENERAL_INFORMATION_REPOSITORY_ADDRESS,
+                ServerConfigs.GENERAL_INFORMATION_REPOSITORY_PORT);
 
         if (!con.open()) {
             // TODO: handle later

@@ -17,7 +17,8 @@ import Others.InterfaceReferee;
  */
 public class ServiceProviderAgent extends Thread implements InterfaceCoach,
         InterfaceContestant,
-        InterfaceReferee {
+        InterfaceReferee,
+        Comparable<InterfaceContestant> {
 
     /**
      *
@@ -108,7 +109,7 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
         try {
             outMessage = servInterface.processAndReply(inMessage);
         } catch (Exception e) {
-            //TODO deal with error;
+            e.printStackTrace();
         }
 
         sconi.writeObject(outMessage);
@@ -197,4 +198,10 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
     public void setRefereeState(RefereeState state) {
         this.state = state;
     }
+
+    @Override
+    public int compareTo(InterfaceContestant o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+  
 }
