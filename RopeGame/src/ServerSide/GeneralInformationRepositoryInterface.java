@@ -36,24 +36,18 @@ class GeneralInformationRepositoryInterface implements ServerInterface {
         Message outMessage = null;
 
         switch (inMessage.getType()) {
-            case GIR_ADD_COACH: {
-                Coach coach = new Coach("lol", inMessage.getTeam(), inMessage.getStrategy());
-                ir.addCoach(coach);
+            case GIR_UPDATE_COACH: {
+                ir.updateCoach(inMessage.getTeam(), inMessage.getCoachState());
                 outMessage = new Message(OK);
                 break;
             }
-            case GIR_ADD_CONTESTANT: {
-                Contestant contestant = new Contestant("llll",
-                        inMessage.getTeam(),
-                        inMessage.getId(),
-                        inMessage.getStrength());
-                ir.addContestant(contestant);
+            case GIR_UPDATE_CONTESTANT: {
+                ir.updateContestant(inMessage.getTeam(), inMessage.getContestantId(), inMessage.getContestantState(), inMessage.getStrength());
                 outMessage = new Message(OK);
                 break;
             }
-            case GIR_ADD_REFEREE: {
-                Referee rf = new Referee("referee");
-                ir.addReferee(rf);
+            case GIR_UPDATE_REFEREE: {
+                ir.updateReferee(inMessage.getRefereeState());
                 outMessage = new Message(OK);
                 break;
             }
@@ -91,7 +85,7 @@ class GeneralInformationRepositoryInterface implements ServerInterface {
                 outMessage = new Message(OK);
                 break;
             case GIR_RESET_TEAM_PLACEMENT:
-                ir.resetTeamPlacement();
+                ir.resetTeamPlacement(inMessage.getTeam(), inMessage.getContestantId());
                 outMessage = new Message(OK);
                 break;
             case GIR_SET_FLAG_POSITION:
@@ -103,7 +97,7 @@ class GeneralInformationRepositoryInterface implements ServerInterface {
                 outMessage = new Message(OK);
                 break;
             case GIR_SET_TEAM_PLACEMENT:
-                ir.setTeamPlacement();
+                ir.setTeamPlacement(inMessage.getTeam(), inMessage.getContestantId());
                 outMessage = new Message(OK);
                 break;
             case GIR_SET_TRIAL_NUMBER:

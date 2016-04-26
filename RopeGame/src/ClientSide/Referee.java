@@ -180,7 +180,6 @@ public class Referee extends Thread implements InterfaceReferee {
 
         informationRepository.setFlagPosition(flagPosition);
         informationRepository.printLineUpdate();
-        informationRepository.resetTeamPlacement();
 
         playground.resultAsserted();
     }

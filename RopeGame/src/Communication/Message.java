@@ -37,11 +37,6 @@ public class Message implements Serializable {
      */
     private int strength;
 
-    /**
-     *
-     */
-    private CoachStrategy strategy;
-
     // additional variables required to define the Referee
     /**
      *
@@ -114,11 +109,10 @@ public class Message implements Serializable {
      * @param team
      * @param strategy
      */
-    public Message(MessageType type, CoachState state, int team, CoachStrategy strategy) {
+    public Message(MessageType type, CoachState state, int team) {
         this.type = type;
         this.state = state;
         this.team = team;
-        this.strategy = strategy;
     }
 
     // initialization for Referee
@@ -341,12 +335,8 @@ public class Message implements Serializable {
         this.set = set;
     }
 
-    public int getId() {
+    public int getContestantId() {
         return id;
-    }
-
-    public CoachStrategy getStrategy() {
-        return strategy;
     }
 
     public void setTeam(int team) {
@@ -536,15 +526,15 @@ public class Message implements Serializable {
         /**
          *
          */
-        GIR_ADD_COACH(MessageCategory.GIR),
+        GIR_UPDATE_COACH(MessageCategory.GIR),
         /**
          *
          */
-        GIR_ADD_CONTESTANT(MessageCategory.GIR),
+        GIR_UPDATE_CONTESTANT(MessageCategory.GIR),
         /**
          *
          */
-        GIR_ADD_REFEREE(MessageCategory.GIR),
+        GIR_UPDATE_REFEREE(MessageCategory.GIR),
         /**
          *
          */

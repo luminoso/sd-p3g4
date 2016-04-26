@@ -1,15 +1,9 @@
 package ServerSide;
 
-import ClientSide.Coach;
 import ClientSide.Coach.CoachState;
-import ClientSide.Contestant;
 import ClientSide.Contestant.ContestantState;
-import ClientSide.Referee;
 import ClientSide.Referee.RefereeState;
-import Others.InterfaceCoach;
-import Others.InterfaceContestant;
 import Others.InterfaceGeneralInformationRepository;
-import Others.InterfaceReferee;
 import Others.Tuple;
 import RopeGame.Constants;
 import ServerSide.RefereeSite.GameScore;
@@ -128,10 +122,10 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
      * @param referee Referee to add
      */
     @Override
-    public void addReferee(InterfaceReferee referee) {
+    public void updateReferee(RefereeState state) {
         lock.lock();
 
-        refereeState = referee.getRefereeState();
+        refereeState = state;
 
         lock.unlock();
     }
@@ -142,14 +136,11 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
      * @param contestant Contestant to add
      */
     @Override
-    public void addContestant(InterfaceContestant contestant) {
+    public void updateContestant(int team, int id, ContestantState state, int strength) {
         lock.lock();
 
-        int team = contestant.getContestantTeam()-1;
-        int id = contestant.getContestantId()-1;
-
-        this.teamsState.get(team)[id] = new Tuple<>(contestant.getContestantState(), contestant.getContestantStrength());
-
+        this.teamsState.get(team-1)[id-1] = new Tuple<>(state, strength);
+        
         lock.unlock();
     }
 
@@ -159,12 +150,10 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
      * @param coach coach that will be added to the information repository
      */
     @Override
-    public void addCoach(InterfaceCoach coach) {
+    public void updateCoach(int team, CoachState state) {
         lock.lock();
 
-        int team = coach.getCoachTeam() - 1;
-
-        this.coachesState[team] = coach.getCoachState();
+        this.coachesState[team-1] = state;
 
         lock.unlock();
     }
@@ -215,15 +204,19 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
      * Sets a team placement
      */
     @Override
-    public void setTeamPlacement() {
-        InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
-
+    public void setTeamPlacement(int team, int id) {
         lock.lock();
 
-        if (contestant.getContestantTeam() == 1) {
-            team1Placement.add(contestant.getContestantId());
-        } else if (contestant.getContestantTeam() == 2) {
-            team2Placement.add(contestant.getContestantId());
+        switch(team) {
+            case 1:
+                team1Placement.add(id);
+                break;
+            case 2:
+                team2Placement.add(id);
+                break;
+            default:
+                System.out.println("Error: team number");
+                break;
         }
 
         lock.unlock();
@@ -233,11 +226,20 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
      * Resets team placement
      */
     @Override
-    public void resetTeamPlacement() {
+    public void resetTeamPlacement(int team, int id) {
         lock.lock();
 
-        team1Placement.clear();
-        team2Placement.clear();
+        switch(team) {
+            case 1:
+                team1Placement.remove(id);
+                break;
+            case 2:
+                team2Placement.remove(id);
+                break;
+            default:
+                System.out.println("Error: team number");
+                break;
+        }
 
         lock.unlock();
     }
@@ -261,17 +263,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
      */
     @Override
     public void printLineUpdate() {
-        Thread thread = Thread.currentThread();
-
         lock.lock();
-
-        if (thread.getClass() == Contestant.class) {
-            addContestant((Contestant) thread);
-        } else if (thread.getClass() == Coach.class) {
-            addCoach((Coach) thread);
-        } else {
-            addReferee((Referee) thread);
-        }
 
         printActiveEntitiesStates();
         printTrialResult(trialNumber, flagPosition);

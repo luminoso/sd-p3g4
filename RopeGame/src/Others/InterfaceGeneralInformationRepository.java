@@ -33,6 +33,11 @@ public interface InterfaceGeneralInformationRepository {
     public void updateReferee(RefereeState state);
 
     /**
+     * 
+     */
+    public void printLineUpdate();
+    
+    /**
      * Closes log file
      */
     public void close();
@@ -74,7 +79,7 @@ public interface InterfaceGeneralInformationRepository {
     /**
      * Resets team placement
      */
-    public void resetTeamPlacement();
+    public void resetTeamPlacement(int team, int id);
 
     /**
      * Sets flag position
@@ -93,7 +98,7 @@ public interface InterfaceGeneralInformationRepository {
     /**
      * Sets a team placement
      */
-    public void setTeamPlacement();
+    public void setTeamPlacement(int team, int id);
 
     /**
      * Sets a trial score score

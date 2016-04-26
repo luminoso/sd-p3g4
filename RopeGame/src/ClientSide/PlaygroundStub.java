@@ -92,8 +92,7 @@ public class PlaygroundStub implements InterfacePlayground {
 
         outMessage = new Message(Message.MessageType.PG_CHECK_TEAM_PLACEMENT,
                 coach.getCoachState(),
-                coach.getCoachTeam(),
-                coach.getCoachStrategy());
+                coach.getCoachTeam());
 
         con.writeObject(outMessage);
 
@@ -338,8 +337,7 @@ public class PlaygroundStub implements InterfacePlayground {
 
         outMessage = new Message(Message.MessageType.PG_WATCH_TRIAL,
                 coach.getCoachState(),
-                coach.getCoachTeam(),
-                coach.getCoachStrategy());
+                coach.getCoachTeam());
 
         con.writeObject(outMessage);
 

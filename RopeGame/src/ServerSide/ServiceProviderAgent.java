@@ -98,11 +98,8 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
         // Contestant
         this.state = inMessage.getState();
         this.team = inMessage.getTeam();
-        this.contestantId = inMessage.getId();
-        this.strength = inMessage.getId();
-
-        // Coach
-        this.strategy = inMessage.getStrategy();
+        this.contestantId = inMessage.getContestantId();
+        this.strength = inMessage.getStrength();
 
         // Referee (not neeeded)
         // process message in correct shared memory

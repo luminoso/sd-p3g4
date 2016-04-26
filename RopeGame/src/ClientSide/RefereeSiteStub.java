@@ -282,8 +282,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
 
         outMessage = new Message(Message.MessageType.RS_INFORM_REFEREE,
                 coach.getCoachState(),
-                coach.getCoachTeam(),
-                coach.getCoachStrategy());
+                coach.getCoachTeam());
 
         con.writeObject(outMessage);
 

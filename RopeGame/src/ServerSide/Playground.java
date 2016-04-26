@@ -120,7 +120,7 @@ public class Playground implements InterfacePlayground {
             this.teams[contestant.getContestantTeam()-1].add(contestant);
             
             contestant.setContestantState(ContestantState.STAND_IN_POSITION);
-            GeneralInformationRepository.getInstance().setTeamPlacement();
+            GeneralInformationRepository.getInstance().setTeamPlacement(contestant.getContestantTeam(), contestant.getContestantId());
             GeneralInformationRepository.getInstance().printLineUpdate();
             
             if(isTeamInPlace(contestant.getContestantTeam())) {
@@ -260,6 +260,7 @@ public class Playground implements InterfacePlayground {
         lock.lock();
         
         teams[contestant.getContestantTeam()-1].remove(contestant);
+        GeneralInformationRepository.getInstance().resetTeamPlacement(contestant.getContestantTeam(), contestant.getContestantId());
         
         lock.unlock();
     }
