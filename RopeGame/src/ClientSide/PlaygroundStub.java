@@ -15,29 +15,33 @@ import java.util.List;
  * @author Guilherme Cardoso
  */
 public class PlaygroundStub implements InterfacePlayground {
+
     /**
      * Private constructor to be used in the singleton.
      */
-    public PlaygroundStub() {}
+    public PlaygroundStub() {
+    }
 
     /**
+     * Initiates the connection to the Server according to the ServerConfigs
      *
-     * @return
+     * @return ClientCom with the opened connection
      */
     private ClientCom initiateConnection() {
         ClientCom con = new ClientCom(ServerConfigs.PLAYGROUND_ADDRESS,
                 ServerConfigs.PLAYGROUND_PORT);
 
         if (!con.open()) {
-            // TODO: handle later
-            //return false; // server doesn't accept more connections
+            out.println("Couldn't initiate connection to "
+                    + ServerConfigs.PLAYGROUND_ADDRESS + ":"
+                    + ServerConfigs.PLAYGROUND_PORT);
         }
 
         return con;
     }
 
     /**
-     *
+     * The method adds a contestant to the playground.
      */
     @Override
     public void addContestant() {
@@ -69,8 +73,9 @@ public class PlaygroundStub implements InterfacePlayground {
     }
 
     /**
+     * Checks if all contestants are ready to pull the rope
      *
-     * @return
+     * @return true if every Contestant is in place to pull the rope
      */
     @Override
     public boolean checkAllContestantsReady() {
@@ -79,7 +84,7 @@ public class PlaygroundStub implements InterfacePlayground {
     }
 
     /**
-     *
+     * Synchronisation point for waiting for the teams to be ready
      */
     @Override
     public void checkTeamPlacement() {
@@ -110,7 +115,7 @@ public class PlaygroundStub implements InterfacePlayground {
     }
 
     /**
-     *
+     * The method removes the contestant from the playground.
      */
     @Override
     public void getContestant() {
@@ -138,8 +143,10 @@ public class PlaygroundStub implements InterfacePlayground {
     }
 
     /**
+     * The method returns the flag position in relation to the middle. Middle =
+     * 0.
      *
-     * @return
+     * @return Position of the flag.
      */
     @Override
     public int getFlagPosition() {
@@ -167,8 +174,9 @@ public class PlaygroundStub implements InterfacePlayground {
     }
 
     /**
+     * Gets the last flag position
      *
-     * @return
+     * @return the flag position before the current position
      */
     @Override
     public int getLastFlagPosition() {
@@ -196,8 +204,9 @@ public class PlaygroundStub implements InterfacePlayground {
     }
 
     /**
+     * Gets the current teams in the playground
      *
-     * @return
+     * @return List containing both teams Contestants in the playground
      */
     @Override
     public List<InterfaceContestant>[] getTeams() {
@@ -206,7 +215,7 @@ public class PlaygroundStub implements InterfacePlayground {
     }
 
     /**
-     *
+     * Checks if everyone pulled the rope
      */
     @Override
     public void haveAllPulled() {
@@ -215,7 +224,7 @@ public class PlaygroundStub implements InterfacePlayground {
     }
 
     /**
-     *
+     * Contestant pulls the rope
      */
     @Override
     public void pullRope() {
@@ -241,7 +250,7 @@ public class PlaygroundStub implements InterfacePlayground {
     }
 
     /**
-     *
+     * Synchronisation point for signalling the result is asserted
      */
     @Override
     public void resultAsserted() {
@@ -267,8 +276,9 @@ public class PlaygroundStub implements InterfacePlayground {
     }
 
     /**
+     * Sets the flag position
      *
-     * @param flagPosition
+     * @param flagPosition position of the flag
      */
     @Override
     public void setFlagPosition(int flagPosition) {
@@ -296,7 +306,7 @@ public class PlaygroundStub implements InterfacePlayground {
     }
 
     /**
-     *
+     * Referee instructs the Contestants to start pulling the rope
      */
     @Override
     public void startPulling() {
@@ -325,7 +335,7 @@ public class PlaygroundStub implements InterfacePlayground {
     }
 
     /**
-     *
+     * Synchronisation point for watching the trial in progress
      */
     @Override
     public void watchTrial() {

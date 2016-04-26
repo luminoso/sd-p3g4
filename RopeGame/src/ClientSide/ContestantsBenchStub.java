@@ -15,8 +15,9 @@ import java.util.Set;
  * @author Guilherme Cardoso
  */
 public class ContestantsBenchStub implements InterfaceContestantsBench {
+
     /**
-     *
+     * Team number of this Stub
      */
     private final int team;
 
@@ -30,23 +31,25 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
     }
 
     /**
+     * Initiates the connection to the Server according to the ServerConfigs
      *
-     * @return
+     * @return ClientCom with the opened connection
      */
     private ClientCom initiateConnection() {
         ClientCom con = new ClientCom(ServerConfigs.CONTESTANTS_BENCH_ADDRESS,
                 ServerConfigs.CONTESTANTS_BENCH_PORT);
 
         if (!con.open()) {
-            // TODO: handle later
-            //return false; // server doesn't accept more connections
+            out.println("Couldn't initiate connection to "
+                    + ServerConfigs.CONTESTANTS_BENCH_ADDRESS + ":"
+                    + ServerConfigs.CONTESTANTS_BENCH_PORT);
         }
 
         return con;
     }
 
     /**
-     *
+     * The method adds a contestant to the bench.
      */
     public void addContestant() {
         InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
@@ -76,8 +79,9 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
     }
 
     /**
+     * This method returns the bench which contains the Contestants
      *
-     * @return
+     * @return List of the contestants in the bench
      */
     @Override
     public Set<InterfaceContestant> getBench() {
@@ -108,7 +112,7 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
     }
 
     /**
-     *
+     * The method removes a contestant from the bench.
      */
     @Override
     public void getContestant() {
@@ -135,8 +139,9 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
     }
 
     /**
+     * Gets the selected contestants to play
      *
-     * @return
+     * @return Set with the selected contestants
      */
     @Override
     public Set<Integer> getSelectedContestants() {
@@ -167,7 +172,8 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
     }
 
     /**
-     *
+     * Synchronization point where the Referee waits for the Coaches to pick the
+     * teams
      */
     @Override
     public void pickYourTeam() {
@@ -196,8 +202,10 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
     }
 
     /**
+     * Set selected contestants array. This arrays should be filled with the IDs
+     * of the players for the next round.
      *
-     * @param selected
+     * @param selected identifiers for the selected players
      */
     @Override
     public void setSelectedContestants(Set<Integer> selected) {
@@ -229,7 +237,8 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
     }
 
     /**
-     *
+     * Synchronisation point where Coaches wait for the next trial instructed by
+     * the Referee
      */
     @Override
     public void waitForNextTrial() {

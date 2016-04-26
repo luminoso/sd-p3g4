@@ -2,10 +2,10 @@ package ClientSide;
 
 import Others.CoachStrategy;
 import Others.InterfaceCoach;
-import RopeGame.Constants;
 import Others.InterfaceContestantsBench;
 import Others.InterfacePlayground;
 import Others.InterfaceRefereeSite;
+import RopeGame.Constants;
 import java.util.Set;
 
 /**
@@ -16,33 +16,34 @@ import java.util.Set;
  * @author Guilherme Cardoso
  */
 public class Coach extends Thread implements Comparable<InterfaceCoach>, InterfaceCoach {
+
     /**
-     * 
+     *
      */
     private final InterfaceContestantsBench bench;
-    
+
     /**
-     * 
+     *
      */
     private final InterfaceRefereeSite refereeSite;
-    
+
     /**
-     * 
+     *
      */
     private final InterfacePlayground playground;
-    
+
     /**
-     * 
+     *
      */
     private CoachState state;           // Coach state
-    
+
     /**
-     * 
+     *
      */
     private int team;                   // Coach team
-    
+
     /**
-     * 
+     *
      */
     private CoachStrategy strategy;     // Team picking strategy
 
@@ -52,14 +53,13 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
      * @param name Name of the coach
      * @param team Team of the coach
      * @param strategy Coach strategy
-     * @param runlocal
      */
     public Coach(String name, int team, CoachStrategy strategy) {
         super(name);                    // Giving name to thread
-        
+
         // Initial state
         state = CoachState.WAIT_FOR_REFEREE_COMMAND;
-        
+
         this.team = team;               // Team assignement
         this.strategy = strategy;       // Team picking strategy
 
@@ -177,14 +177,15 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
         // Sugestion: update message where if the ID isn't in the set
         //              update with +1, else update with -1
         Set<Integer> selectedContestants = bench.getSelectedContestants();
-        
-        for(int i = 1; i <= Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH; i++)
-            if(selectedContestants.contains(i)) {
+
+        for (int i = 1; i <= Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH; i++) {
+            if (selectedContestants.contains(i)) {
                 // CB_Stub.updateStrength(i, -1);
             } else {
                 // CB_Stub.updateStrength(i, +1);
             }
-        
+        }
+
         bench.waitForNextTrial();
     }
 
@@ -203,29 +204,11 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
      * Enums of possible Coach states
      */
     public enum CoachState {
-        /**
-         * 
-         */
         WAIT_FOR_REFEREE_COMMAND(1, "WFRC"),
-        
-        /**
-         * 
-         */
         ASSEMBLE_TEAM(2, "AETM"),
-        
-        /**
-         * 
-         */
         WATCH_TRIAL(3, "WHTL");
 
-        /**
-         * 
-         */
         private final int id;
-        
-        /**
-         * 
-         */
         private final String state;
 
         /**
