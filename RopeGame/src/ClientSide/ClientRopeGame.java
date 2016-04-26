@@ -45,14 +45,6 @@ public class ClientRopeGame {
         }
     }
 
-    public static String getServerHostName() {
-        return serverHostName;
-    }
-
-    public static int getServerPortNumb() {
-        return serverPortNumb;
-    }
-
     /**
      * Function to generate a random strength when a player is instantiated.
      *

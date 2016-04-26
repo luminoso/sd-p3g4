@@ -1,8 +1,8 @@
 package Others;
 
-import ClientSide.Coach;
-import ClientSide.Contestant;
-import ClientSide.Referee;
+import ClientSide.Coach.CoachState;
+import ClientSide.Contestant.ContestantState;
+import ClientSide.Referee.RefereeState;
 import ServerSide.RefereeSite;
 
 /**
@@ -16,21 +16,21 @@ public interface InterfaceGeneralInformationRepository {
      *
      * @param coach coach that will be added to the information repository
      */
-    public void addCoach(InterfaceCoach coach);
+    public void updateCoach(int team, CoachState state);
 
     /**
      * Adds a Referee to General Information Repository
      *
      * @param contestant Contestant to add
      */
-    public void addContestant(InterfaceContestant contestant);
+    public void updateContestant(int team, int id, ContestantState state, int strength);
 
     /**
      * Adds a Referee to General Information Repository
      *
      * @param referee Referee to add
      */
-    public void addReferee(InterfaceReferee referee);
+    public void updateReferee(RefereeState state);
 
     /**
      * Closes log file
@@ -56,11 +56,6 @@ public interface InterfaceGeneralInformationRepository {
      * Prints game logger legend
      */
     public void printLegend();
-
-    /**
-     * Fully prints a line with all the updates
-     */
-    public void printLineUpdate();
 
     /**
      * Prints that was a draw
