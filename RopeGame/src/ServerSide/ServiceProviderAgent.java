@@ -197,8 +197,8 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
     }
 
     @Override
-    public int compareTo(InterfaceContestant o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int compareTo(InterfaceContestant contestant) {
+        return getContestantId() - contestant.getContestantId();
     }
   
 }
