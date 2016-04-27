@@ -3,6 +3,7 @@ package ClientSide;
 import Others.CoachStrategy;
 import Others.InterfaceCoach;
 import Others.InterfaceContestantsBench;
+import Others.InterfaceGeneralInformationRepository;
 import Others.InterfacePlayground;
 import Others.InterfaceRefereeSite;
 import RopeGame.Constants;
@@ -32,6 +33,8 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
      */
     private final InterfacePlayground playground;
 
+    private final InterfaceGeneralInformationRepository informationRepository;
+    
     /**
      *
      */
@@ -66,6 +69,7 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
         bench = new ContestantsBenchStub(team);
         refereeSite = new RefereeSiteStub();
         playground = new PlaygroundStub();
+        informationRepository = new GeneralInformationRepositoryStub();
     }
 
     /**
@@ -133,6 +137,7 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
      */
     @Override
     public void run() {
+        informationRepository.updateCoach();
         bench.waitForNextTrial();
 
         while (!refereeSite.hasMatchEnded()) {

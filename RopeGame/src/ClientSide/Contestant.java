@@ -164,7 +164,8 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
      */
     @Override
     public void run() {
-        seatDown();
+        informationRepository.updateContestant();
+        bench.addContestant();
 
         while (!refereeSite.hasMatchEnded()) {
             switch (state) {
@@ -199,6 +200,7 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
      */
     private void getReady() {
         setContestantState(ContestantState.DO_YOUR_BEST);
+        informationRepository.updateContestant();
         informationRepository.printLineUpdate();
     }
 

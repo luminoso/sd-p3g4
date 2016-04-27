@@ -89,6 +89,8 @@ public class Referee extends Thread implements InterfaceReferee {
      */
     @Override
     public void run() {
+        informationRepository.updateReferee();
+        
         while (state != END_OF_THE_MATCH) {
             switch (state) {
                 case START_OF_THE_MATCH:
@@ -135,6 +137,7 @@ public class Referee extends Thread implements InterfaceReferee {
         informationRepository.setGameNumber(refereeSite.getGamePoints().size() + 1);
         informationRepository.printGameHeader();
         setRefereeState(RefereeState.START_OF_A_GAME);
+        informationRepository.updateReferee();
         informationRepository.printLineUpdate();
     }
 
@@ -225,6 +228,7 @@ public class Referee extends Thread implements InterfaceReferee {
         }
 
         setRefereeState(RefereeState.END_OF_A_GAME);
+        informationRepository.updateReferee();
         informationRepository.printLineUpdate();
         informationRepository.printGameResult(refereeSite.getGamePoints().get(refereeSite.getGamePoints().size() - 1));
     }
@@ -246,6 +250,7 @@ public class Referee extends Thread implements InterfaceReferee {
         }
 
         setRefereeState(RefereeState.END_OF_THE_MATCH);
+        informationRepository.updateReferee();
         informationRepository.printLineUpdate();
 
         if (score1 > score2) {

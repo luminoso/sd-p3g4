@@ -18,16 +18,16 @@ public class RopeGame {
         new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"RF"})).start();
         new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CH", "1", "0"})).start();
         new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CH", "2", "1"})).start();
-        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "1", "1", Integer.toString(randomStrength())})).start();
-        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "1", "2", Integer.toString(randomStrength())})).start();
-        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "1", "3", Integer.toString(randomStrength())})).start();
-        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "1", "4", Integer.toString(randomStrength())})).start();
-        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "1", "5", Integer.toString(randomStrength())})).start();
-        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "2", "1", Integer.toString(randomStrength())})).start();
-        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "2", "2", Integer.toString(randomStrength())})).start();
-        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "2", "3", Integer.toString(randomStrength())})).start();
-        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "2", "4", Integer.toString(randomStrength())})).start();
-        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "2", "5", Integer.toString(randomStrength())})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "1", "1"})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "1", "2"})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "1", "3"})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "1", "4"})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "1", "5"})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "2", "1"})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "2", "2"})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "2", "3"})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "2", "4"})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "2", "5"})).start();
 
     }
 

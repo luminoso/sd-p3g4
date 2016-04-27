@@ -227,15 +227,11 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
      */
     @Override
     public List<RefereeSite.TrialScore> getTrialPoints() {
-        InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
-        //TODO: OU KEEPWINNINGTEAM
-
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
-        outMessage = new Message(Message.MessageType.RS_GET_TRIAL_POINTS,
-                referee.getRefereeState());
+        outMessage = new Message(Message.MessageType.RS_GET_TRIAL_POINTS);
 
         con.writeObject(outMessage);
 
