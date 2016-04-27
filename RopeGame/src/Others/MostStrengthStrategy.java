@@ -14,14 +14,14 @@ import java.util.Set;
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class MostStrengthStrategy implements CoachStrategy, Comparator<InterfaceContestant> {
+public class MostStrengthStrategy implements CoachStrategy, Comparator<Tuple<Integer, Integer>> {
 
     /**
      * Comparator to sort the Contestant accordingly to this strategy
      */
     @Override
-    public int compare(InterfaceContestant o1, InterfaceContestant o2) {
-        return o2.getContestantStrength()- o1.getContestantStrength();
+    public int compare(Tuple<Integer, Integer> o1, Tuple<Integer, Integer> o2) {
+        return o2.getRight()- o1.getRight();
     }
         
     /**
@@ -34,15 +34,15 @@ public class MostStrengthStrategy implements CoachStrategy, Comparator<Interface
     public Set<Integer> pickTeam(InterfaceContestantsBench bench, InterfaceRefereeSite site) {
         Set<Integer> pickedTeam = new HashSet<>();
         
-        List<InterfaceContestant> contestants = new LinkedList<>(bench.getBench());
+        List<Tuple<Integer, Integer>> contestants = new LinkedList<>(bench.getBench());
         contestants.sort(this);
         
-        for(InterfaceContestant cont : contestants) {
+        for(Tuple<Integer, Integer> cont : contestants) {
             if(pickedTeam.size() == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND) {
                 break;
             }
             
-            pickedTeam.add(cont.getContestantId());
+            pickedTeam.add(cont.getLeft());
         }
         
         return pickedTeam;

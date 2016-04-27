@@ -19,7 +19,7 @@ public interface InterfaceContestantsBench {
      *
      * @return List of the contestants in the bench
      */
-    public Set<InterfaceContestant> getBench();
+    public Set<Tuple<Integer, Integer>> getBench();
 
     /**
      * The method removes a contestant from the bench.

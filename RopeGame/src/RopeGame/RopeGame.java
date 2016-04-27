@@ -15,7 +15,7 @@ public class RopeGame {
         new Thread(() -> ServerSide.ServerRopeGame.main(new String[]{"PG"})).start();
         new Thread(() -> ServerSide.ServerRopeGame.main(new String[]{"RS"})).start();
         new Thread(() -> ServerSide.ServerRopeGame.main(new String[]{"GR"})).start();
-        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"RF"})).start();
+        Thread.sleep(1000);
         new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CH", "1", "0"})).start();
         new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CH", "2", "1"})).start();
         new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "1", "1"})).start();
@@ -28,6 +28,8 @@ public class RopeGame {
         new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "2", "3"})).start();
         new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "2", "4"})).start();
         new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "2", "5"})).start();
+        Thread.sleep(1000);
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"RF"})).start();
 
     }
 

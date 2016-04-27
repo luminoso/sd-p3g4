@@ -43,17 +43,17 @@ public class KeepWinningTeam implements CoachStrategy {
 
         // if we lost of if it is the first game we're going to pick random Contestants
         if (didWeLost || trialPoints.isEmpty()) {
-            List<InterfaceContestant> contestants = new LinkedList<>(bench.getBench());
+            List<Tuple<Integer, Integer>> contestants = new LinkedList<>(bench.getBench());
             Collections.shuffle(contestants);
 
             Set<Integer> pickedTeam = new HashSet<>();
 
-            for (InterfaceContestant contestant : contestants) {
+            for (Tuple<Integer, Integer> contestant : contestants) {
                 if (pickedTeam.size() == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND) {
                     break;
                 }
 
-                pickedTeam.add(contestant.getContestantId());
+                pickedTeam.add(contestant.getLeft());
             }
 
             return pickedTeam;

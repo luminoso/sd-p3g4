@@ -5,6 +5,7 @@ import Others.InterfaceCoach;
 import Others.InterfaceContestant;
 import Others.InterfaceContestantsBench;
 import Others.InterfaceReferee;
+import Others.Tuple;
 import RopeGame.ServerConfigs;
 import static java.lang.System.out;
 import java.util.Set;
@@ -84,7 +85,7 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
      * @return List of the contestants in the bench
      */
     @Override
-    public Set<InterfaceContestant> getBench() {
+    public Set<Tuple<Integer, Integer>> getBench() {
         //TODO: Coach strategies also access this function
         // instruction below may crash ? 
         InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
@@ -105,7 +106,7 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
             out.println("Message type error");
         }
 
-        Set<InterfaceContestant> bench = inMessage.getBench();
+        Set<Tuple<Integer, Integer>> bench = inMessage.getBench();
 
         return bench;
     }

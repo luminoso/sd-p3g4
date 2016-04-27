@@ -1,12 +1,14 @@
 package Others;
 
+import java.io.Serializable;
+
 /**
  * Generic Tuple implementation.
  * 
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
-public class Tuple<X, Y> {
+public class Tuple<X, Y> implements Serializable{
     private X left;
     private Y right;
     

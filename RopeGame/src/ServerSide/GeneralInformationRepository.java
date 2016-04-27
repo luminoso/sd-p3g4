@@ -156,13 +156,11 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
 
     @Override
     public void updateContestantStrength(int team, int id, int strength) {
-        InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
-        
         lock.lock();
 
         ContestantState state = teamsState.get(team-1)[id-1].getLeft();
         
-        this.teamsState.get(team)[id] = new Tuple<>(state, strength);
+        this.teamsState.get(team-1)[id-1] = new Tuple<>(state, strength);
         
         lock.unlock();
     }
@@ -262,10 +260,12 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
 
         switch(contestant.getContestantTeam()) {
             case 1:
-                team1Placement.remove(contestant.getContestantId());
+                if(team1Placement.contains(contestant.getContestantId()))
+                    team1Placement.remove(contestant.getContestantId());
                 break;
             case 2:
-                team2Placement.remove(contestant.getContestantId());
+                if(team2Placement.contains(contestant.getContestantId()))
+                    team2Placement.remove(contestant.getContestantId());
                 break;
             default:
                 System.out.println("Error: team number");

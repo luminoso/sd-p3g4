@@ -6,6 +6,7 @@ import static Communication.Message.MessageType.*;
 import Communication.MessageException;
 import Others.InterfaceCoach;
 import Others.InterfaceContestant;
+import Others.Tuple;
 import java.util.List;
 import java.util.Set;
 
@@ -36,13 +37,13 @@ class ContestantsBenchInterface implements ServerInterface {
             }
             case CB_GET_BENCH: {
                 InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
-                Set<InterfaceContestant> bench = benchs.get(coach.getCoachTeam()-1).getBench();
+                Set<Tuple<Integer, Integer>> bench = benchs.get(coach.getCoachTeam()-1).getBench();
                 outMessage = new Message(BENCH);
                 outMessage.setSet(bench);
                 break;
             }
             case CB_GET_CONTESTANT: {
-                InterfaceContestant contestant = (Contestant) Thread.currentThread();
+                InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
                 benchs.get(contestant.getContestantTeam()-1).getContestant();
                 outMessage = new Message(OK);
                 break;

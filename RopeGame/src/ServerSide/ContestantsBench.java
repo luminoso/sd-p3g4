@@ -6,7 +6,9 @@ import ClientSide.GeneralInformationRepositoryStub;
 import Others.InterfaceCoach;
 import Others.InterfaceContestant;
 import Others.InterfaceContestantsBench;
+import Others.Tuple;
 import RopeGame.Constants;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -159,8 +161,8 @@ public class ContestantsBench implements InterfaceContestantsBench {
      * @return List of the contestants in the bench
      */
     @Override
-    public Set<InterfaceContestant> getBench() {
-        Set<InterfaceContestant> temp;
+    public Set<Tuple<Integer, Integer>> getBench() {
+        Set<Tuple<Integer, Integer>> temp;
 
         lock.lock();
 
@@ -173,8 +175,12 @@ public class ContestantsBench implements InterfaceContestantsBench {
             return null;
         }
 
-        temp = new TreeSet<>(this.bench);
+        temp = new HashSet<>();
 
+        for(InterfaceContestant contestant : bench) {
+            temp.add(new Tuple<>(contestant.getContestantId(), contestant.getContestantStrength()));
+        }
+        
         lock.unlock();
 
         return temp;
