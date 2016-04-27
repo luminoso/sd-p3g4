@@ -1,11 +1,10 @@
 package ClientSide;
 
-import ClientSide.Coach.CoachState;
-import ClientSide.Contestant.ContestantState;
-import ClientSide.Referee.RefereeState;
 import Communication.Message;
+import Others.InterfaceCoach;
 import Others.InterfaceContestant;
 import Others.InterfaceGeneralInformationRepository;
+import Others.InterfaceReferee;
 import RopeGame.ServerConfigs;
 import ServerSide.RefereeSite;
 
@@ -54,7 +53,9 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
      * @param coach
      */
     @Override
-    public void updateCoach(int team, CoachState state) {
+    public void updateCoach() {
+        InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
+        
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
@@ -62,8 +63,8 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         // Problably defining a variable coach was better?
         // handled in GeneralRepositoryInterface in the same way
         outMessage = new Message(Message.MessageType.GIR_UPDATE_COACH,
-                state,
-                team);
+                coach.getCoachState(),
+                coach.getCoachTeam());
 
         con.writeObject(outMessage);
 
@@ -82,13 +83,44 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
      * @param contestant
      */
     @Override
-    public void updateContestant(int team, int id, ContestantState state, int strength) {
+    public void updateContestant() {
+        InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
+        
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.GIR_UPDATE_CONTESTANT,
-                state,
+                contestant.getContestantState(),
+                contestant.getContestantTeam(),
+                contestant.getContestantId(),
+                contestant.getContestantStrength());
+
+        con.writeObject(outMessage);
+
+        inMessage = (Message) con.readObject();
+
+        if (inMessage.getType() != Message.MessageType.OK) {
+            // TODO: handle error
+            System.exit(1);
+        }
+
+        con.close();
+    }
+
+    /**
+     * 
+     * @param team
+     * @param id
+     * @param strength 
+     */
+    public void updateContestantStrength(int team, int id, int strength) {
+        ClientCom con = initiateConnection();
+
+        Message inMessage, outMessage;
+
+        outMessage = new Message(Message.MessageType.GIR_UPDATE_CONTESTANT_STRENGTH,
+                null,
                 team,
                 id,
                 strength);
@@ -104,19 +136,21 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
 
         con.close();
     }
-
+    
     /**
      *
      * @param referee
      */
     @Override
-    public void updateReferee(RefereeState state) {
+    public void updateReferee() {
+        InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
+        
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.GIR_UPDATE_REFEREE,
-                state);
+                referee.getRefereeState());
 
         con.writeObject(outMessage);
 
@@ -328,7 +362,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
      *
      */
     @Override
-    public void resetTeamPlacement(int team, int id) {
+    public void resetTeamPlacement() {
         InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
         
         ClientCom con = initiateConnection();
@@ -337,8 +371,8 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
 
         outMessage = new Message(Message.MessageType.GIR_RESET_TEAM_PLACEMENT,
                                     contestant.getContestantState(),
-                                    team,
-                                    id,
+                                    contestant.getContestantTeam(),
+                                    contestant.getContestantId(),
                                     contestant.getContestantStrength());
 
         con.writeObject(outMessage);
@@ -409,7 +443,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
      *
      */
     @Override
-    public void setTeamPlacement(int team, int id) {
+    public void setTeamPlacement() {
         InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
 
         ClientCom con = initiateConnection();
@@ -418,8 +452,8 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
 
         outMessage = new Message(Message.MessageType.GIR_SET_TEAM_PLACEMENT,
                 contestant.getContestantState(),
-                team,
-                id,
+                contestant.getContestantTeam(),
+                contestant.getContestantId(),
                 contestant.getContestantStrength());
 
         con.writeObject(outMessage);

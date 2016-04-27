@@ -3,7 +3,10 @@ package ServerSide;
 import ClientSide.Coach.CoachState;
 import ClientSide.Contestant.ContestantState;
 import ClientSide.Referee.RefereeState;
+import Others.InterfaceCoach;
+import Others.InterfaceContestant;
 import Others.InterfaceGeneralInformationRepository;
+import Others.InterfaceReferee;
 import Others.Tuple;
 import RopeGame.Constants;
 import ServerSide.RefereeSite.GameScore;
@@ -122,10 +125,12 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
      * @param referee Referee to add
      */
     @Override
-    public void updateReferee(RefereeState state) {
+    public void updateReferee() {
+        InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
+        
         lock.lock();
 
-        refereeState = state;
+        refereeState = referee.getRefereeState();
 
         lock.unlock();
     }
@@ -136,24 +141,46 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
      * @param contestant Contestant to add
      */
     @Override
-    public void updateContestant(int team, int id, ContestantState state, int strength) {
+    public void updateContestant() {
+        InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
+        
         lock.lock();
 
-        this.teamsState.get(team-1)[id-1] = new Tuple<>(state, strength);
+        int team = contestant.getContestantTeam()-1;
+        int id = contestant.getContestantId()-1;
+        
+        this.teamsState.get(team)[id] = new Tuple<>(contestant.getContestantState(), contestant.getContestantStrength());
         
         lock.unlock();
     }
 
+    @Override
+    public void updateContestantStrength(int team, int id, int strength) {
+        InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
+        
+        lock.lock();
+
+        ContestantState state = teamsState.get(team-1)[id-1].getLeft();
+        
+        this.teamsState.get(team)[id] = new Tuple<>(state, strength);
+        
+        lock.unlock();
+    }
+    
     /**
      * Adds a Coach to General Information Repository
      *
      * @param coach coach that will be added to the information repository
      */
     @Override
-    public void updateCoach(int team, CoachState state) {
+    public void updateCoach() {
+        InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
+        
         lock.lock();
 
-        this.coachesState[team-1] = state;
+        int team = coach.getCoachTeam()-1;
+        
+        this.coachesState[team] = coach.getCoachState();
 
         lock.unlock();
     }
@@ -204,15 +231,17 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
      * Sets a team placement
      */
     @Override
-    public void setTeamPlacement(int team, int id) {
+    public void setTeamPlacement() {
+        InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
+        
         lock.lock();
 
-        switch(team) {
+        switch(contestant.getContestantTeam()) {
             case 1:
-                team1Placement.add(id);
+                team1Placement.add(contestant.getContestantId());
                 break;
             case 2:
-                team2Placement.add(id);
+                team2Placement.add(contestant.getContestantId());
                 break;
             default:
                 System.out.println("Error: team number");
@@ -226,15 +255,17 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
      * Resets team placement
      */
     @Override
-    public void resetTeamPlacement(int team, int id) {
+    public void resetTeamPlacement() {
+        InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
+        
         lock.lock();
 
-        switch(team) {
+        switch(contestant.getContestantTeam()) {
             case 1:
-                team1Placement.remove(id);
+                team1Placement.remove(contestant.getContestantId());
                 break;
             case 2:
-                team2Placement.remove(id);
+                team2Placement.remove(contestant.getContestantId());
                 break;
             default:
                 System.out.println("Error: team number");

@@ -180,9 +180,9 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
 
         for (int i = 1; i <= Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH; i++) {
             if (selectedContestants.contains(i)) {
-                // CB_Stub.updateStrength(i, -1);
+                bench.updateContestantStrength(i, -1);
             } else {
-                // CB_Stub.updateStrength(i, +1);
+                bench.updateContestantStrength(i, 1);
             }
         }
 

@@ -266,4 +266,33 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
         con.close();
 
     }
+    
+    @Override
+    public void updateContestantStrength(int id, int delta) {
+        InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
+
+        // coach team
+        ClientCom con = initiateConnection();
+
+        Message inMessage, outMessage;
+
+        outMessage = new Message(Message.MessageType.CB_UPDATE_CONTESTANT_STRENGTH,
+                null,
+                coach.getCoachTeam(),
+                id,
+                delta);
+
+        con.writeObject(outMessage);
+
+        inMessage = (Message) con.readObject();
+
+        if (inMessage.getType() != Message.MessageType.OK) {
+            // TODO: handle error
+            System.exit(1);
+        }
+
+        coach.setCoachState(inMessage.getCoachState());
+
+        con.close();
+    }
 }

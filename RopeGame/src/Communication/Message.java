@@ -3,7 +3,6 @@ package Communication;
 import ClientSide.Coach.CoachState;
 import ClientSide.Contestant.ContestantState;
 import ClientSide.Referee.RefereeState;
-import Others.CoachStrategy;
 import ServerSide.RefereeSite;
 import java.io.Serializable;
 import java.util.List;
@@ -486,6 +485,10 @@ public class Message implements Serializable {
         /**
          *
          */
+        CB_UPDATE_CONTESTANT_STRENGTH(MessageCategory.CB),
+        /**
+         *
+         */
         PG_ADD_CONTESTANT(MessageCategory.PG),
         /**
          *
@@ -531,6 +534,10 @@ public class Message implements Serializable {
          *
          */
         GIR_UPDATE_CONTESTANT(MessageCategory.GIR),
+        /**
+         *
+         */
+        GIR_UPDATE_CONTESTANT_STRENGTH(MessageCategory.GIR),
         /**
          *
          */

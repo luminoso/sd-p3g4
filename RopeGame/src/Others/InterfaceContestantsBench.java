@@ -12,32 +12,32 @@ public interface InterfaceContestantsBench {
      * The method adds a contestant to the bench.
      *
      */
-    void addContestant();
+    public void addContestant();
 
     /**
      * This method returns the bench which contains the Contestants
      *
      * @return List of the contestants in the bench
      */
-    Set<InterfaceContestant> getBench();
+    public Set<InterfaceContestant> getBench();
 
     /**
      * The method removes a contestant from the bench.
      */
-    void getContestant();
+    public void getContestant();
 
     /**
      * Gets the selected contestants to play
      *
      * @return Set with the selected contestants
      */
-    Set<Integer> getSelectedContestants();
+    public Set<Integer> getSelectedContestants();
 
     /**
      * Synchronisation point where the Referee waits for the Coaches to pick the
      * teams
      */
-    void pickYourTeam();
+    public void pickYourTeam();
 
     /**
      * Set selected contestants array. This arrays should be filled with the IDs
@@ -45,12 +45,18 @@ public interface InterfaceContestantsBench {
      *
      * @param selected identifiers for the selected players
      */
-    void setSelectedContestants(Set<Integer> selected);
+    public void setSelectedContestants(Set<Integer> selected);
 
     /**
      * Synchronisation point where Coaches wait for the next trial instructed by
      * the Referee
      */
-    void waitForNextTrial();
+    public void waitForNextTrial();
 
+    /**
+     * 
+     * @param id
+     * @param delta 
+     */
+    public void updateContestantStrength(int id, int delta);
 }

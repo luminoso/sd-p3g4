@@ -2,6 +2,7 @@ package ServerSide;
 
 import ClientSide.Coach.CoachState;
 import ClientSide.Contestant.ContestantState;
+import ClientSide.GeneralInformationRepositoryStub;
 import ClientSide.Referee.RefereeState;
 import Others.InterfaceCoach;
 import Others.InterfaceContestant;
@@ -75,6 +76,11 @@ public class Playground implements InterfacePlayground {
     private final List<InterfaceContestant>[] teams;               // list containing the Contestant in both teams
 
     /**
+     * 
+     */
+    private final GeneralInformationRepositoryStub informationRepository;
+    
+    /**
      * The method returns the Playground object. This method is thread-safe and
      * uses the implicit monitor of the class.
      *
@@ -103,6 +109,7 @@ public class Playground implements InterfacePlayground {
         this.teams = new List[2];
         this.teams[0] = new ArrayList<>();
         this.teams[1] = new ArrayList<>();
+        this.informationRepository = new GeneralInformationRepositoryStub();
     }
 
     /**
@@ -118,8 +125,8 @@ public class Playground implements InterfacePlayground {
             this.teams[contestant.getContestantTeam() - 1].add(contestant);
 
             contestant.setContestantState(ContestantState.STAND_IN_POSITION);
-            GeneralInformationRepository.getInstance().setTeamPlacement(contestant.getContestantTeam(), contestant.getContestantId());
-            GeneralInformationRepository.getInstance().printLineUpdate();
+            informationRepository.updateContestant();
+            informationRepository.printLineUpdate();
 
             if (isTeamInPlace(contestant.getContestantTeam())) {
                 this.teamsInPosition.signalAll();
@@ -143,7 +150,8 @@ public class Playground implements InterfacePlayground {
         lock.lock();
 
         coach.setCoachState(CoachState.ASSEMBLE_TEAM);
-        GeneralInformationRepository.getInstance().printLineUpdate();
+        informationRepository.updateCoach();
+        informationRepository.printLineUpdate();
 
         try {
             while (!isTeamInPlace(coach.getCoachTeam())) {
@@ -167,7 +175,8 @@ public class Playground implements InterfacePlayground {
         lock.lock();
 
         coach.setCoachState(CoachState.WATCH_TRIAL);
-        GeneralInformationRepository.getInstance().printLineUpdate();
+        informationRepository.updateCoach();
+        informationRepository.printLineUpdate();
 
         try {
             this.resultAssert.await();
@@ -233,7 +242,8 @@ public class Playground implements InterfacePlayground {
         this.startTrial.signalAll();
 
         referee.setRefereeState(RefereeState.WAIT_FOR_TRIAL_CONCLUSION);
-        GeneralInformationRepository.getInstance().printLineUpdate();
+        informationRepository.updateReferee();
+        informationRepository.printLineUpdate();
 
         if (pullCounter != 2 * Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND) {
             try {
@@ -257,7 +267,7 @@ public class Playground implements InterfacePlayground {
         lock.lock();
         
         teams[contestant.getContestantTeam()-1].remove(contestant);
-        GeneralInformationRepository.getInstance().resetTeamPlacement(contestant.getContestantTeam(), contestant.getContestantId());
+        informationRepository.resetTeamPlacement();
         
         lock.unlock();
     }

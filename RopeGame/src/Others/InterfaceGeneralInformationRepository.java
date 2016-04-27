@@ -1,8 +1,5 @@
 package Others;
 
-import ClientSide.Coach.CoachState;
-import ClientSide.Contestant.ContestantState;
-import ClientSide.Referee.RefereeState;
 import ServerSide.RefereeSite;
 
 /**
@@ -16,21 +13,29 @@ public interface InterfaceGeneralInformationRepository {
      *
      * @param coach coach that will be added to the information repository
      */
-    public void updateCoach(int team, CoachState state);
+    public void updateCoach();
 
     /**
      * Adds a Referee to General Information Repository
      *
      * @param contestant Contestant to add
      */
-    public void updateContestant(int team, int id, ContestantState state, int strength);
-
+    public void updateContestant();
+    
+    /**
+     * 
+     * @param team
+     * @param id
+     * @param strength 
+     */
+    public void updateContestantStrength(int team, int id, int strength);
+    
     /**
      * Adds a Referee to General Information Repository
      *
      * @param referee Referee to add
      */
-    public void updateReferee(RefereeState state);
+    public void updateReferee();
 
     /**
      * 
@@ -79,7 +84,7 @@ public interface InterfaceGeneralInformationRepository {
     /**
      * Resets team placement
      */
-    public void resetTeamPlacement(int team, int id);
+    public void resetTeamPlacement();
 
     /**
      * Sets flag position
@@ -98,7 +103,7 @@ public interface InterfaceGeneralInformationRepository {
     /**
      * Sets a team placement
      */
-    public void setTeamPlacement(int team, int id);
+    public void setTeamPlacement();
 
     /**
      * Sets a trial score score

@@ -72,6 +72,13 @@ class ContestantsBenchInterface implements ServerInterface {
                 outMessage.setCoachState(coach.getCoachState());
                 break;
             }
+            case CB_UPDATE_CONTESTANT_STRENGTH: {
+                InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
+                InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
+                benchs.get(coach.getCoachTeam()-1).updateContestantStrength(contestant.getContestantId(), contestant.getContestantStrength());
+                outMessage = new Message(OK);
+                break;
+            }
             default:
                 throw new MessageException("Method in PG not found", outMessage);
         }

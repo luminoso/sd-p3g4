@@ -2,6 +2,7 @@ package ServerSide;
 
 import ClientSide.Coach.CoachState;
 import ClientSide.Contestant.ContestantState;
+import ClientSide.GeneralInformationRepositoryStub;
 import Others.InterfaceCoach;
 import Others.InterfaceContestant;
 import Others.InterfaceContestantsBench;
@@ -68,6 +69,8 @@ public class ContestantsBench implements InterfaceContestantsBench {
      */
     private boolean coachWaiting;
 
+    private final GeneralInformationRepositoryStub informationRepository;
+    
     /**
      * Gets all the instances of the Contestants Bench
      *
@@ -100,6 +103,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
         waitForCoach = lock.newCondition();
         bench = new TreeSet<>();
         selectedContestants = new TreeSet<>();
+        informationRepository = new GeneralInformationRepositoryStub();
     }
 
     /**
@@ -115,7 +119,8 @@ public class ContestantsBench implements InterfaceContestantsBench {
 
         if (contestant.getContestantState() != ContestantState.SEAT_AT_THE_BENCH) {
             contestant.setContestantState(ContestantState.SEAT_AT_THE_BENCH);
-            GeneralInformationRepository.getInstance().printLineUpdate();
+            informationRepository.updateContestant();
+            informationRepository.printLineUpdate();
         }
 
         if (checkAllPlayersSeated()) {
@@ -242,7 +247,8 @@ public class ContestantsBench implements InterfaceContestantsBench {
         lock.lock();
 
         coach.setCoachState(CoachState.WAIT_FOR_REFEREE_COMMAND);
-        GeneralInformationRepository.getInstance().printLineUpdate();
+        informationRepository.updateCoach();
+        informationRepository.printLineUpdate();
 
         coachWaiting = true;
         waitForCoach.signal();
@@ -257,6 +263,22 @@ public class ContestantsBench implements InterfaceContestantsBench {
         lock.unlock();
     }
 
+    @Override
+    public void updateContestantStrength(int id, int delta) {
+        lock.lock();
+        
+        for(InterfaceContestant contestant : bench) {
+            if(contestant.getContestantId() == id) {
+                contestant.setContestantStrength(contestant.getContestantStrength() + delta);
+                informationRepository.updateContestantStrength(contestant.getContestantTeam(), 
+                        contestant.getContestantTeam(), contestant.getContestantStrength());
+                informationRepository.printLineUpdate();
+            }
+        }
+        
+        lock.unlock();
+    }
+    
     /**
      * Gets the selected contestants array
      *

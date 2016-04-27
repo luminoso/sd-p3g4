@@ -1,5 +1,6 @@
 package ServerSide;
 
+import ClientSide.GeneralInformationRepositoryStub;
 import ClientSide.Referee.RefereeState;
 import Others.InterfaceReferee;
 import Others.InterfaceRefereeSite;
@@ -56,6 +57,8 @@ public class RefereeSite implements InterfaceRefereeSite {
      */
     private final List<GameScore> gameStatus;           // current game status
 
+    private final GeneralInformationRepositoryStub informationRepository;
+    
     /**
      * The method returns the RefereeSite object. The method is thread-safe and
      * uses the implicit monitor of the class.
@@ -82,6 +85,7 @@ public class RefereeSite implements InterfaceRefereeSite {
         informReferee = lock.newCondition();
         informRefereeCounter = 0;
         hasMatchEnded = false;
+        informationRepository = new GeneralInformationRepositoryStub();
     }
 
     /**
@@ -207,7 +211,8 @@ public class RefereeSite implements InterfaceRefereeSite {
         lock.lock();
         try {
             referee.setRefereeState(RefereeState.TEAMS_READY);
-            GeneralInformationRepository.getInstance().printLineUpdate();
+            informationRepository.updateReferee();
+            informationRepository.printLineUpdate();
 
             if (informRefereeCounter != 2) {
                 informReferee.await();
