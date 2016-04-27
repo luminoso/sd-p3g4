@@ -1,90 +1,43 @@
 package RopeGame;
 
-import ClientSide.Coach;
-import ClientSide.Contestant;
-import ClientSide.Referee;
-import Others.KeepWinningTeam;
-import Others.MostStrengthStrategy;
-import ServerSide.ContestantsBench;
-import ServerSide.GeneralInformationRepository;
-import ServerSide.Playground;
-import ServerSide.RefereeSite;
-
 /**
- * General description:
- * This class starts the Rope Game. It instantiates all the active and passive
- * entities.
- * 
+ * General description: This class starts the Rope Game.
+ * It instantiates all the active and passive entities.
+ *
  * @author Eduardo Sousa
  * @author Guilherme Cardoso
  */
 public class RopeGame {
+
     public static void main(String[] args) throws InterruptedException {
-        // Instantiating all passive entities
-        ContestantsBench.getInstances();
-        RefereeSite.getInstance();
-        Playground.getInstance();
-        GeneralInformationRepository informationRepository = GeneralInformationRepository.getInstance();
-        
-        // Instantiating all active entities
-        Referee rf = new Referee("Arbit");
-        
-        Coach[] coaches = new Coach[2];
-        coaches[0] = new Coach("Coach: 1", 1, new MostStrengthStrategy());
-        coaches[1] = new Coach("Coach: 2", 2, new KeepWinningTeam());
-        
-        Contestant[][] contestants = new Contestant[2][Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH];
-        
-        for(int i = 0; i < 2; i++){
-            for(int j = 0; j < Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH; j++){
-                contestants[i][j] = new Contestant("Cont: " + (j+1) + " Team: " + (i+1), i+1, j+1, randomStrength() );
-            }
-        }
 
-        // Adding initial information to the General Information Repository
-        informationRepository.addReferee(rf);
-        
-        for(int i = 0; i < coaches.length; i++) {
-            informationRepository.addCoach(coaches[i]);
-            for(int j = 0; j < contestants[i].length; j++) {
-                informationRepository.addContestant(contestants[i][j]);
-            }
-        }
-        
-        // Print the main header
-        informationRepository.printHeader();
-        
-        // Starting simulation
-        for (int i = 0; i < coaches.length; i++) {
-            coaches[i].start();
+        new Thread(() -> ServerSide.ServerRopeGame.main(new String[]{"CB"})).start();
+        new Thread(() -> ServerSide.ServerRopeGame.main(new String[]{"PG"})).start();
+        new Thread(() -> ServerSide.ServerRopeGame.main(new String[]{"RS"})).start();
+        new Thread(() -> ServerSide.ServerRopeGame.main(new String[]{"GR"})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"RF"})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"RF"})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CH", "1", "0"})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CH", "2", "1"})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "1", "1", Integer.toString(randomStrength())})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "1", "2", Integer.toString(randomStrength())})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "1", "3", Integer.toString(randomStrength())})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "1", "4", Integer.toString(randomStrength())})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "1", "5", Integer.toString(randomStrength())})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "2", "1", Integer.toString(randomStrength())})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "2", "2", Integer.toString(randomStrength())})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "2", "3", Integer.toString(randomStrength())})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "2", "4", Integer.toString(randomStrength())})).start();
+        new Thread(() -> ClientSide.ClientRopeGame.main(new String[]{"CT", "2", "5", Integer.toString(randomStrength())})).start();
 
-            for (int j = 0; j < contestants[i].length; j++) {
-                contestants[i][j].start();
-            }
-        }
-        
-        rf.start();
-
-        // Waiting for simulation to end
-        rf.join();
-        
-        for (int i = 0; i < coaches.length; i++) {
-            while(coaches[i].isAlive())
-                coaches[i].interrupt();
-
-            for (int j = 0; j < contestants[i].length; j++) {
-                while(contestants[i][j].isAlive())
-                    contestants[i][j].interrupt();
-            }
-        }
     }
-    
+
     /**
      * Function to generate a random strength when a player is instantiated.
-     * 
+     *
      * @return a strength for a player instantiation
      */
-    private static int randomStrength(){
+    private static int randomStrength() {
         return Constants.INITIAL_MINIMUM_FORCE + (int) (Math.random() * (Constants.INITIAL_MAXIMUM_FORCE - Constants.INITIAL_MINIMUM_FORCE));
     }
 }
