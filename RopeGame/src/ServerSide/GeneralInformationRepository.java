@@ -80,6 +80,8 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
      */
     private int flagPosition;                       // current flag position
 
+    private boolean headerPrinted;
+    
     /**
      * 
      * @return 
@@ -104,6 +106,8 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
             printer = null;
         }
 
+        headerPrinted = false;
+        
         teamsState = new LinkedList<>();
         teamsState.add(new Tuple[Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH]);
         teamsState.add(new Tuple[Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH]);
@@ -260,12 +264,10 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
 
         switch(contestant.getContestantTeam()) {
             case 1:
-                if(team1Placement.contains(contestant.getContestantId()))
-                    team1Placement.remove(contestant.getContestantId());
+                team1Placement.remove(team1Placement.indexOf(contestant.getContestantId()));
                 break;
             case 2:
-                if(team2Placement.contains(contestant.getContestantId()))
-                    team2Placement.remove(contestant.getContestantId());
+                team2Placement.remove(team2Placement.indexOf(contestant.getContestantId()));
                 break;
             default:
                 System.out.println("Error: team number");
@@ -296,11 +298,13 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     public void printLineUpdate() {
         lock.lock();
 
-        printActiveEntitiesStates();
-        printTrialResult(trialNumber, flagPosition);
+        if(headerPrinted) {
+            printActiveEntitiesStates();
+            printTrialResult(trialNumber, flagPosition);
 
-        printer.flush();
-
+            printer.flush();
+        }
+        
         lock.unlock();
     }
 
@@ -396,6 +400,8 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         printEmptyResult();
         printer.flush();
 
+        headerPrinted = true;
+        
         lock.unlock();
     }
 

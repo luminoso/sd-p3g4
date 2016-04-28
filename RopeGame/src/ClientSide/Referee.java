@@ -90,6 +90,7 @@ public class Referee extends Thread implements InterfaceReferee {
     @Override
     public void run() {
         informationRepository.updateReferee();
+        informationRepository.printHeader();
         
         while (state != END_OF_THE_MATCH) {
             switch (state) {

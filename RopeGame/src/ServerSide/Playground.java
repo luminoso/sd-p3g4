@@ -10,6 +10,7 @@ import Others.InterfacePlayground;
 import Others.InterfaceReferee;
 import RopeGame.Constants;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -122,10 +123,11 @@ public class Playground implements InterfacePlayground {
         lock.lock();
 
         try {
-            this.teams[contestant.getContestantTeam() - 1].add(contestant);
+            this.teams[contestant.getContestantTeam()-1].add(contestant);
 
             contestant.setContestantState(ContestantState.STAND_IN_POSITION);
             informationRepository.updateContestant();
+            informationRepository.setTeamPlacement();
             informationRepository.printLineUpdate();
 
             if (isTeamInPlace(contestant.getContestantTeam())) {
@@ -266,8 +268,17 @@ public class Playground implements InterfacePlayground {
 
         lock.lock();
         
-        teams[contestant.getContestantTeam()-1].remove(contestant);
+        Iterator<InterfaceContestant> it = teams[contestant.getContestantTeam()-1].iterator();
+        
+        while(it.hasNext()) {
+            InterfaceContestant temp = it.next();
+            
+            if(temp.getContestantId() == contestant.getContestantId()) 
+                it.remove();
+        }
+        
         informationRepository.resetTeamPlacement();
+        informationRepository.printLineUpdate();
         
         lock.unlock();
     }
