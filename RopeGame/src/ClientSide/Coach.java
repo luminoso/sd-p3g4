@@ -6,6 +6,7 @@ import Others.InterfaceContestantsBench;
 import Others.InterfaceGeneralInformationRepository;
 import Others.InterfacePlayground;
 import Others.InterfaceRefereeSite;
+import Others.Tuple;
 import RopeGame.Constants;
 import java.util.Set;
 
@@ -178,8 +179,9 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
      * their strength
      */
     private void reviewNotes() {
+        Set<Tuple<Integer, Integer>> contestants = bench.getBench();
         Set<Integer> selectedContestants = bench.getSelectedContestants();
-
+        
         for (int i = 1; i <= Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH; i++) {
             if (selectedContestants.contains(i)) {
                 bench.updateContestantStrength(i, -1);
