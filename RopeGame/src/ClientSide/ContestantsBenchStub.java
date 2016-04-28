@@ -75,7 +75,8 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
         }
 
         contestant.setContestantState(inMessage.getContestantState());
-
+        contestant.setContestantStrength(inMessage.getStrength());
+        
         con.close();
     }
 
@@ -268,7 +269,6 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
         coach.setCoachState(inMessage.getCoachState());
 
         con.close();
-
     }
     
     @Override

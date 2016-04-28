@@ -123,6 +123,7 @@ public class RopeGame {
         pg.setName("rp-PG"); pg.start();
         rs.setName("rp-RS"); rs.start();
         gr.setName("rp-GR"); gr.start();
+        Thread.sleep(1000);
         c11.setName("rp-c11"); c11.start();
         c12.setName("rp-C12"); c12.start();
         c13.setName("rp-c13"); c13.start();

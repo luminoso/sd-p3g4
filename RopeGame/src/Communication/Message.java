@@ -398,6 +398,10 @@ public class Message implements Serializable {
         return number;
     }
 
+    public void setStrength(int strength) {
+        this.strength = strength;
+    }
+
     /**
      *
      */

@@ -33,6 +33,7 @@ class ContestantsBenchInterface implements ServerInterface {
                 benchs.get(contestant.getContestantTeam()-1).addContestant();
                 outMessage = new Message(CONTESTANT_STATE_CHANGE);
                 outMessage.setContestantState(contestant.getContestantState());
+                outMessage.setStrength(contestant.getContestantStrength());
                 break;
             }
             case CB_GET_BENCH: {
@@ -74,9 +75,8 @@ class ContestantsBenchInterface implements ServerInterface {
                 break;
             }
             case CB_UPDATE_CONTESTANT_STRENGTH: {
-                InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
                 InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
-                benchs.get(coach.getCoachTeam()-1).updateContestantStrength(contestant.getContestantId(), contestant.getContestantStrength());
+                benchs.get(contestant.getContestantTeam()-1).updateContestantStrength(contestant.getContestantId(), contestant.getContestantStrength());
                 outMessage = new Message(OK);
                 break;
             }
