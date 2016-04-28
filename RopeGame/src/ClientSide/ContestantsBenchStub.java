@@ -70,7 +70,7 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.CONTESTANT_STATE_CHANGE) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -103,7 +103,8 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.BENCH) {
-            out.println("Message type error");
+            out.println("Returned message with wrong type");
+            System.exit(1);
         }
 
         Set<Tuple<Integer, Integer>> bench = inMessage.getBench();
@@ -133,7 +134,8 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            out.print("Message type error");
+            out.println("Returned message with wrong type");
+            System.exit(1);
         }
 
     }
@@ -162,7 +164,8 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.SELECTED_CONTESTANTS) {
-            out.println("Message type error");
+            out.println("Returned message with wrong type");
+            System.exit(1);
         }
 
         Set selectedContestants = inMessage.getSelectedContestants();
@@ -193,7 +196,7 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -226,7 +229,7 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -258,7 +261,7 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.COACH_STATE_CHANGE) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -288,7 +291,7 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 

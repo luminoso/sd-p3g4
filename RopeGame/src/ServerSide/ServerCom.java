@@ -76,8 +76,13 @@ public class ServerCom
    *  e ao port de escuta públicos.
    */
 
+   public static int sconid = 0;
+   
    public void start ()
    {
+      
+       //Thread.currentThread().setName("sconi-id:" + Integer.toString(sconid++));
+       
       try
       { listeningSocket = new ServerSocket (serverPortNumb);
       }

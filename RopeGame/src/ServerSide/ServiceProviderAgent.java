@@ -90,6 +90,8 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
         Message inMessage = null,
                 outMessage = null;
 
+        Thread.currentThread().setName("SPA-" + Integer.toString(serviceProviderAgentId++));
+        
         inMessage = (Message) sconi.readObject();
 
         // TODO: validate message

@@ -103,6 +103,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         try {
             printer = new PrintWriter(Constants.FILE_NAME);
         } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
             printer = null;
         }
 

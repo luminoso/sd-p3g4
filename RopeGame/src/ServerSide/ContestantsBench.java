@@ -134,6 +134,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
                 playersSelected.await();
             } while (!isContestantSelected() && !RefereeSite.getInstance().hasMatchEnded());
         } catch (InterruptedException ex) {
+            ex.printStackTrace();
             lock.unlock();
             return;
         }
@@ -171,6 +172,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
                 allPlayersSeated.await();
             }
         } catch (InterruptedException ex) {
+            ex.printStackTrace();
             lock.unlock();
             return null;
         }
@@ -235,6 +237,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
                 waitForCoach.await();
             }
         } catch (InterruptedException ex) {
+            ex.printStackTrace();
         }
 
         waitForNextTrial.signal();
@@ -262,6 +265,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
         try {
             waitForNextTrial.await();
         } catch (InterruptedException ex) {
+            ex.printStackTrace();
         }
 
         coachWaiting = false;

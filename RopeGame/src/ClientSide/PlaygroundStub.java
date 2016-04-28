@@ -62,7 +62,7 @@ public class PlaygroundStub implements InterfacePlayground {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.CONTESTANT_STATE_CHANGE) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -104,7 +104,7 @@ public class PlaygroundStub implements InterfacePlayground {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.COACH_STATE_CHANGE) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -135,7 +135,7 @@ public class PlaygroundStub implements InterfacePlayground {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -163,7 +163,7 @@ public class PlaygroundStub implements InterfacePlayground {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.FLAG_POSITION) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -193,7 +193,7 @@ public class PlaygroundStub implements InterfacePlayground {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.LAST_FLAG_POSITION) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -267,7 +267,7 @@ public class PlaygroundStub implements InterfacePlayground {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -297,7 +297,7 @@ public class PlaygroundStub implements InterfacePlayground {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -324,7 +324,7 @@ public class PlaygroundStub implements InterfacePlayground {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.REFEREE_STATE_CHANGE) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -354,7 +354,7 @@ public class PlaygroundStub implements InterfacePlayground {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.COACH_STATE_CHANGE) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 

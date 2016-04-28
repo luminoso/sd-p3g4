@@ -7,6 +7,7 @@ import Others.InterfaceGeneralInformationRepository;
 import Others.InterfaceReferee;
 import RopeGame.ServerConfigs;
 import ServerSide.RefereeSite;
+import static java.lang.System.out;
 
 /**
  *
@@ -71,7 +72,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -101,7 +102,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -130,7 +131,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -157,7 +158,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -180,7 +181,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -203,7 +204,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -229,7 +230,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -252,7 +253,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -275,7 +276,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -298,7 +299,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -321,7 +322,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -351,7 +352,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -380,7 +381,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -406,7 +407,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -432,7 +433,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -461,7 +462,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -487,7 +488,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 

@@ -5,6 +5,7 @@ import ClientSide.Referee.RefereeState;
 import Others.InterfaceReferee;
 import Others.InterfaceRefereeSite;
 import RopeGame.Constants;
+import static java.lang.System.out;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.Condition;
@@ -218,6 +219,7 @@ public class RefereeSite implements InterfaceRefereeSite {
                 informReferee.await();
             }
         } catch (InterruptedException ex) {
+            ex.printStackTrace();
             Logger.getLogger(RefereeSite.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -265,6 +267,7 @@ public class RefereeSite implements InterfaceRefereeSite {
     @Override
     public void setHasMatchEnded(boolean hasMatchEnded) {
         lock.lock();
+        out.println("setting has match ended");
         this.hasMatchEnded = hasMatchEnded;
         lock.unlock();
     }

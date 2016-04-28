@@ -63,7 +63,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -93,7 +93,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -119,7 +119,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.REFEREE_STATE_CHANGE) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -149,7 +149,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.GAME_POINTS) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -181,7 +181,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.REMAINING_GAMES) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -211,7 +211,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.REMAINING_TRIALS) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -238,7 +238,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.TRIAL_POINTS) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -268,7 +268,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.BOOLEAN) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -298,7 +298,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -324,7 +324,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
@@ -355,7 +355,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
         inMessage = (Message) con.readObject();
 
         if (inMessage.getType() != Message.MessageType.OK) {
-            // TODO: handle error
+            out.println("Returned message with wrong type");
             System.exit(1);
         }
 
