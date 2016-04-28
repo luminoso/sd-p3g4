@@ -289,7 +289,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
             if(contestant.getContestantId() == id) {
                 contestant.setContestantStrength(contestant.getContestantStrength() + delta);
                 informationRepository.updateContestantStrength(contestant.getContestantTeam(), 
-                        contestant.getContestantTeam(), contestant.getContestantStrength());
+                        contestant.getContestantId(), contestant.getContestantStrength());
                 informationRepository.printLineUpdate();
             }
         }

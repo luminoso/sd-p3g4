@@ -75,7 +75,7 @@ class ContestantsBenchInterface implements ServerInterface {
             }
             case CB_UPDATE_CONTESTANT_STRENGTH: {
                 InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
-                int numbers[] = inMessage.getNumbers();
+                int numbers[] = inMessage.getNumbers(); // {id, delta}
                 benchs.get(coach.getCoachTeam()-1).updateContestantStrength(numbers[0],numbers[1]);
                 outMessage = new Message(OK);
                 break;
