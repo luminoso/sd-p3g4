@@ -1,6 +1,5 @@
 package ServerSide;
 
-import ClientSide.Contestant;
 import Communication.Message;
 import static Communication.Message.MessageType.*;
 import Communication.MessageException;
@@ -75,8 +74,9 @@ class ContestantsBenchInterface implements ServerInterface {
                 break;
             }
             case CB_UPDATE_CONTESTANT_STRENGTH: {
-                InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
-                benchs.get(contestant.getContestantTeam()-1).updateContestantStrength(contestant.getContestantId(), contestant.getContestantStrength());
+                InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
+                int numbers[] = inMessage.getNumbers();
+                benchs.get(coach.getCoachTeam()-1).updateContestantStrength(numbers[0],numbers[1]);
                 outMessage = new Message(OK);
                 break;
             }

@@ -281,11 +281,11 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.CB_UPDATE_CONTESTANT_STRENGTH,
-                null,
-                coach.getCoachTeam(),
-                id,
-                delta);
+                coach.getCoachState(),
+                coach.getCoachTeam());
 
+        outMessage.setNumbers(new int[]{id,delta});
+        
         con.writeObject(outMessage);
 
         inMessage = (Message) con.readObject();
