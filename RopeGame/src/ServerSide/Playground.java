@@ -277,8 +277,10 @@ public class Playground implements InterfacePlayground {
         while(it.hasNext()) {
             InterfaceContestant temp = it.next();
             
-            if(temp.getContestantId() == contestant.getContestantId()) 
+            if(temp.getContestantId() == contestant.getContestantId()) {
                 it.remove();
+                break;
+            }
         }
         
         informationRepository.resetTeamPlacement();
