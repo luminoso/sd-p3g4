@@ -251,9 +251,13 @@ public class RefereeSite implements InterfaceRefereeSite {
     @Override
     public boolean hasMatchEnded() {
         boolean hasEnded;
+        
         lock.lock();
+        
         hasEnded = hasMatchEnded;
+ 
         lock.unlock();
+        
         return hasEnded;
     }
 
@@ -265,7 +269,9 @@ public class RefereeSite implements InterfaceRefereeSite {
     @Override
     public void setHasMatchEnded(boolean hasMatchEnded) {
         lock.lock();
+        
         this.hasMatchEnded = hasMatchEnded;
+        
         lock.unlock();
     }
 

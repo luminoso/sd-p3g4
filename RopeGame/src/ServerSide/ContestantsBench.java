@@ -9,6 +9,7 @@ import Others.InterfaceContestantsBench;
 import Others.Tuple;
 import RopeGame.Constants;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -150,8 +151,15 @@ public class ContestantsBench implements InterfaceContestantsBench {
 
         lock.lock();
 
-        bench.remove(contestant);
+        Iterator<InterfaceContestant> it = bench.iterator();
 
+        while(it.hasNext()) {
+            InterfaceContestant temp = it.next();
+            
+            if(temp.getContestantId() == contestant.getContestantId())
+                it.remove();
+        }
+        
         lock.unlock();
     }
 

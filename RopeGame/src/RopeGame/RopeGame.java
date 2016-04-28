@@ -1,5 +1,7 @@
 package RopeGame;
 
+import java.util.Scanner;
+
 /**
  * General description: This class starts the Rope Game.
  * It instantiates all the active and passive entities.
@@ -10,7 +12,7 @@ package RopeGame;
 public class RopeGame {
 
     public static void main(String[] args) throws InterruptedException {
-
+        
         new Thread(() -> ServerSide.ServerRopeGame.main(new String[]{"CB"})).start();
         new Thread(() -> ServerSide.ServerRopeGame.main(new String[]{"PG"})).start();
         new Thread(() -> ServerSide.ServerRopeGame.main(new String[]{"RS"})).start();
