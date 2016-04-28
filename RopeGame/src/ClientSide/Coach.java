@@ -178,9 +178,6 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
      * their strength
      */
     private void reviewNotes() {
-        // Redo because can't pass active entities with messages like this
-        // Sugestion: update message where if the ID isn't in the set
-        //              update with +1, else update with -1
         Set<Integer> selectedContestants = bench.getSelectedContestants();
 
         for (int i = 1; i <= Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH; i++) {
