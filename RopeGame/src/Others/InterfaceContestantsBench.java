@@ -3,41 +3,45 @@ package Others;
 import java.util.Set;
 
 /**
+ * Interface that defines the operations available over the objects that
+ * represent the contestants bench.
  *
- * @author Eduardo Sousa
- * @author Guilherme Cardoso
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-2
  */
 public interface InterfaceContestantsBench {
+
     /**
      * The method adds a contestant to the bench.
      *
      */
-    public void addContestant();
+     void addContestant();
 
     /**
      * This method returns the bench which contains the Contestants
      *
      * @return List of the contestants in the bench
      */
-    public Set<Tuple<Integer, Integer>> getBench();
+     Set<Tuple<Integer, Integer>> getBench();
 
     /**
      * The method removes a contestant from the bench.
      */
-    public void getContestant();
+     void getContestant();
 
     /**
      * Gets the selected contestants to play
      *
      * @return Set with the selected contestants
      */
-    public Set<Integer> getSelectedContestants();
+     Set<Integer> getSelectedContestants();
 
     /**
      * Synchronisation point where the Referee waits for the Coaches to pick the
      * teams
      */
-    public void pickYourTeam();
+     void pickYourTeam();
 
     /**
      * Set selected contestants array. This arrays should be filled with the IDs
@@ -45,18 +49,19 @@ public interface InterfaceContestantsBench {
      *
      * @param selected identifiers for the selected players
      */
-    public void setSelectedContestants(Set<Integer> selected);
+     void setSelectedContestants(Set<Integer> selected);
 
     /**
      * Synchronisation point where Coaches wait for the next trial instructed by
-     * the Referee
+     * the Referee.
      */
-    public void waitForNextTrial();
+    void waitForNextTrial();
 
     /**
-     * 
-     * @param id
-     * @param delta 
+     * Updates the contestant strength.
+     *
+     * @param id of the contestants to be updated
+     * @param delta difference to be applied to the contestant
      */
-    public void updateContestantStrength(int id, int delta);
+    void updateContestantStrength(int id, int delta);
 }

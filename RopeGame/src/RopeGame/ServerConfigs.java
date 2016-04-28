@@ -1,8 +1,11 @@
 package RopeGame;
 
 /**
- *
- * @author ed1000
+ * Constants for server configuration.
+ * 
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-2
  */
 public class ServerConfigs {
     /**

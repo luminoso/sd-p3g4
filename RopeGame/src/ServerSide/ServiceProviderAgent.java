@@ -1,19 +1,20 @@
 package ServerSide;
 
-import ClientSide.Coach.CoachState;
 import ClientSide.Contestant;
-import ClientSide.Contestant.ContestantState;
-import ClientSide.Referee.RefereeState;
 import Communication.Message;
 import Others.CoachStrategy;
 import Others.InterfaceCoach;
+import Others.InterfaceCoach.CoachState;
 import Others.InterfaceContestant;
+import Others.InterfaceContestant.ContestantState;
 import Others.InterfaceReferee;
+import Others.InterfaceReferee.RefereeState;
 
 /**
  *
- * @author Eduardo Sousa
- * @author Guilherme Cardoso
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-2
  */
 public class ServiceProviderAgent extends Thread implements InterfaceCoach,
         InterfaceContestant,
@@ -23,7 +24,7 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
     /**
      *
      */
-    private ServerCom sconi;
+    private final ServerCom sconi;
 
     /**
      *
@@ -33,7 +34,7 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
     /**
      *
      */
-    private final ServerInterface servInterface;
+    private final InterfaceServer servInterface;
 
     /**
      *
@@ -61,15 +62,13 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
     private CoachStrategy strategy;
 
     /**
+     * Initialisation of the server interface,
      *
-     * @param sconi
-     * @param cbi
-     * @param pgi
-     * @param rsi
-     * @param giri
+     * @param sconi connection to be dispatched
+     * @param servInterface server interface to be used
      */
     ServiceProviderAgent(ServerCom sconi,
-            ServerInterface servInterface) {
+            InterfaceServer servInterface) {
 
         super(Integer.toString(serviceProviderAgentId++));
         this.sconi = sconi;
@@ -82,29 +81,21 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
         this.strategy = null;
     }
 
-    /**
-     *
-     */
     @Override
     public void run() {
         Message inMessage = null,
                 outMessage = null;
 
         Thread.currentThread().setName("SPA-" + Integer.toString(serviceProviderAgentId++));
-        
+
         inMessage = (Message) sconi.readObject();
 
         // TODO: validate message
-        // Adapt current thread to message running conditions
-        // TODO: move to inside each cbi, pgi, rsi?
-        // Contestant
         this.state = inMessage.getState();
         this.team = inMessage.getTeam();
         this.contestantId = inMessage.getContestantId();
         this.strength = inMessage.getStrength();
 
-        // Referee (not neeeded)
-        // process message in correct shared memory
         try {
             outMessage = servInterface.processAndReply(inMessage);
         } catch (Exception e) {
@@ -115,7 +106,7 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
         sconi.close();
     }
 
-    // COACH METHODS
+    // Coach methods
     @Override
     public CoachState getCoachState() {
         return (CoachState) state;
@@ -125,7 +116,7 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
     public void setCoachState(CoachState state) {
         this.state = state;
     }
-    
+
     @Override
     public int getCoachTeam() {
         return team;
@@ -135,7 +126,7 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
     public void setCoachTeam(int team) {
         this.team = team;
     }
-    
+
     @Override
     public CoachStrategy getCoachStrategy() {
         return strategy;
@@ -146,7 +137,7 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
         this.strategy = strategy;
     }
 
-    // CONTESTANT METHODS
+    // Contestant methods
     @Override
     public int getContestantId() {
         return contestantId;
@@ -181,13 +172,13 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
     public int getContestantTeam() {
         return team;
     }
-    
+
     @Override
     public void setContestantTeam(int team) {
         this.team = team;
     }
-    
-    // REFEREE METHODS
+
+    // Referee methods
     @Override
     public RefereeState getRefereeState() {
         return (RefereeState) state;
@@ -202,5 +193,5 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
     public int compareTo(InterfaceContestant contestant) {
         return getContestantId() - contestant.getContestantId();
     }
-  
+
 }

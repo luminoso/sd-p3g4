@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * General Description:
  * Coach strategy implementation that picks the players with the most strength.
  * 
- * @author Eduardo Sousa
- * @author Guilherme Cardoso
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-2
  */
 public class MostStrengthStrategy implements CoachStrategy, Comparator<Tuple<Integer, Integer>> {
 

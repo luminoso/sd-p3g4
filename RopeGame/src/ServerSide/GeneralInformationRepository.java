@@ -1,15 +1,15 @@
 package ServerSide;
 
-import ClientSide.Coach.CoachState;
-import ClientSide.Contestant.ContestantState;
-import ClientSide.Referee.RefereeState;
 import Others.InterfaceCoach;
+import Others.InterfaceCoach.CoachState;
 import Others.InterfaceContestant;
+import Others.InterfaceContestant.ContestantState;
 import Others.InterfaceGeneralInformationRepository;
 import Others.InterfaceReferee;
+import Others.InterfaceReferee.RefereeState;
 import Others.Tuple;
 import RopeGame.Constants;
-import ServerSide.RefereeSite.GameScore;
+import Others.InterfaceRefereeSite.GameScore;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.LinkedList;
@@ -18,73 +18,74 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * General Description: This is an passive class that logs entities activity
+ * This is an passive class that logs entities activity
  *
- * @author Eduardo Sousa
- * @author Guilherme Cardoso
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-2
  */
 public class GeneralInformationRepository implements InterfaceGeneralInformationRepository {
 
     /**
-     * 
+     *
      */
     private static GeneralInformationRepository instance;
 
     /**
-     * 
+     *
      */
     private final Lock lock;
-    
+
     /**
-     * 
+     *
      */
     private PrintWriter printer;
 
     /**
-     * 
+     *
      */
     private final List<Tuple<ContestantState, Integer>[]> teamsState;
-    
+
     /**
-     * 
+     *
      */
     private final CoachState[] coachesState;
-    
+
     /**
-     * 
+     *
      */
     private RefereeState refereeState;
 
     /**
-     * 
+     *
      */
     private final List<Integer> team1Placement;     // list containing team contestants
-    
+
     /**
-     * 
+     *
      */
     private final List<Integer> team2Placement;     // list containing team contestants
 
     /**
-     * 
+     *
      */
     private int gameNumber;                         // list containing scores of the game
-    
+
     /**
-     * 
+     *
      */
     private int trialNumber;                        // list containing scores of the trial
 
     /**
-     * 
+     *
      */
     private int flagPosition;                       // current flag position
 
     private boolean headerPrinted;
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public static synchronized GeneralInformationRepository getInstance() {
         if (instance == null) {
@@ -108,7 +109,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         }
 
         headerPrinted = false;
-        
+
         teamsState = new LinkedList<>();
         teamsState.add(new Tuple[Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH]);
         teamsState.add(new Tuple[Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH]);
@@ -124,15 +125,10 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         flagPosition = 0;
     }
 
-    /**
-     * Adds a Referee to General Information Repository
-     *
-     * @param referee Referee to add
-     */
     @Override
     public void updateReferee() {
         InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
-        
+
         lock.lock();
 
         refereeState = referee.getRefereeState();
@@ -140,22 +136,17 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         lock.unlock();
     }
 
-    /**
-     * Adds a Referee to General Information Repository
-     *
-     * @param contestant Contestant to add
-     */
     @Override
     public void updateContestant() {
         InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
-        
+
         lock.lock();
 
-        int team = contestant.getContestantTeam()-1;
-        int id = contestant.getContestantId()-1;
-        
+        int team = contestant.getContestantTeam() - 1;
+        int id = contestant.getContestantId() - 1;
+
         this.teamsState.get(team)[id] = new Tuple<>(contestant.getContestantState(), contestant.getContestantStrength());
-        
+
         lock.unlock();
     }
 
@@ -163,36 +154,26 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     public void updateContestantStrength(int team, int id, int strength) {
         lock.lock();
 
-        ContestantState state = teamsState.get(team-1)[id-1].getLeft();
-        
-        this.teamsState.get(team-1)[id-1] = new Tuple<>(state, strength);
-        
+        ContestantState state = teamsState.get(team - 1)[id - 1].getLeft();
+
+        this.teamsState.get(team - 1)[id - 1] = new Tuple<>(state, strength);
+
         lock.unlock();
     }
-    
-    /**
-     * Adds a Coach to General Information Repository
-     *
-     * @param coach coach that will be added to the information repository
-     */
+
     @Override
     public void updateCoach() {
         InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
-        
+
         lock.lock();
 
-        int team = coach.getCoachTeam()-1;
-        
+        int team = coach.getCoachTeam() - 1;
+
         this.coachesState[team] = coach.getCoachState();
 
         lock.unlock();
     }
 
-    /**
-     * Sets a game score
-     *
-     * @param gameNumber
-     */
     @Override
     public void setGameNumber(int gameNumber) {
         lock.lock();
@@ -202,11 +183,6 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         lock.unlock();
     }
 
-    /**
-     * Sets a trial score score
-     *
-     * @param trialNumber
-     */
     @Override
     public void setTrialNumber(int trialNumber) {
         lock.lock();
@@ -216,11 +192,6 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         lock.unlock();
     }
 
-    /**
-     * Sets flag position
-     *
-     * @param flagPosition to set
-     */
     @Override
     public void setFlagPosition(int flagPosition) {
         lock.lock();
@@ -230,16 +201,13 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         lock.unlock();
     }
 
-    /**
-     * Sets a team placement
-     */
     @Override
     public void setTeamPlacement() {
         InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
-        
+
         lock.lock();
 
-        switch(contestant.getContestantTeam()) {
+        switch (contestant.getContestantTeam()) {
             case 1:
                 team1Placement.add(contestant.getContestantId());
                 break;
@@ -254,16 +222,13 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         lock.unlock();
     }
 
-    /**
-     * Resets team placement
-     */
     @Override
     public void resetTeamPlacement() {
         InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
-        
+
         lock.lock();
 
-        switch(contestant.getContestantTeam()) {
+        switch (contestant.getContestantTeam()) {
             case 1:
                 team1Placement.remove(team1Placement.indexOf(contestant.getContestantId()));
                 break;
@@ -278,9 +243,6 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         lock.unlock();
     }
 
-    /**
-     * Print game header
-     */
     @Override
     public void printGameHeader() {
         lock.lock();
@@ -292,26 +254,20 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         lock.unlock();
     }
 
-    /**
-     * Fully prints a line with all the updates
-     */
     @Override
     public void printLineUpdate() {
         lock.lock();
 
-        if(headerPrinted) {
+        if (headerPrinted) {
             printActiveEntitiesStates();
             printTrialResult(trialNumber, flagPosition);
 
             printer.flush();
         }
-        
+
         lock.unlock();
     }
 
-    /**
-     * Fully prints the game result
-     */
     @Override
     public void printGameResult(GameScore score) {
         lock.lock();
@@ -337,13 +293,6 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         lock.unlock();
     }
 
-    /**
-     * Print Match winner
-     *
-     * @param team that won
-     * @param score1 score team 1
-     * @param score2 score team 2
-     */
     @Override
     public void printMatchWinner(int team, int score1, int score2) {
         lock.lock();
@@ -354,9 +303,6 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         lock.unlock();
     }
 
-    /**
-     * Prints that was a draw
-     */
     @Override
     public void printMatchDraw() {
         lock.lock();
@@ -367,9 +313,6 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         lock.unlock();
     }
 
-    /**
-     * Prints game logger legend
-     */
     @Override
     public void printLegend() {
         lock.lock();
@@ -387,9 +330,6 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         lock.unlock();
     }
 
-    /**
-     * Print General Information Repository header
-     */
     @Override
     public void printHeader() {
         lock.lock();
@@ -402,7 +342,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         printer.flush();
 
         headerPrinted = true;
-        
+
         lock.unlock();
     }
 
@@ -530,9 +470,6 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         lock.unlock();
     }
 
-    /**
-     * Closes log file
-     */
     @Override
     public void close() {
         lock.lock();

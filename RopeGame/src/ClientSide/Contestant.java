@@ -7,62 +7,62 @@ import Others.InterfacePlayground;
 import Others.InterfaceRefereeSite;
 
 /**
- * General Description: This is an active class implements the Contestant and
- * his interactions in the passive classes
+ * This is active class Contestant which implements the InterfaceContestant.
  *
- * @author Eduardo Sousa
- * @author Guilherme Cardoso
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-2
  */
 public class Contestant extends Thread implements Comparable<InterfaceContestant>, InterfaceContestant {
+
     /**
-     * 
+     * Bench interface to be used
      */
     private final InterfaceContestantsBench bench;
-    
+
     /**
-     * 
+     * Playground interface to be used
      */
     private final InterfacePlayground playground;
-    
+
     /**
-     * 
+     * RefereeSite interface to be used
      */
     private final InterfaceRefereeSite refereeSite;
 
     /**
-     * 
+     * General Information Repository interface to be used
      */
     private final InterfaceGeneralInformationRepository informationRepository;
-    
+
     /**
-     * 
+     * Current Contestant state
      */
-    private ContestantState state;          // Contestant state
-    
+    private ContestantState state;
+
     /**
-     * 
+     * Current Contestant strength
      */
-    private int strength;                   // Contestant strength
-    
+    private int strength;
+
     /**
-     * 
+     * Current contestant team
      */
-    private int team;                       // Contestant team
-    
+    private int team;
+
     /**
-     * 
+     * Current contestant id
      */
-    private int id;                         // Contestant identification in team
+    private int id;
 
     /**
      * Creates a Contestant instantiation for running in a distributed
-     * enviroment
+     * environment.
      *
      * @param name Name of the contestant
      * @param team Team of the contestant
      * @param id Id of the contestant
      * @param strength Strength of the contestant
-     * @param runlocal
      */
     public Contestant(String name, int team, int id, int strength) {
         super(name);
@@ -72,88 +72,48 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
         this.team = team;
         this.id = id;
         this.strength = strength;
-        
+
         bench = new ContestantsBenchStub(team);
         playground = new PlaygroundStub();
         refereeSite = new RefereeSiteStub();
         informationRepository = new GeneralInformationRepositoryStub();
     }
 
-    /**
-     * Get the current Contestant state
-     *
-     * @return Contestant state
-     */
     @Override
     public ContestantState getContestantState() {
         return state;
     }
 
-    /**
-     * Sets the current Contestant state
-     *
-     * @param state ContestantState
-     */
     @Override
     public void setContestantState(ContestantState state) {
         this.state = state;
     }
 
-    /**
-     * Gets the Contestant team number
-     *
-     * @return contestant team number
-     */
     @Override
     public int getContestantTeam() {
         return team;
     }
 
-    /**
-     * Sets the current Contestant team
-     *
-     * @param team of the contestant
-     */
     @Override
     public void setContestantTeam(int team) {
         this.team = team;
     }
 
-    /**
-     * Gets the Contestant id
-     *
-     * @return contestant id number
-     */
     @Override
     public int getContestantId() {
         return id;
     }
 
-    /**
-     * Sets the current Contestant id
-     *
-     * @param id of the contestant
-     */
     @Override
     public void setContestantId(int id) {
         this.id = id;
     }
 
-    /**
-     * Gets the Contestant strength
-     *
-     * @return contestant strength
-     */
     @Override
     public int getContestantStrength() {
         return strength;
     }
 
-    /**
-     * Sets the Contestant strength
-     *
-     * @param strength contestant strength
-     */
     @Override
     public void setContestantStrength(int strength) {
         this.strength = strength;
@@ -220,84 +180,9 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
         bench.addContestant();
     }
 
-    /**
-     * Compares this Contestant to another Contestant. Comparable
-     * implementation.
-     *
-     * @param contestant another Contestant to compare to
-     * @return contestant difference
-     */
     @Override
     public int compareTo(InterfaceContestant contestant) {
         return getContestantId() - contestant.getContestantId();
     }
 
-    /**
-     * Enums of possible Contestant states
-     */
-    public enum ContestantState {
-        /**
-         * 
-         */
-        SEAT_AT_THE_BENCH(1, "STB"),
-        
-        /**
-         * 
-         */
-        STAND_IN_POSITION(2, "SIP"),
-        
-        /**
-         * 
-         */
-        DO_YOUR_BEST(3, "DYB");
-
-        /**
-         * 
-         */
-        private final int id;
-        
-        /**
-         * 
-         */
-        private final String state;
-
-        /**
-         * Create a ContestantState enum
-         *
-         * @param id of the enum Contestant state
-         * @param state Initials of the Contestant state
-         */
-        ContestantState(int id, String state) {
-            this.id = id;
-            this.state = state;
-        }
-
-        /**
-         * Gets the ID of the ContestantState enum
-         *
-         * @return id of the Contestant state
-         */
-        public int getId() {
-            return id;
-        }
-
-        /**
-         * Gets the enum Contestant state
-         *
-         * @return Contestant state enum string
-         */
-        public String getState() {
-            return state;
-        }
-
-        /**
-         * Converts current Contestant state to String
-         *
-         * @return String describing Contestant sate
-         */
-        @Override
-        public String toString() {
-            return state;
-        }
-    }
 }

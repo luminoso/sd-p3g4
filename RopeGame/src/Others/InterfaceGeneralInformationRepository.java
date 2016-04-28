@@ -3,112 +3,112 @@ package Others;
 import ServerSide.RefereeSite;
 
 /**
+ * Interface that defines the operations available over the objects that
+ * represent the general information repository.
  *
- * @author Eduardo Sousa
- * @author Guilherme Cardoso
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-2
  */
 public interface InterfaceGeneralInformationRepository {
+
     /**
      * Adds a Coach to General Information Repository
-     *
-     * @param coach coach that will be added to the information repository
      */
-    public void updateCoach();
+     void updateCoach();
 
     /**
      * Adds a Referee to General Information Repository
-     *
-     * @param contestant Contestant to add
      */
-    public void updateContestant();
-    
-    /**
-     * 
-     * @param team
-     * @param id
-     * @param strength 
-     */
-    public void updateContestantStrength(int team, int id, int strength);
-    
-    /**
-     * Adds a Referee to General Information Repository
-     *
-     * @param referee Referee to add
-     */
-    public void updateReferee();
+     void updateContestant();
 
     /**
-     * 
+     * Updates the stored meta data about the strength of a contestant
+     *
+     * @param team of the contestant
+     * @param id of the contestant
+     * @param strength of the contestant
      */
-    public void printLineUpdate();
-    
+     void updateContestantStrength(int team, int id, int strength);
+
     /**
-     * Closes log file
+     * Adds a Referee to General Information Repository
      */
-    public void close();
+     void updateReferee();
+
+    /**
+     * Prints an line with updated information about game state.
+     */
+     void printLineUpdate();
+
+    /**
+     * Closes log file.
+     */
+     void close();
 
     /**
      * Print game header
      */
-    public void printGameHeader();
+     void printGameHeader();
 
     /**
-     * Fully prints the game result
+     * Fully prints the game result.
+     * @param score to be printed
      */
-    public void printGameResult(RefereeSite.GameScore score);
+     void printGameResult(RefereeSite.GameScore score);
 
     /**
-     * Print General Information Repository header
+     * Print General Information Repository header.
      */
-    public void printHeader();
+     void printHeader();
 
     /**
-     * Prints game logger legend
+     * Prints game logger legend.
      */
-    public void printLegend();
+     void printLegend();
 
     /**
-     * Prints that was a draw
+     * Prints that was a draw.
      */
-    public void printMatchDraw();
+     void printMatchDraw();
 
     /**
-     * Print Match winner
+     * Print Match winner.
      *
      * @param team that won
      * @param score1 score team 1
      * @param score2 score team 2
      */
-    public void printMatchWinner(int team, int score1, int score2);
+     void printMatchWinner(int team, int score1, int score2);
 
     /**
-     * Resets team placement
+     * Resets team placement.
      */
-    public void resetTeamPlacement();
+     void resetTeamPlacement();
 
     /**
-     * Sets flag position
+     * Sets flag position.
      *
      * @param flagPosition to set
      */
-    public void setFlagPosition(int flagPosition);
+     void setFlagPosition(int flagPosition);
 
     /**
-     * Sets a game score
+     * Sets a game number.
      *
-     * @param gameNumber
+     * @param gameNumber to set
      */
-    public void setGameNumber(int gameNumber);
+     void setGameNumber(int gameNumber);
 
     /**
-     * Sets a team placement
+     * Sets a team placement.
      */
-    public void setTeamPlacement();
+     void setTeamPlacement();
 
     /**
-     * Sets a trial score score
+     * Sets a trial score score.
      *
-     * @param trialNumber
+     * @param trialNumber to set
      */
-    public void setTrialNumber(int trialNumber);
+     void setTrialNumber(int trialNumber);
 }

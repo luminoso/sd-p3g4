@@ -1,7 +1,7 @@
 package Others;
 
 import RopeGame.Constants;
-import ServerSide.RefereeSite.TrialScore;
+import Others.InterfaceRefereeSite.TrialScore;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -11,8 +11,9 @@ import java.util.Set;
 /**
  * This strategy keeps the Contestants in game if they won or picks a random players if they lost.
  * 
- * @author Eduardo Sousa
- * @author Guilherme Cardoso
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-2
  */
 public class KeepWinningTeam implements CoachStrategy {
     

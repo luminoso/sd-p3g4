@@ -1,10 +1,10 @@
 package ServerSide;
 
-import ClientSide.Coach.CoachState;
-import ClientSide.Contestant.ContestantState;
 import ClientSide.GeneralInformationRepositoryStub;
 import Others.InterfaceCoach;
+import Others.InterfaceCoach.CoachState;
 import Others.InterfaceContestant;
+import Others.InterfaceContestant.ContestantState;
 import Others.InterfaceContestantsBench;
 import Others.Tuple;
 import RopeGame.Constants;
@@ -19,63 +19,51 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * General Description: This is an passive class that describes the Contestants
- * bench for each team
+ * This is an passive class that describes the contestants bench for each team.
  *
- * @author Eduardo Sousa
- * @author Guilherme Cardoso
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-2
  */
 public class ContestantsBench implements InterfaceContestantsBench {
 
     /**
-     *
+     * Doubleton for ConstestantsBench
      */
     private static final ContestantsBench[] instances = new ContestantsBench[2];    // Doubleton containing the two teams benches
 
-    /**
-     *
-     */
     private final Lock lock;
 
     /**
-     *
+     * Conditions for waiting
      */
     private final Condition allPlayersSeated;
-
-    /**
-     *
-     */
     private final Condition playersSelected;
-
-    /**
-     *
-     */
     private final Condition waitForNextTrial;
-
-    /**
-     *
-     */
     private final Condition waitForCoach;
 
     /**
-     *
+     * Structure that contains the players in the bench
      */
-    private final Set<InterfaceContestant> bench;                                   // Structure that contains the players in the bench
+    private final Set<InterfaceContestant> bench;
 
     /**
-     *
+     * Selected contestants to play the trial
      */
-    private final Set<Integer> selectedContestants;                                 // Selected contestants to play the trial
+    private final Set<Integer> selectedContestants;
 
     /**
-     *
+     * Sets if the coach is waiting
      */
     private boolean coachWaiting;
 
-    private final GeneralInformationRepositoryStub informationRepository;
-    
     /**
-     * Gets all the instances of the Contestants Bench
+     * General Information Repository implementation to be used
+     */
+    private final GeneralInformationRepositoryStub informationRepository;
+
+    /**
+     * Gets all the instances of the Contestants Bench.
      *
      * @return List containing contestants benches
      */
@@ -96,7 +84,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
     /**
      * Private constructor to be used in the doubleton.
      *
-     * @param team Team identifier.
+     * @param team identifier.
      */
     private ContestantsBench() {
         lock = new ReentrantLock();
@@ -109,9 +97,6 @@ public class ContestantsBench implements InterfaceContestantsBench {
         informationRepository = new GeneralInformationRepositoryStub();
     }
 
-    /**
-     * The method adds a contestant to the bench.
-     */
     @Override
     public void addContestant() {
         InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
@@ -143,9 +128,6 @@ public class ContestantsBench implements InterfaceContestantsBench {
         lock.unlock();
     }
 
-    /**
-     * The method removes a contestant from the bench.
-     */
     @Override
     public void getContestant() {
         InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
@@ -154,21 +136,17 @@ public class ContestantsBench implements InterfaceContestantsBench {
 
         Iterator<InterfaceContestant> it = bench.iterator();
 
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             InterfaceContestant temp = it.next();
-            
-            if(temp.getContestantId() == contestant.getContestantId())
+
+            if (temp.getContestantId() == contestant.getContestantId()) {
                 it.remove();
+            }
         }
-        
+
         lock.unlock();
     }
 
-    /**
-     * This method returns the bench which contains the Contestants
-     *
-     * @return List of the contestants in the bench
-     */
     @Override
     public Set<Tuple<Integer, Integer>> getBench() {
         Set<Tuple<Integer, Integer>> temp;
@@ -187,21 +165,15 @@ public class ContestantsBench implements InterfaceContestantsBench {
 
         temp = new HashSet<>();
 
-        for(InterfaceContestant contestant : bench) {
+        for (InterfaceContestant contestant : bench) {
             temp.add(new Tuple<>(contestant.getContestantId(), contestant.getContestantStrength()));
         }
-        
+
         lock.unlock();
 
         return temp;
     }
 
-    /**
-     * Set selected contestants array. This arrays should be filled with the IDs
-     * of the players for the next round.
-     *
-     * @param selected identifiers for the selected players
-     */
     @Override
     public void setSelectedContestants(Set<Integer> selected) {
         lock.lock();
@@ -214,11 +186,6 @@ public class ContestantsBench implements InterfaceContestantsBench {
         lock.unlock();
     }
 
-    /**
-     * Gets the selected contestants to play
-     *
-     * @return Set with the selected contestants
-     */
     @Override
     public Set<Integer> getSelectedContestants() {
         Set<Integer> selected = null;
@@ -232,10 +199,6 @@ public class ContestantsBench implements InterfaceContestantsBench {
         return selected;
     }
 
-    /**
-     * Synchronisation point where the Referee waits for the Coaches to pick the
-     * teams
-     */
     @Override
     public void pickYourTeam() {
         lock.lock();
@@ -253,10 +216,6 @@ public class ContestantsBench implements InterfaceContestantsBench {
         lock.unlock();
     }
 
-    /**
-     * Synchronisation point where Coaches wait for the next trial instructed by
-     * the Referee
-     */
     @Override
     public void waitForNextTrial() {
         InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
@@ -284,21 +243,21 @@ public class ContestantsBench implements InterfaceContestantsBench {
     @Override
     public void updateContestantStrength(int id, int delta) {
         lock.lock();
-        
-        for(InterfaceContestant contestant : bench) {
-            if(contestant.getContestantId() == id) {
+
+        for (InterfaceContestant contestant : bench) {
+            if (contestant.getContestantId() == id) {
                 contestant.setContestantStrength(contestant.getContestantStrength() + delta);
-                informationRepository.updateContestantStrength(contestant.getContestantTeam(), 
+                informationRepository.updateContestantStrength(contestant.getContestantTeam(),
                         contestant.getContestantId(), contestant.getContestantStrength());
                 informationRepository.printLineUpdate();
             }
         }
-        
+
         lock.unlock();
     }
-    
+
     /**
-     * Gets the selected contestants array
+     * Gets the selected contestants array.
      *
      * @return Integer array of the selected contestants for the round
      */
@@ -316,7 +275,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
     }
 
     /**
-     * Checks if all players are seated on bench
+     * Checks if all players are seated on bench.
      *
      * @return True if all players seated
      */

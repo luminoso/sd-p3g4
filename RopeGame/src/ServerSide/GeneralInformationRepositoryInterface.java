@@ -7,10 +7,11 @@ import Others.InterfaceContestant;
 
 /**
  *
- * @author Eduardo Sousa
- * @author Guilherme Cardoso
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-2
  */
-class GeneralInformationRepositoryInterface implements ServerInterface {
+class GeneralInformationRepositoryInterface implements InterfaceServer {
 
     /**
      *
@@ -25,11 +26,7 @@ class GeneralInformationRepositoryInterface implements ServerInterface {
         ir = GeneralInformationRepository.getInstance();
     }
 
-    /**
-     *
-     * @param inMessage
-     * @return
-     */
+    @Override
     public Message processAndReply(Message inMessage) throws MessageException {
         Message outMessage = null;
 
@@ -46,8 +43,8 @@ class GeneralInformationRepositoryInterface implements ServerInterface {
             }
             case GIR_UPDATE_CONTESTANT_STRENGTH: {
                 InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
-                ir.updateContestantStrength(contestant.getContestantTeam(), 
-                        contestant.getContestantId(), 
+                ir.updateContestantStrength(contestant.getContestantTeam(),
+                        contestant.getContestantId(),
                         contestant.getContestantStrength());
                 outMessage = new Message(OK);
                 break;

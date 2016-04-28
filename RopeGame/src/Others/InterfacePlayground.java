@@ -3,9 +3,12 @@ package Others;
 import java.util.List;
 
 /**
+ * Interface that defines the operations available over the objects that
+ * represent the playground.
  *
- * @author Eduardo Sousa
- * @author Guilherme Cardoso
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-2
  */
 public interface InterfacePlayground {
 
@@ -37,14 +40,14 @@ public interface InterfacePlayground {
      * The method returns the flag position in relation to the middle. Middle =
      * 0.
      *
-     * @return Position of the flag.
+     * @return position of the flag.
      */
     int getFlagPosition();
 
     /**
      * Gets the last flag position
      *
-     * @return the flag position before the current position
+     * @return flag position before the current position
      */
     int getLastFlagPosition();
 

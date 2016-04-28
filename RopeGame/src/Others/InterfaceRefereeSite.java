@@ -1,13 +1,16 @@
 package Others;
 
-import ServerSide.RefereeSite.GameScore;
-import ServerSide.RefereeSite.TrialScore;
+import Others.InterfaceRefereeSite.GameScore;
+import Others.InterfaceRefereeSite.TrialScore;
 import java.util.List;
 
 /**
+ * Interface that defines the operations available over the objects that
+ * represent the referee site.
  *
- * @author Eduardo Sousa
- * @author Guilherme Cardoso
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-2
  */
 public interface InterfaceRefereeSite {
 
@@ -82,4 +85,72 @@ public interface InterfaceRefereeSite {
      * @param hasMatchEnded true if match ended
      */
     void setHasMatchEnded(boolean hasMatchEnded);
+
+    /**
+     *
+     */
+    public enum TrialScore {
+
+        DRAW(0, "D"),
+        VICTORY_TEAM_1(1, "VT1"),
+        VICTORY_TEAM_2(2, "VT2");
+
+        private final int id;
+        private final String status;
+
+        /**
+         * Initializes the TrialScore
+         *
+         * @param id of the trial
+         * @param status of the trial
+         */
+        private TrialScore(int id, String status) {
+            this.id = id;
+            this.status = status;
+        }
+
+        /**
+         *
+         * @return
+         */
+        public int getId() {
+            return this.id;
+        }
+
+        /**
+         * Returns the
+         *
+         * @return
+         */
+        public String getStatus() {
+            return this.status;
+        }
+    }
+
+    /**
+     * Enums that describe the GameScore
+     */
+    public enum GameScore {
+
+        DRAW(0, "D"),
+        VICTORY_TEAM_1_BY_POINTS(1, "VT1PT"),
+        VICTORY_TEAM_1_BY_KNOCKOUT(2, "VT1KO"),
+        VICTORY_TEAM_2_BY_POINTS(3, "VT2PT"),
+        VICTORY_TEAM_2_BY_KNOCKOUT(4, "VT2KO");
+
+        private final int id;
+        private final String status;
+
+        /**
+         * Initializes the GameScore
+         *
+         * @param id of the score
+         * @param status of the score
+         */
+        private GameScore(int id, String status) {
+            this.id = id;
+            this.status = status;
+        }
+
+    }
 }

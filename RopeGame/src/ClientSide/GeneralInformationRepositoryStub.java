@@ -10,32 +10,19 @@ import ServerSide.RefereeSite;
 import static java.lang.System.out;
 
 /**
+ * This is an passive class that describes the General Information Repository.
+ * This class connects to a server and messages the according invocation.
  *
- * @author Eduardo Sousa
- * @author Guilherme Cardoso
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-2
  */
 public class GeneralInformationRepositoryStub implements InterfaceGeneralInformationRepository {
 
     /**
+     * Initiates the connection to the Server according to the ServerConfigs
      *
-     */
-    private static GeneralInformationRepositoryStub instance;
-
-    /**
-     *
-     * @return
-     */
-    public static synchronized GeneralInformationRepositoryStub getInstance() {
-        if (instance == null) {
-            instance = new GeneralInformationRepositoryStub();
-        }
-
-        return instance;
-    }
-
-    /**
-     *
-     * @return
+     * @return ClientCom with the opened connection
      */
     private ClientCom initiateConnection() {
         ClientCom con = new ClientCom(ServerConfigs.GENERAL_INFORMATION_REPOSITORY_ADDRESS,
@@ -49,14 +36,10 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         return con;
     }
 
-    /**
-     *
-     * @param coach
-     */
     @Override
     public void updateCoach() {
         InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
-        
+
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
@@ -79,14 +62,10 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         con.close();
     }
 
-    /**
-     *
-     * @param contestant
-     */
     @Override
     public void updateContestant() {
         InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
-        
+
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
@@ -110,10 +89,11 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
     }
 
     /**
-     * 
-     * @param team
-     * @param id
-     * @param strength 
+     * Updates the Contestant strength
+     *
+     * @param team of the contestant
+     * @param id of the contestant
+     * @param strength to be updated to
      */
     public void updateContestantStrength(int team, int id, int strength) {
         ClientCom con = initiateConnection();
@@ -137,15 +117,11 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
 
         con.close();
     }
-    
-    /**
-     *
-     * @param referee
-     */
+
     @Override
     public void updateReferee() {
         InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
-        
+
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
@@ -165,9 +141,6 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         con.close();
     }
 
-    /**
-     *
-     */
     @Override
     public void close() {
         ClientCom con = initiateConnection();
@@ -188,9 +161,6 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         con.close();
     }
 
-    /**
-     *
-     */
     @Override
     public void printGameHeader() {
         ClientCom con = initiateConnection();
@@ -211,10 +181,6 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         con.close();
     }
 
-    /**
-     *
-     * @param score
-     */
     @Override
     public void printGameResult(RefereeSite.GameScore score) {
         ClientCom con = initiateConnection();
@@ -237,9 +203,6 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         con.close();
     }
 
-    /**
-     *
-     */
     @Override
     public void printHeader() {
         ClientCom con = initiateConnection();
@@ -260,9 +223,6 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         con.close();
     }
 
-    /**
-     *
-     */
     @Override
     public void printLegend() {
         ClientCom con = initiateConnection();
@@ -283,9 +243,6 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         con.close();
     }
 
-    /**
-     *
-     */
     @Override
     public void printLineUpdate() {
         ClientCom con = initiateConnection();
@@ -306,9 +263,6 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         con.close();
     }
 
-    /**
-     *
-     */
     @Override
     public void printMatchDraw() {
         ClientCom con = initiateConnection();
@@ -329,12 +283,6 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         con.close();
     }
 
-    /**
-     *
-     * @param team
-     * @param score1
-     * @param score2
-     */
     @Override
     public void printMatchWinner(int team, int score1, int score2) {
         ClientCom con = initiateConnection();
@@ -359,22 +307,19 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         con.close();
     }
 
-    /**
-     *
-     */
     @Override
     public void resetTeamPlacement() {
         InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
-        
+
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.GIR_RESET_TEAM_PLACEMENT,
-                                    contestant.getContestantState(),
-                                    contestant.getContestantTeam(),
-                                    contestant.getContestantId(),
-                                    contestant.getContestantStrength());
+                contestant.getContestantState(),
+                contestant.getContestantTeam(),
+                contestant.getContestantId(),
+                contestant.getContestantStrength());
 
         con.writeObject(outMessage);
 
@@ -388,10 +333,6 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         con.close();
     }
 
-    /**
-     *
-     * @param flagPosition
-     */
     @Override
     public void setFlagPosition(int flagPosition) {
         ClientCom con = initiateConnection();
@@ -414,10 +355,6 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         con.close();
     }
 
-    /**
-     *
-     * @param gameNumber
-     */
     @Override
     public void setGameNumber(int gameNumber) {
         ClientCom con = initiateConnection();
@@ -440,9 +377,6 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         con.close();
     }
 
-    /**
-     *
-     */
     @Override
     public void setTeamPlacement() {
         InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
@@ -469,10 +403,6 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         con.close();
     }
 
-    /**
-     *
-     * @param trialNumber
-     */
     @Override
     public void setTrialNumber(int trialNumber) {
         ClientCom con = initiateConnection();

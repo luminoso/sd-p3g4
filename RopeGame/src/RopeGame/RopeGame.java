@@ -1,8 +1,8 @@
 package RopeGame;
 
 /**
- * General description: This class starts the Rope Game. It instantiates all the
- * active and passive entities.
+ * This class starts the Rope Game. It instantiates all the active and passive
+ * entities.
  *
  * @author Eduardo Sousa
  * @author Guilherme Cardoso

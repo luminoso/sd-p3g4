@@ -1,11 +1,11 @@
 package RopeGame;
 
 /**
- * General Description:
  * This class contains constants common for the Rope Game
  * 
- * @author Eduardo Sousa
- * @author Guilherme Cardoso
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-2
  */
 public class Constants {
     /**

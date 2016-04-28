@@ -11,9 +11,12 @@ import static java.lang.System.out;
 import java.util.Set;
 
 /**
+ * This is an passive class that describes the ContestantsBench. This class
+ * connects to a server and messages the according invocation.
  *
- * @author Eduardo Sousa
- * @author Guilherme Cardoso
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-2
  */
 public class ContestantsBenchStub implements InterfaceContestantsBench {
 
@@ -49,9 +52,7 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
         return con;
     }
 
-    /**
-     * The method adds a contestant to the bench.
-     */
+    @Override
     public void addContestant() {
         InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
 
@@ -76,19 +77,12 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
 
         contestant.setContestantState(inMessage.getContestantState());
         contestant.setContestantStrength(inMessage.getStrength());
-        
+
         con.close();
     }
 
-    /**
-     * This method returns the bench which contains the Contestants
-     *
-     * @return List of the contestants in the bench
-     */
     @Override
     public Set<Tuple<Integer, Integer>> getBench() {
-        //TODO: Coach strategies also access this function
-        // instruction below may crash ? 
         InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
 
         ClientCom con = initiateConnection();
@@ -113,9 +107,6 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
         return bench;
     }
 
-    /**
-     * The method removes a contestant from the bench.
-     */
     @Override
     public void getContestant() {
         InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
@@ -141,15 +132,8 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
 
     }
 
-    /**
-     * Gets the selected contestants to play
-     *
-     * @return Set with the selected contestants
-     */
     @Override
     public Set<Integer> getSelectedContestants() {
-        //TODO: KeepWinningTeam also access this function
-        // instruction below may crash ?
         InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
 
         ClientCom con = initiateConnection();
@@ -174,10 +158,6 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
         return selectedContestants;
     }
 
-    /**
-     * Synchronization point where the Referee waits for the Coaches to pick the
-     * teams
-     */
     @Override
     public void pickYourTeam() {
         InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
@@ -204,17 +184,10 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
         con.close();
     }
 
-    /**
-     * Set selected contestants array. This arrays should be filled with the IDs
-     * of the players for the next round.
-     *
-     * @param selected identifiers for the selected players
-     */
     @Override
     public void setSelectedContestants(Set<Integer> selected) {
         InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
 
-        // coach team
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
@@ -238,17 +211,10 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
 
     }
 
-    /**
-     * Synchronisation point where Coaches wait for the next trial instructed by
-     * the Referee
-     */
     @Override
     public void waitForNextTrial() {
-        // coach state changes!
-        // GeneralInformationRepository.getInstance().printLineUpdate();
         InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
 
-        // coach team
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
@@ -270,12 +236,11 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
 
         con.close();
     }
-    
+
     @Override
     public void updateContestantStrength(int id, int delta) {
         InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
 
-        // coach team
         ClientCom con = initiateConnection();
 
         Message inMessage, outMessage;
@@ -284,8 +249,8 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
                 coach.getCoachState(),
                 coach.getCoachTeam());
 
-        outMessage.setNumbers(new int[]{id,delta});
-        
+        outMessage.setNumbers(new int[]{id, delta});
+
         con.writeObject(outMessage);
 
         inMessage = (Message) con.readObject();

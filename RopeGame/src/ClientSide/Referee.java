@@ -1,14 +1,15 @@
 package ClientSide;
 
-import static ClientSide.Referee.RefereeState.END_OF_THE_MATCH;
 import Others.InterfaceContestantsBench;
 import Others.InterfaceGeneralInformationRepository;
 import Others.InterfacePlayground;
 import Others.InterfaceReferee;
+import Others.InterfaceReferee.RefereeState;
+import static Others.InterfaceReferee.RefereeState.END_OF_THE_MATCH;
 import Others.InterfaceRefereeSite;
+import Others.InterfaceRefereeSite.GameScore;
+import Others.InterfaceRefereeSite.TrialScore;
 import RopeGame.Constants;
-import ServerSide.RefereeSite.GameScore;
-import ServerSide.RefereeSite.TrialScore;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +17,9 @@ import java.util.List;
  * General Description: This is an active class implements the Referee and his
  * interactions in the passive classes
  *
- * @author Eduardo Sousa
- * @author Guilherme Cardoso
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-2
  */
 public class Referee extends Thread implements InterfaceReferee {
     /**
@@ -45,11 +47,7 @@ public class Referee extends Thread implements InterfaceReferee {
      */
     private RefereeState state;     // Referee state
 
-    /**
-     * 
-     * @param name
-     * @param runlocal 
-     */
+ 
     public Referee(String name) {
         super(name);
 
@@ -306,87 +304,4 @@ public class Referee extends Thread implements InterfaceReferee {
                 || refereeSite.getRemainingGames() == 0;
     }
 
-    /**
-     * Enums of possible Referee states
-     */
-    public enum RefereeState {
-        /**
-         * 
-         */
-        START_OF_THE_MATCH(1, "SOM"),
-        
-        /**
-         * 
-         */
-        START_OF_A_GAME(2, "SOG"),
-        
-        /**
-         * 
-         */
-        TEAMS_READY(3, "TRD"),
-        
-        /**
-         * 
-         */
-        WAIT_FOR_TRIAL_CONCLUSION(4, "WTC"),
-        
-        /**
-         * 
-         */
-        END_OF_A_GAME(5, "EOG"),
-        
-        /**
-         * 
-         */
-        END_OF_THE_MATCH(6, "EOM");
-
-        /**
-         * 
-         */
-        private final int id;
-        
-        /**
-         * 
-         */
-        private final String state;
-
-        /**
-         * Create a RefereeState enum
-         *
-         * @param id of the enum Referee state
-         * @param state Initials of the Referee state
-         */
-        RefereeState(int id, String state) {
-            this.id = id;
-            this.state = state;
-        }
-
-        /**
-         * Gets the ID of the RefereeState enum
-         *
-         * @return id of the Referee state
-         */
-        public int getId() {
-            return id;
-        }
-
-        /**
-         * Gets the enum Referee state
-         *
-         * @return Referee state enum string
-         */
-        public String getState() {
-            return state;
-        }
-
-        /**
-         * Converts current Referee state to String
-         *
-         * @return String describing Referee sate
-         */
-        @Override
-        public String toString() {
-            return state;
-        }
-    }
 }

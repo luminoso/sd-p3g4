@@ -10,17 +10,14 @@ import static java.lang.System.out;
 import java.util.List;
 
 /**
+ * This is an passive class that describes the Playground. This class connects
+ * to a server and messages the according invocation.
  *
- * @author Eduardo Sousa
- * @author Guilherme Cardoso
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-2
  */
 public class PlaygroundStub implements InterfacePlayground {
-
-    /**
-     * Private constructor to be used in the singleton.
-     */
-    public PlaygroundStub() {
-    }
 
     /**
      * Initiates the connection to the Server according to the ServerConfigs
@@ -40,9 +37,6 @@ public class PlaygroundStub implements InterfacePlayground {
         return con;
     }
 
-    /**
-     * The method adds a contestant to the playground.
-     */
     @Override
     public void addContestant() {
         InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
@@ -72,20 +66,12 @@ public class PlaygroundStub implements InterfacePlayground {
 
     }
 
-    /**
-     * Checks if all contestants are ready to pull the rope
-     *
-     * @return true if every Contestant is in place to pull the rope
-     */
     @Override
     public boolean checkAllContestantsReady() {
         //TODO: not used? delete from interface, etc
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    /**
-     * Synchronisation point for waiting for the teams to be ready
-     */
     @Override
     public void checkTeamPlacement() {
         InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
@@ -113,9 +99,6 @@ public class PlaygroundStub implements InterfacePlayground {
         con.close();
     }
 
-    /**
-     * The method removes the contestant from the playground.
-     */
     @Override
     public void getContestant() {
         InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
@@ -141,12 +124,6 @@ public class PlaygroundStub implements InterfacePlayground {
 
     }
 
-    /**
-     * The method returns the flag position in relation to the middle. Middle =
-     * 0.
-     *
-     * @return Position of the flag.
-     */
     @Override
     public int getFlagPosition() {
         InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
@@ -172,11 +149,6 @@ public class PlaygroundStub implements InterfacePlayground {
         return inMessage.getFlagPostion();
     }
 
-    /**
-     * Gets the last flag position
-     *
-     * @return the flag position before the current position
-     */
     @Override
     public int getLastFlagPosition() {
         InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
@@ -202,29 +174,18 @@ public class PlaygroundStub implements InterfacePlayground {
         return inMessage.getLastFlagPostion();
     }
 
-    /**
-     * Gets the current teams in the playground
-     *
-     * @return List containing both teams Contestants in the playground
-     */
     @Override
     public List<InterfaceContestant>[] getTeams() {
         // unused function?
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    /**
-     * Checks if everyone pulled the rope
-     */
     @Override
     public void haveAllPulled() {
         // unused function?
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    /**
-     * Contestant pulls the rope
-     */
     @Override
     public void pullRope() {
         InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
@@ -248,9 +209,6 @@ public class PlaygroundStub implements InterfacePlayground {
         }
     }
 
-    /**
-     * Synchronisation point for signalling the result is asserted
-     */
     @Override
     public void resultAsserted() {
         InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
@@ -274,11 +232,6 @@ public class PlaygroundStub implements InterfacePlayground {
         con.close();
     }
 
-    /**
-     * Sets the flag position
-     *
-     * @param flagPosition position of the flag
-     */
     @Override
     public void setFlagPosition(int flagPosition) {
         InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
@@ -304,9 +257,6 @@ public class PlaygroundStub implements InterfacePlayground {
         con.close();
     }
 
-    /**
-     * Referee instructs the Contestants to start pulling the rope
-     */
     @Override
     public void startPulling() {
         InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
@@ -333,9 +283,6 @@ public class PlaygroundStub implements InterfacePlayground {
         con.close();
     }
 
-    /**
-     * Synchronisation point for watching the trial in progress
-     */
     @Override
     public void watchTrial() {
         InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();

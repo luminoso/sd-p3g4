@@ -10,17 +10,27 @@ import static java.lang.System.out;
  * This class implements the Client of RopeGame client-server architecture. It
  * also implements initialization of the active ententies.
  *
- * @author Eduardo Sousa
- * @author Guilherme Cardoso
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-2
  */
 public class ClientRopeGame {
 
+    /**
+     * Initializes the Client of RopeGame Client/Server implementation.
+     * <p>
+     * <ul>
+     * <li>Referee: RF
+     * <li>Coach: ClientRopeGame CH team strategy
+     * <li>Contestant: ClientRopeGame CT team id
+     * </ul><p>
+     *
+     * @param args --help for full details
+     */
     public static void main(String[] args) {
 
         /**
-         * Initializes the ClientRopeGame According to the argument Referee:
-         * ClientRopeGame RF Coach: ClientRopeGame CH <int:team> <int:strategy>
-         * Contestant: ClientRopeGame CT <int:team> <int:id>
+         * Initializes the ClientRopeGame According to the argument
          */
         if (args.length >= 1) {
             switch (args[0]) {

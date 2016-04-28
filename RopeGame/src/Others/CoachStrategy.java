@@ -4,17 +4,20 @@ import java.io.Serializable;
 import java.util.Set;
 
 /**
- * General Description: Interface for Coaches strategies
+ * Interface that defines the operations available over the objects that represent 
+ * the coach strategies.
  *
- * @author Eduardo Sousa
- * @author Guilherme Cardoso
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-2
  */
 public interface CoachStrategy extends Serializable {
+    
     /**
-     * 
-     * @param bench
-     * @param site
-     * @return 
+     * Method in which the coach picks the Contestants to go to referee site 
+     * @param bench with all the contestants
+     * @param site implementation
+     * @return Set with the picked contestants
      */
-    public Set<Integer> pickTeam(InterfaceContestantsBench bench, InterfaceRefereeSite site);
+     Set<Integer> pickTeam(InterfaceContestantsBench bench, InterfaceRefereeSite site);
 }

@@ -1,13 +1,13 @@
 package ServerSide;
 
-import ClientSide.Coach.CoachState;
-import ClientSide.Contestant.ContestantState;
 import ClientSide.GeneralInformationRepositoryStub;
-import ClientSide.Referee.RefereeState;
 import Others.InterfaceCoach;
+import Others.InterfaceCoach.CoachState;
 import Others.InterfaceContestant;
+import Others.InterfaceContestant.ContestantState;
 import Others.InterfacePlayground;
 import Others.InterfaceReferee;
+import Others.InterfaceReferee.RefereeState;
 import RopeGame.Constants;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -21,8 +21,9 @@ import java.util.logging.Logger;
 /**
  * General Description: This is an passive class that describes the Playground.
  *
- * @author Eduardo Sousa
- * @author Guilherme Cardoso
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-2
  */
 public class Playground implements InterfacePlayground {
 
@@ -77,10 +78,10 @@ public class Playground implements InterfacePlayground {
     private final List<InterfaceContestant>[] teams;               // list containing the Contestant in both teams
 
     /**
-     * 
+     *
      */
     private final GeneralInformationRepositoryStub informationRepository;
-    
+
     /**
      * The method returns the Playground object. This method is thread-safe and
      * uses the implicit monitor of the class.
@@ -113,9 +114,6 @@ public class Playground implements InterfacePlayground {
         this.informationRepository = new GeneralInformationRepositoryStub();
     }
 
-    /**
-     * The method adds a contestant to the playground.
-     */
     @Override
     public void addContestant() {
         InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
@@ -123,7 +121,7 @@ public class Playground implements InterfacePlayground {
         lock.lock();
 
         try {
-            this.teams[contestant.getContestantTeam()-1].add(contestant);
+            this.teams[contestant.getContestantTeam() - 1].add(contestant);
 
             contestant.setContestantState(ContestantState.STAND_IN_POSITION);
             informationRepository.updateContestant();
@@ -142,9 +140,6 @@ public class Playground implements InterfacePlayground {
         lock.unlock();
     }
 
-    /**
-     * Synchronisation point for waiting for the teams to be ready
-     */
     @Override
     public void checkTeamPlacement() {
         InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
@@ -168,9 +163,6 @@ public class Playground implements InterfacePlayground {
         lock.unlock();
     }
 
-    /**
-     * Synchronisation point for watching the trial in progress
-     */
     @Override
     public void watchTrial() {
         InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
@@ -192,9 +184,6 @@ public class Playground implements InterfacePlayground {
         lock.unlock();
     }
 
-    /**
-     * Contestant pulls the rope
-     */
     @Override
     public void pullRope() {
         lock.lock();
@@ -221,9 +210,6 @@ public class Playground implements InterfacePlayground {
         lock.unlock();
     }
 
-    /**
-     * Synchronisation point for signalling the result is asserted
-     */
     @Override
     public void resultAsserted() {
         lock.lock();
@@ -235,9 +221,6 @@ public class Playground implements InterfacePlayground {
         lock.unlock();
     }
 
-    /**
-     * Referee instructs the Contestants to start pulling the rope
-     */
     @Override
     public void startPulling() {
         InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
@@ -263,38 +246,29 @@ public class Playground implements InterfacePlayground {
         lock.unlock();
     }
 
-    /**
-     * The method removes the contestant from the playground.
-     */
     @Override
     public void getContestant() {
         InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
 
         lock.lock();
-        
-        Iterator<InterfaceContestant> it = teams[contestant.getContestantTeam()-1].iterator();
-        
-        while(it.hasNext()) {
+
+        Iterator<InterfaceContestant> it = teams[contestant.getContestantTeam() - 1].iterator();
+
+        while (it.hasNext()) {
             InterfaceContestant temp = it.next();
-            
-            if(temp.getContestantId() == contestant.getContestantId()) {
+
+            if (temp.getContestantId() == contestant.getContestantId()) {
                 it.remove();
                 break;
             }
         }
-        
+
         informationRepository.resetTeamPlacement();
         informationRepository.printLineUpdate();
-        
+
         lock.unlock();
     }
 
-    /**
-     * The method returns the flag position in relation to the middle. Middle =
-     * 0.
-     *
-     * @return Position of the flag.
-     */
     @Override
     public int getFlagPosition() {
         int result;
@@ -308,11 +282,6 @@ public class Playground implements InterfacePlayground {
         return result;
     }
 
-    /**
-     * Gets the last flag position
-     *
-     * @return the flag position before the current position
-     */
     @Override
     public int getLastFlagPosition() {
         int result;
@@ -326,11 +295,6 @@ public class Playground implements InterfacePlayground {
         return result;
     }
 
-    /**
-     * Sets the flag position
-     *
-     * @param flagPosition position of the flag
-     */
     @Override
     public void setFlagPosition(int flagPosition) {
         this.lastFlagPosition = flagPosition;
@@ -347,9 +311,6 @@ public class Playground implements InterfacePlayground {
         return this.teams[teamId - 1].size() == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND;
     }
 
-    /**
-     * Checks if everyone pulled the rope
-     */
     @Override
     public void haveAllPulled() {
         lock.lock();
@@ -362,21 +323,11 @@ public class Playground implements InterfacePlayground {
         lock.unlock();
     }
 
-    /**
-     * Checks if all contestants are ready to pull the rope
-     *
-     * @return true if every Contestant is in place to pull the rope
-     */
     @Override
     public boolean checkAllContestantsReady() {
         return (teams[0].size() + teams[1].size()) == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND * 2;
     }
 
-    /**
-     * Gets the current teams in the playground
-     *
-     * @return List containing both teams Contestants in the playground
-     */
     @Override
     public List<InterfaceContestant>[] getTeams() {
         List<InterfaceContestant>[] teamslist = new List[2];
