@@ -17,8 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * General Description: This is an passive class that describes the Referee
- * site.
+ * This is an passive class that describes the Referee Site
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
@@ -26,42 +25,18 @@ import java.util.logging.Logger;
  */
 public class RefereeSite implements InterfaceRefereeSite {
 
-    /**
-     *
-     */
-    private static RefereeSite instance;
+    private static RefereeSite instance;        // singleton
 
-    /**
-     *
-     */
+    // locking and waiting condtions
     private final Lock lock;
+    private final Condition informReferee;      // condition for referee wait for the coaches
 
-    /**
-     *
-     */
-    private final Condition informReferee;              // condition for referee wait for the coaches
-
-    /**
-     *
-     */
-    private int informRefereeCounter;                   // counter of how many coaches informed the referee
-
-    /**
-     *
-     */
+    private int informRefereeCounter;           // counter of how many coaches informed the referee  
     private boolean hasMatchEnded;
 
-    /**
-     *
-     */
-    private List<TrialScore> trialStatus;               // current trial status
-
-    private int shutdownVotes;
-    
-    /**
-     *
-     */
-    private final List<GameScore> gameStatus;           // current game status
+    private List<TrialScore> trialStatus;       // current trial status
+    private int shutdownVotes;                  // count if all votes are met to shutdown
+    private final List<GameScore> gameStatus;   // current game status
 
     private final GeneralInformationRepositoryStub informationRepository;
 
@@ -69,7 +44,7 @@ public class RefereeSite implements InterfaceRefereeSite {
      * The method returns the RefereeSite object. The method is thread-safe and
      * uses the implicit monitor of the class.
      *
-     * @return RefereeSite object to be used.
+     * @return referee site object to be used
      */
     public static synchronized RefereeSite getInstance() {
         if (instance == null) {
@@ -80,7 +55,7 @@ public class RefereeSite implements InterfaceRefereeSite {
     }
 
     /**
-     * Private constructor to be used in singleton.
+     * Private constructor to be used in singleton
      */
     private RefereeSite() {
         lock = new ReentrantLock();
@@ -231,15 +206,15 @@ public class RefereeSite implements InterfaceRefereeSite {
     @Override
     public boolean shutdown() {
         boolean result = false;
-        
+
         lock.lock();
-        
+
         shutdownVotes++;
-        
+
         result = shutdownVotes == (1 + 2 * (1 + Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH));
-        
+
         lock.unlock();
-        
+
         return result;
     }
 

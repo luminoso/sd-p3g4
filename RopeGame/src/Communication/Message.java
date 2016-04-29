@@ -21,52 +21,27 @@ public class Message implements Serializable {
 
     private static final long serialVersionUID = 20160412;
 
-    // Variable to define Referee
+    // type of this message
+    private final MessageType type;
+
+    // variable to define referee
     private Enum state;
 
-    // Adicional variables to define the Coach
+    // adicional variables to define the coach
     private int team;
 
-    // Adicional variables to define Contestant
+    // adicional variables to define contestant
     private int id;
     private int strength;
 
-    private MessageType type;
-
-    /**
-     * An set that this message may contain
-     */
-    private Set set;
-
-    /**
-     * An number that this message may contain
-     */
-    private int number;
-
-    /**
-     * Array of numbers that this message may contain
-     */
-    private int numbers[];
-
-    /**
-     * GameScore that this message may contain
-     */
-    private RefereeSite.GameScore gameScore;
-
-    /**
-     * TrialScore that this message may contain
-     */
-    private RefereeSite.TrialScore trialscore;
-
-    /**
-     * A list that this message may contain
-     */
-    private List list;
-
-    /**
-     * A boolean that this message may contain
-     */
-    private boolean bool;
+    // aditional data that this message can store to transport all the data needed
+    private Set set;                            // an set that this message may contain
+    private int number;                         // an number that this message may contain
+    private int numbers[];                      // array of numbers that this message may contain
+    private RefereeSite.GameScore gameScore;    // gameScore that this message may contain
+    private RefereeSite.TrialScore trialscore;  // trialScore that this message may contain
+    private List list;                          // a list that this message may contain
+    private boolean bool;                       // a boolean that this message may contain
 
     /**
      * Initialisation for Contestant
@@ -89,8 +64,8 @@ public class Message implements Serializable {
      * Initialisation for the Coach
      *
      * @param type of the message
-     * @param state of the Coach
-     * @param team of the Coach
+     * @param state of the coach
+     * @param team of the coach
      */
     public Message(MessageType type, CoachState state, int team) {
         this.type = type;
@@ -102,7 +77,7 @@ public class Message implements Serializable {
      * Initialisation of the Referee
      *
      * @param type of the message
-     * @param state of the Referee
+     * @param state of the referee
      */
     public Message(MessageType type, RefereeState state) {
         this.type = type;
@@ -121,7 +96,7 @@ public class Message implements Serializable {
     /**
      * Gets MessageType of the Message
      *
-     * @return MessageType
+     * @return message type
      */
     public MessageType getType() {
         return type;
@@ -130,7 +105,7 @@ public class Message implements Serializable {
     /**
      * Gets the bench stored in this message
      *
-     * @return Set of the bench
+     * @return set of the bench
      */
     public Set getBench() {
         return set;
@@ -139,7 +114,7 @@ public class Message implements Serializable {
     /**
      * Gets selected contestants stored in this message
      *
-     * @return Set of the selected contestants
+     * @return set of the selected contestants
      */
     public Set getSelectedContestants() {
         return set;
@@ -148,7 +123,7 @@ public class Message implements Serializable {
     /**
      * Set the selected contestants embed in the message
      *
-     * @param Set of the selected contestants
+     * @param set of the selected contestants
      */
     public void setSelectedContestants(Set set) {
         this.set = set;
@@ -157,7 +132,7 @@ public class Message implements Serializable {
     /**
      * Gets the Coach state stored in this message
      *
-     * @return CoachState
+     * @return coach state
      */
     public CoachState getCoachState() {
         return (CoachState) state;
@@ -166,16 +141,16 @@ public class Message implements Serializable {
     /**
      * Gets the FlagPosition stored in this message
      *
-     * @return FlagPosition
+     * @return flag position
      */
     public int getFlagPostion() {
         return number;
     }
 
     /**
-     * Gets the LastFlagPosition stored in this message
+     * Gets the last flag position stored in this message
      *
-     * @return LastFlagPosition
+     * @return last flag position
      */
     public int getLastFlagPostion() {
         return number;
@@ -184,7 +159,7 @@ public class Message implements Serializable {
     /**
      * Sets FlagPosition embed in this message
      *
-     * @param position of the flag
+     * @param position to set
      */
     public void setFlagPosition(int position) {
         number = position;
@@ -193,7 +168,7 @@ public class Message implements Serializable {
     /**
      * Gets the Referee stored in this message
      *
-     * @return RefereeState
+     * @return referee state
      */
     public RefereeState getRefereeState() {
         return (RefereeState) state;
@@ -202,7 +177,7 @@ public class Message implements Serializable {
     /**
      * Gets the Array of Integers stored in this message
      *
-     * @return Array of Integers
+     * @return array of Integers
      */
     public int[] getNumbers() {
         return numbers;
@@ -211,7 +186,7 @@ public class Message implements Serializable {
     /**
      * Sets the Array of Integers embed in this message
      *
-     * @param numbers in an Array
+     * @param numbers to set in the array
      */
     public void setNumbers(int[] numbers) {
         this.numbers = numbers;
@@ -220,25 +195,25 @@ public class Message implements Serializable {
     /**
      * Gets the GamePoint embed in this message
      *
-     * @param score
+     * @param score containing the game point to set
      */
     public void setGamePoint(RefereeSite.GameScore score) {
         gameScore = score;
     }
 
     /**
-     * Gets the GamePoint stored in this message
+     * Gets the game pont stored in this message
      *
-     * @return gamePoint
+     * @return game point
      */
     public RefereeSite.GameScore getGamePoint() {
         return gameScore;
     }
 
     /**
-     * Gets the GameNumber embed in this message
+     * Gets the game number embed in this message
      *
-     * @param gameNumber
+     * @param gameNumber to set
      */
     public void setGameNumber(int gameNumber) {
         number = gameNumber;
@@ -247,7 +222,7 @@ public class Message implements Serializable {
     /**
      * Gets the TrialNumber embed in this message
      *
-     * @param trialNumber
+     * @param trialNumber to set
      */
     public void setTrialNumber(int trialNumber) {
         number = trialNumber;
@@ -256,7 +231,7 @@ public class Message implements Serializable {
     /**
      * Gets the TrialScore embed in this message
      *
-     * @param score
+     * @param score to set
      */
     public void setTrialScore(RefereeSite.TrialScore score) {
         trialscore = score;
@@ -265,7 +240,7 @@ public class Message implements Serializable {
     /**
      * Gets the game points stored in this message
      *
-     * @return list of GamePoints
+     * @return list of game points
      */
     public List getGamePoints() {
         return list;
@@ -274,7 +249,7 @@ public class Message implements Serializable {
     /**
      * Gets the remaining games stored in this message
      *
-     * @return remainingGames
+     * @return remaining games
      */
     public int getRemainingGames() {
         return number;
@@ -283,7 +258,7 @@ public class Message implements Serializable {
     /**
      * Gets the remaining trials stored in this message
      *
-     * @return remainingTrials
+     * @return remaining trials
      */
     public int getRemainingtTrials() {
         return number;
@@ -337,7 +312,7 @@ public class Message implements Serializable {
     /**
      * Gets the state stored in this message
      *
-     * @return Enum with the state
+     * @return enum with the state
      */
     public Enum getState() {
         return state;
@@ -346,7 +321,7 @@ public class Message implements Serializable {
     /**
      * Gets the contestant state stored in this message
      *
-     * @param state of the contestant
+     * @param state of the contestant to set
      */
     public void setContestantState(Enum state) {
         this.state = state;
@@ -355,7 +330,7 @@ public class Message implements Serializable {
     /**
      * Sets coach state embed in this message
      *
-     * @param state of the coach
+     * @param state of the coach to set
      */
     public void setStateCoachState(Enum state) {
         this.state = state;
@@ -382,7 +357,7 @@ public class Message implements Serializable {
     /**
      * Sets the team embed in this message
      *
-     * @param team number
+     * @param team number to set
      */
     public void setTeam(int team) {
         this.team = team;
@@ -418,7 +393,7 @@ public class Message implements Serializable {
     /**
      * Gets the trial point stored in this message
      *
-     * @return TrialScore trialPoint
+     * @return trial point
      */
     public RefereeSite.TrialScore getTrialPoint() {
         return trialscore;
@@ -436,7 +411,7 @@ public class Message implements Serializable {
     /**
      * Sets remaining games embed in this message
      *
-     * @param remainingGames to be stored
+     * @param remainingGames to set
      */
     public void setRemainingGames(int remainingGames) {
         number = remainingGames;
@@ -445,7 +420,7 @@ public class Message implements Serializable {
     /**
      * Sets remaining trials embed in this message
      *
-     * @param remainingTrials to be stored
+     * @param remainingTrials to set
      */
     public void setRemainingTrials(int remainingTrials) {
         number = remainingTrials;
@@ -454,7 +429,7 @@ public class Message implements Serializable {
     /**
      * Set trial points embed in this message
      *
-     * @param trialPoints to be stored
+     * @param trialPoints to set
      */
     public void setTrialPoints(List<RefereeSite.TrialScore> trialPoints) {
         list = trialPoints;
@@ -463,7 +438,7 @@ public class Message implements Serializable {
     /**
      * Set if the match as ended embed in this message
      *
-     * @param hasMatchEnded
+     * @param hasMatchEnded boolean to set
      */
     public void setHasMatchEnded(boolean hasMatchEnded) {
         bool = hasMatchEnded;
@@ -472,7 +447,7 @@ public class Message implements Serializable {
     /**
      * Sets game result embed in this message
      *
-     * @param score of the game
+     * @param score of the game result
      */
     public void setGameResult(RefereeSite.GameScore score) {
         gameScore = score;
@@ -490,7 +465,7 @@ public class Message implements Serializable {
     /**
      * Gets the game result stored in this message
      *
-     * @return gamescore
+     * @return game result
      */
     public RefereeSite.GameScore getGameResult() {
         return gameScore;
@@ -499,7 +474,7 @@ public class Message implements Serializable {
     /**
      * Gets the game number stored in this message
      *
-     * @return gamenumber
+     * @return game number
      */
     public int getGameNumber() {
         return number;
@@ -508,7 +483,7 @@ public class Message implements Serializable {
     /**
      * Gets the trial number stored in this message
      *
-     * @return trialnumber
+     * @return trial number
      */
     public int getTrialNumber() {
         return number;
@@ -517,7 +492,7 @@ public class Message implements Serializable {
     /**
      * Sets the contestant strength embed in this message
      *
-     * @param strength of the contested to be stored
+     * @param strength of the contested to set
      */
     public void setStrength(int strength) {
         this.strength = strength;
@@ -528,15 +503,13 @@ public class Message implements Serializable {
      * function/destination in a Client/Server message implementation
      */
     public enum MessageType {
-        /**
-         * Type of return of messages.
-         */
+        
+        // type of return of messages
         OK(MessageCategory.GENERIC),
         INTERRUPT(MessageCategory.GENERIC),
         SHUTDOWN(MessageCategory.GENERIC),
-        /**
-         * Type of embed that in the message.
-         */
+        
+        // type of embed that in the message
         BENCH(MessageCategory.GENERIC),
         SELECTED_CONTESTANTS(MessageCategory.GENERIC),
         FLAG_POSITION(MessageCategory.GENERIC),
@@ -549,9 +522,8 @@ public class Message implements Serializable {
         COACH_STATE_CHANGE(MessageCategory.GENERIC),
         REFEREE_STATE_CHANGE(MessageCategory.GENERIC),
         CONTESTANT_STATE_CHANGE(MessageCategory.GENERIC),
-        /**
-         * Methods that can be called in the ContestantsBench.
-         */
+        
+        // methods that can be called in the ContestantsBench
         CB_ADD_CONTESTANT(MessageCategory.CB),
         CB_GET_BENCH(MessageCategory.CB),
         CB_GET_CONTESTANT(MessageCategory.CB),
@@ -560,9 +532,7 @@ public class Message implements Serializable {
         CB_SET_SELECTED_CONTESTANTS(MessageCategory.CB),
         CB_WAIT_FOR_NEXT_TRIAL(MessageCategory.CB),
         CB_UPDATE_CONTESTANT_STRENGTH(MessageCategory.CB),
-        /**
-         * Methods that can be called in the PlaygGround.
-         */
+        // methods that can be called in the PlaygGround
         PG_ADD_CONTESTANT(MessageCategory.PG),
         PG_CHECK_TEAM_PLACEMENT(MessageCategory.PG),
         PG_GET_CONTESTANT(MessageCategory.PG),
@@ -573,9 +543,8 @@ public class Message implements Serializable {
         PG_SET_FLAG_POSITION(MessageCategory.PG),
         PG_START_PULLING(MessageCategory.PG),
         PG_WATCH_TRIAL(MessageCategory.PG),
-        /**
-         * Methods that can be called in the GeneralInformationRepository.
-         */
+        
+        // methods that can be called in the GeneralInformationRepository
         GIR_UPDATE_COACH(MessageCategory.GIR),
         GIR_UPDATE_CONTESTANT(MessageCategory.GIR),
         GIR_UPDATE_CONTESTANT_STRENGTH(MessageCategory.GIR),
@@ -593,9 +562,8 @@ public class Message implements Serializable {
         GIR_SET_GAME_NUMBER(MessageCategory.GIR),
         GIR_SET_TEAM_PLACEMENT(MessageCategory.GIR),
         GIR_SET_TRIAL_NUMBER(MessageCategory.GIR),
-        /**
-         * Methods that can be called in the RefereeSite.
-         */
+        
+        // methods that can be called in the RefereeSite
         RS_ADD_GAME_POINT(MessageCategory.RS),
         RS_ADD_TRIAL_POINT(MessageCategory.RS),
         RS_BOTH_TEAMS_READY(MessageCategory.RS),
@@ -608,24 +576,21 @@ public class Message implements Serializable {
         RS_RESET_TRIAL_POINTS(MessageCategory.RS),
         RS_SET_HAS_MATCH_ENDED(MessageCategory.RS);
 
-        /**
-         * Stores the message category
-         */
-        private final MessageCategory category;
+        private final MessageCategory category; // stores the message category
 
         /**
-         * Constructor for the MessageType
+         * Constructor for the message type
          *
-         * @param category
+         * @param category of the message
          */
         MessageType(MessageCategory category) {
             this.category = category;
         }
 
         /**
-         * Gets the MessageCategory
+         * Gets the message category
          *
-         * @return MessageCategory
+         * @return message category
          */
         public MessageCategory getCategory() {
             return category;
@@ -636,25 +601,10 @@ public class Message implements Serializable {
      * Enums for the MessageCategory
      */
     public enum MessageCategory {
-        /**
-         * Message with Generic means no specific shared memory method.
-         */
-        GENERIC,
-        /**
-         * Message with ContestantsBench access methods.
-         */
-        CB,
-        /**
-         * Message with Playground access methods.
-         */
-        PG,
-        /**
-         * Message with General Repository Information access methods.
-         */
-        GIR,
-        /**
-         * Message with RefereSite access methods.
-         */
-        RS;
+        GENERIC, // generic means no specific shared memory method
+        CB, // contestants bench methods
+        PG, // playground methods
+        GIR, // general repository information methods
+        RS; // refere site methods.
     }
 }

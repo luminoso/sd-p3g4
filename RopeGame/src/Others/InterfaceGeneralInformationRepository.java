@@ -15,12 +15,12 @@ public interface InterfaceGeneralInformationRepository {
     /**
      * Adds a Coach to General Information Repository
      */
-     void updateCoach();
+    void updateCoach();
 
     /**
      * Adds a Referee to General Information Repository
      */
-     void updateContestant();
+    void updateContestant();
 
     /**
      * Updates the stored meta data about the strength of a contestant
@@ -29,91 +29,94 @@ public interface InterfaceGeneralInformationRepository {
      * @param id of the contestant
      * @param strength of the contestant
      */
-     void updateContestantStrength(int team, int id, int strength);
+    void updateContestantStrength(int team, int id, int strength);
 
     /**
      * Adds a Referee to General Information Repository
      */
-     void updateReferee();
+    void updateReferee();
 
     /**
-     * Prints an line with updated information about game state.
+     * Prints an line with updated information about game state
      */
-     void printLineUpdate();
+    void printLineUpdate();
 
     /**
-     * Closes log file.
+     * Closes log file
      */
-     void close();
+    void close();
 
     /**
      * Print game header
      */
-     void printGameHeader();
+    void printGameHeader();
 
     /**
-     * Fully prints the game result.
+     * Fully prints the game result
+     *
      * @param score to be printed
      */
-     void printGameResult(RefereeSite.GameScore score);
+    void printGameResult(RefereeSite.GameScore score);
 
     /**
-     * Print General Information Repository header.
+     * Print general information repository header
      */
-     void printHeader();
+    void printHeader();
 
     /**
-     * Prints game logger legend.
+     * Prints game logger legend
      */
-     void printLegend();
+    void printLegend();
 
     /**
-     * Prints that was a draw.
+     * Prints that was a draw
      */
-     void printMatchDraw();
+    void printMatchDraw();
 
     /**
-     * Print Match winner.
+     * Print Match winner
      *
      * @param team that won
      * @param score1 score team 1
      * @param score2 score team 2
      */
-     void printMatchWinner(int team, int score1, int score2);
+    void printMatchWinner(int team, int score1, int score2);
 
     /**
-     * Resets team placement.
+     * Resets team placement
      */
-     void resetTeamPlacement();
+    void resetTeamPlacement();
 
     /**
-     * Sets flag position.
+     * Sets flag position
      *
      * @param flagPosition to set
      */
-     void setFlagPosition(int flagPosition);
+    void setFlagPosition(int flagPosition);
 
     /**
-     * Sets a game number.
+     * Sets a game number
      *
      * @param gameNumber to set
      */
-     void setGameNumber(int gameNumber);
+    void setGameNumber(int gameNumber);
 
     /**
-     * Sets a team placement.
+     * Sets a team placement
      */
-     void setTeamPlacement();
+    void setTeamPlacement();
 
     /**
-     * Sets a trial score score.
+     * Sets a trial score score
      *
      * @param trialNumber to set
      */
-     void setTrialNumber(int trialNumber);
-     
+    void setTrialNumber(int trialNumber);
+
     /**
-     * 
+     * Checks if the game should be shut down
+     *
+     * @return true if the game must be shut down
      */
     boolean shutdown();
 }

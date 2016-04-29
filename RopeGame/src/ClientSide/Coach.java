@@ -11,7 +11,7 @@ import RopeGame.Constants;
 import java.util.Set;
 
 /**
- * This is active class Coach which implements the InterfaceCoach.
+ * This is active class Coach which implements the InterfaceCoach
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
@@ -19,56 +19,31 @@ import java.util.Set;
  */
 public class Coach extends Thread implements Comparable<InterfaceCoach>, InterfaceCoach {
 
-    /**
-     * Bench interface to be used
-     */
-    private final InterfaceContestantsBench bench;
+    private final InterfaceContestantsBench bench; // bench interface to be used
+    private final InterfaceRefereeSite refereeSite; // refereeSite interface to be used
+    private final InterfacePlayground playground;  // playground interface to be used
+    private final InterfaceGeneralInformationRepository informationRepository; // general Information Repository interface to be used
 
-    /**
-     * RefereeSite interface to be used
-     */
-    private final InterfaceRefereeSite refereeSite;
-
-    /**
-     * Playground interface to be used
-     */
-    private final InterfacePlayground playground;
-
-    /**
-     * General Information Repository interface to be used
-     */
-    private final InterfaceGeneralInformationRepository informationRepository;
-
-    /**
-     * Current Coach state
-     */
+    // coach definition
     private CoachState state;
-
-    /**
-     * Current Coach team
-     */
     private int team;
-
-    /**
-     * Current Coach strategy
-     */
     private CoachStrategy strategy;
 
     /**
-     * Creates a Coach instantiation for running in a distributed environment.
+     * Creates a Coach instantiation for running in a distributed environment
      *
-     * @param name Name of the coach
-     * @param team Team of the coach
-     * @param strategy Coach strategy
+     * @param name of the coach
+     * @param team of the coach
+     * @param strategy to be used by the coach
      */
     public Coach(String name, int team, CoachStrategy strategy) {
-        super(name);                    // Giving name to thread
+        super(name);                    // giving name to thread
 
-        // Initial state
+        // initial state
         state = CoachState.WAIT_FOR_REFEREE_COMMAND;
 
-        this.team = team;               // Team assignement
-        this.strategy = strategy;       // Team picking strategy
+        this.team = team;               // team assignement
+        this.strategy = strategy;       // team picking strategy
 
         bench = new ContestantsBenchStub(team);
         refereeSite = new RefereeSiteStub();
@@ -128,7 +103,7 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
 
     /**
      * The coach decides which players are selected for next round and updates
-     * selectedContestants array at the Bench
+     * selected contestants array at the bench
      */
     private void callContestants() {
         Set<Integer> pickedContestants = this.strategy.pickTeam(bench, refereeSite);

@@ -8,7 +8,6 @@ import Others.InterfaceRefereeSite;
 import Others.KeepWinningTeam;
 import Others.MostStrengthStrategy;
 import RopeGame.Constants;
-import ServerSide.RefereeSite;
 import static java.lang.System.out;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,12 +24,11 @@ public class ClientRopeGame {
 
     /**
      * Initializes the Client of RopeGame Client/Server implementation.
-     * <p>
      * <ul>
      * <li>Referee: RF
      * <li>Coach: ClientRopeGame CH team strategy
      * <li>Contestant: ClientRopeGame CT team id
-     * </ul><p>
+     * </ul>
      *
      * @param args --help for full details
      */
@@ -45,25 +43,25 @@ public class ClientRopeGame {
                     Referee ref = new Referee("Referee");
                     ref.start();
                     out.println("Client Referee started");
-                    
+
                     try {
                         ref.join();
                     } catch (InterruptedException ex) {
                         Logger.getLogger(ClientRopeGame.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
+
                     InterfaceContestantsBench bench = new ContestantsBenchStub(1);
                     InterfaceRefereeSite refereeSite = new RefereeSiteStub();
                     InterfacePlayground playground = new PlaygroundStub();
                     InterfaceGeneralInformationRepository informationRepository = new GeneralInformationRepositoryStub();
-                    
+
                     bench.interrupt();
-                    
+
                     bench.shutdown();
                     refereeSite.shutdown();
                     playground.shutdown();
                     informationRepository.shutdown();
-                    
+
                     break;
                 }
                 case "CH": {
@@ -72,23 +70,23 @@ public class ClientRopeGame {
                     Coach coach = new Coach("Coach " + team, team, strategy);
                     coach.start();
                     out.println("Client Coach started. Team:" + team);
-                    
+
                     try {
                         coach.join();
                     } catch (InterruptedException ex) {
                         Logger.getLogger(ClientRopeGame.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
+
                     InterfaceContestantsBench bench = new ContestantsBenchStub(1);
                     InterfaceRefereeSite refereeSite = new RefereeSiteStub();
                     InterfacePlayground playground = new PlaygroundStub();
                     InterfaceGeneralInformationRepository informationRepository = new GeneralInformationRepositoryStub();
-                    
+
                     bench.shutdown();
                     refereeSite.shutdown();
                     playground.shutdown();
                     informationRepository.shutdown();
-                    
+
                     break;
                 }
                 case "CT": {
@@ -98,23 +96,23 @@ public class ClientRopeGame {
                     Contestant contestant = new Contestant("Contestant " + team + ":" + id, team, id, strength);
                     contestant.start();
                     out.println("Client Contestant started. Team:" + team + " ID:" + id);
-                    
+
                     try {
                         contestant.join();
                     } catch (InterruptedException ex) {
                         Logger.getLogger(ClientRopeGame.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
+
                     InterfaceContestantsBench bench = new ContestantsBenchStub(1);
                     InterfaceRefereeSite refereeSite = new RefereeSiteStub();
                     InterfacePlayground playground = new PlaygroundStub();
                     InterfaceGeneralInformationRepository informationRepository = new GeneralInformationRepositoryStub();
-                    
+
                     bench.shutdown();
                     refereeSite.shutdown();
                     playground.shutdown();
                     informationRepository.shutdown();
-                    
+
                     break;
                 }
                 default: {
@@ -132,7 +130,7 @@ public class ClientRopeGame {
     }
 
     /**
-     * Function to generate a random strength when a player is instantiated.
+     * Function to generate a random strength when a player is instantiated
      *
      * @return a strength for a player instantiation
      */

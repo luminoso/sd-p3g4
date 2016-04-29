@@ -22,7 +22,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * This is an passive class that describes the contestants bench for each team.
+ * This is an passive class that describes the contestants bench for each team
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
@@ -30,52 +30,35 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class ContestantsBench implements InterfaceContestantsBench {
 
-    /**
-     * Doubleton for ConstestantsBench
-     */
-    private static final ContestantsBench[] instances = new ContestantsBench[2];    // Doubleton containing the two teams benches
+    // doubleton containing the two teams benches
+    private static final ContestantsBench[] instances = new ContestantsBench[2];
 
+    // conditions for waiting
     private final Lock lock;
-
-    /**
-     * Conditions for waiting
-     */
     private final Condition allPlayersSeated;
     private final Condition playersSelected;
     private final Condition waitForNextTrial;
     private final Condition waitForCoach;
 
-    /**
-     * Structure that contains the players in the bench
-     */
+    // structure that contains the players in the bench
     private final Set<InterfaceContestant> bench;
 
-    /**
-     * Selected contestants to play the trial
-     */
+    // selected contestants to play the trial
     private final Set<Integer> selectedContestants;
 
-    /**
-     * Sets if the coach is waiting
-     */
-    private boolean coachWaiting;
+    private boolean coachWaiting; // sets if the coach is waiting
+    private int shutdownVotes; // counts if everyone's ready to shutdown
 
-    private int shutdownVotes;
-    
-    /**
-     * 
-     */
+    // referee site implementation to be used
     private final InterfaceRefereeSite refereeSite;
-    
-    /**
-     * General Information Repository implementation to be used
-     */
+
+    // general Information repository implementation to be used
     private final InterfaceGeneralInformationRepository informationRepository;
 
     /**
-     * Gets all the instances of the Contestants Bench.
+     * Gets all the instances of the Contestants Bench
      *
-     * @return List containing contestants benches
+     * @return list containing contestants benches
      */
     public static synchronized List<ContestantsBench> getInstances() {
         List<ContestantsBench> temp = new LinkedList<>();
@@ -92,9 +75,9 @@ public class ContestantsBench implements InterfaceContestantsBench {
     }
 
     /**
-     * Private constructor to be used in the doubleton.
+     * Private constructor to be used in the doubleton
      *
-     * @param team identifier.
+     * @param team identifier
      */
     private ContestantsBench() {
         lock = new ReentrantLock();
@@ -126,7 +109,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
         if (checkAllPlayersSeated()) {
             allPlayersSeated.signal();
         }
-        
+
         try {
             do {
                 playersSelected.await();
@@ -243,7 +226,8 @@ public class ContestantsBench implements InterfaceContestantsBench {
 
         try {
             waitForNextTrial.await();
-        } catch (InterruptedException ex) {}
+        } catch (InterruptedException ex) {
+        }
 
         coachWaiting = false;
 
@@ -266,49 +250,48 @@ public class ContestantsBench implements InterfaceContestantsBench {
         lock.unlock();
     }
 
-    /**
-     * 
-     */
     @Override
     public void interrupt() {
         lock.lock();
-        
+
         while (!checkAllPlayersSeated()) {
             try {
                 allPlayersSeated.await();
-            } catch (InterruptedException ex) {}
+            } catch (InterruptedException ex) {
+            }
         }
         playersSelected.signalAll();
-        
+
         while (!coachWaiting) {
             try {
                 waitForCoach.await();
-            } catch (InterruptedException ex) {}
+            } catch (InterruptedException ex) {
+            }
         }
         waitForNextTrial.signal();
-        
+
         lock.unlock();
     }
-    
+
     @Override
     public boolean shutdown() {
         boolean result = false;
-        
+
         lock.lock();
-        
+
         shutdownVotes++;
-        
+
         result = shutdownVotes == (1 + 2 * (1 + Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH));
-        
+
         lock.unlock();
-        
+
         return result;
     }
-    
+
     /**
      * Gets the selected contestants array.
      *
-     * @return Integer array of the selected contestants for the round
+     * @return integer array of the selected contestants for the round
      */
     private boolean isContestantSelected() {
         InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
@@ -326,7 +309,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
     /**
      * Checks if all players are seated on bench.
      *
-     * @return True if all players seated
+     * @return true if all players seated
      */
     private boolean checkAllPlayersSeated() {
         return bench.size() == Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH;

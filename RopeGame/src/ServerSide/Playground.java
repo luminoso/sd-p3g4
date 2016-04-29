@@ -19,7 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * General Description: This is an passive class that describes the Playground.
+ * General Description: This is an passive class that describes the Playground
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
@@ -27,68 +27,28 @@ import java.util.logging.Logger;
  */
 public class Playground implements InterfacePlayground {
 
-    /**
-     *
-     */
-    private static Playground instance;
+    private static Playground instance;         // singleton
 
-    /**
-     *
-     */
+    // locking and waiting condtions
     private final Lock lock;
+    private final Condition startTrial;         // condition for waiting the trial start
+    private final Condition teamsInPosition;    // condition for waiting to the teams to be in position
+    private final Condition finishedPulling;    // condition for waiting the contestants finished pulling the rope
+    private final Condition resultAssert;       // condition for waiting for the result to be asserted
 
-    /**
-     *
-     */
-    private final Condition startTrial;                   // condition for waiting the trial start
+    private int pullCounter;                    // how many pulls the contestants made
+    private int flagPosition;                   // current flag position
+    private int lastFlagPosition;               // last flag position
+    private int shutdownVotes;                  // count if all votes are met to shutdown
 
-    /**
-     *
-     */
-    private final Condition teamsInPosition;              // condition for waiting to the teams to be in position
-
-    /**
-     *
-     */
-    private final Condition finishedPulling;              // condition for waiting the contestants finished pulling the rope
-
-    /**
-     *
-     */
-    private final Condition resultAssert;                 // condition for waiting for the result to be asserted
-
-    /**
-     *
-     */
-    private int pullCounter;                              // how many pulls the contestants made
-
-    /**
-     *
-     */
-    private int flagPosition;                             // current flag position
-
-    /**
-     *
-     */
-    private int lastFlagPosition;                         // last flag position
-
-    private int shutdownVotes;
-    
-    /**
-     *
-     */
-    private final List<InterfaceContestant>[] teams;               // list containing the Contestant in both teams
-
-    /**
-     *
-     */
+    private final List<InterfaceContestant>[] teams;  // list containing the Contestant in both teams
     private final GeneralInformationRepositoryStub informationRepository;
 
     /**
      * The method returns the Playground object. This method is thread-safe and
      * uses the implicit monitor of the class.
      *
-     * @return Playground object to be used.
+     * @return playground object to be used
      */
     public static synchronized Playground getInstance() {
         if (instance == null) {
@@ -97,10 +57,9 @@ public class Playground implements InterfacePlayground {
 
         return instance;
     }
-    
 
     /**
-     * Private constructor to be used in the singleton.
+     * Private constructor to be used in the singleton
      */
     private Playground() {
         this.flagPosition = 0;
@@ -323,6 +282,7 @@ public class Playground implements InterfacePlayground {
         } catch (InterruptedException ex) {
             ex.printStackTrace();
             Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
         lock.unlock();
     }
@@ -349,18 +309,18 @@ public class Playground implements InterfacePlayground {
     @Override
     public boolean shutdown() {
         boolean result = false;
-        
+
         lock.lock();
-        
+
         shutdownVotes++;
-        
+
         result = shutdownVotes == (1 + 2 * (1 + Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH));
-        
+
         lock.unlock();
-        
+
         return result;
     }
-    
+
     /**
      * Updates the flag position accordingly with the teams joint forces
      */

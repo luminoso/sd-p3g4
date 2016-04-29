@@ -7,9 +7,9 @@ import Others.InterfaceContestant.ContestantState;
 import Others.InterfaceGeneralInformationRepository;
 import Others.InterfaceReferee;
 import Others.InterfaceReferee.RefereeState;
+import Others.InterfaceRefereeSite.GameScore;
 import Others.Tuple;
 import RopeGame.Constants;
-import Others.InterfaceRefereeSite.GameScore;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.LinkedList;
@@ -26,68 +26,29 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class GeneralInformationRepository implements InterfaceGeneralInformationRepository {
 
-    /**
-     *
-     */
-    private static GeneralInformationRepository instance;
+    private static GeneralInformationRepository instance; // singleton
 
-    /**
-     *
-     */
+    // locking condtions
     private final Lock lock;
 
-    /**
-     *
-     */
     private PrintWriter printer;
 
-    /**
-     *
-     */
+    // variables to store current game status and update accordingly to changes
     private final List<Tuple<ContestantState, Integer>[]> teamsState;
-
-    /**
-     *
-     */
-    private final CoachState[] coachesState;
-
-    /**
-     *
-     */
-    private RefereeState refereeState;
-
-    /**
-     *
-     */
+    private final CoachState[] coachesState;        // coaches state tracking
+    private RefereeState refereeState;              // referee state tracking
     private final List<Integer> team1Placement;     // list containing team contestants
-
-    /**
-     *
-     */
     private final List<Integer> team2Placement;     // list containing team contestants
-
-    /**
-     *
-     */
     private int gameNumber;                         // list containing scores of the game
-
-    /**
-     *
-     */
     private int trialNumber;                        // list containing scores of the trial
-
-    /**
-     *
-     */
     private int flagPosition;                       // current flag position
-
     private boolean headerPrinted;
-
     private int shutdownVotes;
-    
+
     /**
+     * Gets an instance of the general information repository
      *
-     * @return
+     * @return general information repository instance
      */
     public static synchronized GeneralInformationRepository getInstance() {
         if (instance == null) {
@@ -98,7 +59,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     }
 
     /**
-     * Private constructor
+     * Private constructor for the singleton
      */
     private GeneralInformationRepository() {
         lock = new ReentrantLock();
@@ -125,7 +86,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         team2Placement = new LinkedList<>();
 
         flagPosition = 0;
-        
+
         shutdownVotes = 0;
     }
 
@@ -463,7 +424,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     /**
      * Print that the game was a draw
      *
-     * @param game
+     * @param game number that was a draw
      */
     private void printGameDraw(int game) {
         lock.lock();
@@ -487,18 +448,18 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     @Override
     public boolean shutdown() {
         boolean result = false;
-        
+
         lock.lock();
-        
+
         shutdownVotes++;
-        
-        if(shutdownVotes == (1 + 2 * (1 + Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH))) {
+
+        if (shutdownVotes == (1 + 2 * (1 + Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH))) {
             result = true;
             close();
         }
-        
+
         lock.unlock();
-        
+
         return result;
     }
 }

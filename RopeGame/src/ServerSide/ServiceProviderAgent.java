@@ -11,6 +11,9 @@ import Others.InterfaceReferee;
 import Others.InterfaceReferee.RefereeState;
 
 /**
+ * This class implements all Coach, Contestant and Referee interfaces. The
+ * purpose is to serve the incoming messages and forward to the right passive
+ * class implementation of the InterfaceServer.
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
@@ -21,56 +24,29 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
         InterfaceReferee,
         Comparable<InterfaceContestant> {
 
-    /**
-     *
-     */
-    private final ServerCom sconi;
-    
-    /**
-     *
-     */
     private final ServerCom scon;
-
-    /**
-     *
-     */
-    private static int serviceProviderAgentId = 0;
-
-    /**
-     *
-     */
+    private final ServerCom sconi;
     private final InterfaceServer servInterface;
 
-    /**
-     *
-     */
+    private static int serviceProviderAgentId = 0;  // spa initialisation counter
+
+    // referee personalization
     private Enum state;
 
-    /**
-     *
-     */
+    // coach personalization
+    private int team;
+    private CoachStrategy strategy;
+
+    // contestant personalization
+    private int contestantId;
     private int strength;
 
     /**
+     * Initialisation of the server interface
      *
-     */
-    private int team;
-
-    /**
-     *
-     */
-    private int contestantId;
-
-    /**
-     *
-     */
-    private CoachStrategy strategy;
-
-    /**
-     * Initialisation of the server interface,
-     *
-     * @param sconi connection to be dispatched
-     * @param servInterface server interface to be used
+     * @param scon connection of the main server
+     * @param sconi connection accepted by the main server
+     * @param servInterface server interface to be provided
      */
     ServiceProviderAgent(ServerCom scon, ServerCom sconi,
             InterfaceServer servInterface) {
@@ -79,12 +55,11 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
         this.scon = scon;
         this.sconi = sconi;
         this.servInterface = servInterface;
-
         this.state = null;
-        this.strength = 0;
         this.team = 0;
-        this.contestantId = 0;
         this.strategy = null;
+        this.contestantId = 0;
+        this.strength = 0;
     }
 
     @Override
@@ -96,16 +71,17 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
 
         inMessage = (Message) sconi.readObject();
 
-        if(inMessage.getType() == Message.MessageType.SHUTDOWN) {
-                boolean shutdown = servInterface.goingToShutdown();
-                
-                outMessage = new Message(Message.MessageType.OK);
-                
-                sconi.writeObject(outMessage);
-                sconi.close();
-                
-                if(shutdown)
-                    System.exit(0);
+        if (inMessage.getType() == Message.MessageType.SHUTDOWN) {
+            boolean shutdown = servInterface.goingToShutdown();
+
+            outMessage = new Message(Message.MessageType.OK);
+
+            sconi.writeObject(outMessage);
+            sconi.close();
+
+            if (shutdown) {
+                System.exit(0);
+            }
         } else {
             // TODO: validate message
             this.state = inMessage.getState();
@@ -122,8 +98,7 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
             sconi.writeObject(outMessage);
             sconi.close();
         }
-        
-        
+
     }
 
     // Coach methods

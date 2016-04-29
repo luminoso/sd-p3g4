@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * Interface that defines the operations available over the objects that
- * represent the playground.
+ * represent the playground
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
@@ -13,8 +13,7 @@ import java.util.List;
 public interface InterfacePlayground {
 
     /**
-     * The method adds a contestant to the playground.
-     *
+     * The method adds a contestant to the playground
      */
     void addContestant();
 
@@ -31,8 +30,7 @@ public interface InterfacePlayground {
     void checkTeamPlacement();
 
     /**
-     * The method removes the contestant from the playground.
-     *
+     * The method removes the contestant from the playground
      */
     void getContestant();
 
@@ -40,7 +38,7 @@ public interface InterfacePlayground {
      * The method returns the flag position in relation to the middle. Middle =
      * 0.
      *
-     * @return position of the flag.
+     * @return position of the flag
      */
     int getFlagPosition();
 
@@ -54,7 +52,7 @@ public interface InterfacePlayground {
     /**
      * Gets the current teams in the playground
      *
-     * @return List containing both teams Contestants in the playground
+     * @return list containing both teams Contestants in the playground
      */
     List<InterfaceContestant>[] getTeams();
 
@@ -89,9 +87,11 @@ public interface InterfacePlayground {
      * Synchronisation point for watching the trial in progress
      */
     void watchTrial();
-    
+
     /**
-     * 
+     * Checks if the game should be shut down
+     *
+     * @return true if the game must be shut down
      */
     boolean shutdown();
 }

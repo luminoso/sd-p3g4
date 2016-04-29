@@ -3,6 +3,8 @@ package ServerSide;
 import RopeGame.ServerConfigs;
 
 /**
+ * This class implements the Server of RopeGame client-server architecture. It
+ * also implements initialization of the passive ententies.
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
@@ -10,6 +12,17 @@ import RopeGame.ServerConfigs;
  */
 public class ServerRopeGame {
 
+    /**
+     * Initializes the Server of RopeGame Client/Server implementation
+     * <ul>
+     * <li>Contestants Bench: CB
+     * <li>Playground: PG
+     * <li>Referee site: RS
+     * <li>General Information Repository: GR
+     * </ul>
+     *
+     * @param args --help for more info
+     */
     public static void main(String[] args) {
         ServerCom scon = null, sconi;
         ServiceProviderAgent sps;

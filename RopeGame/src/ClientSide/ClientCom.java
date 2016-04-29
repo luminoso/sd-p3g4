@@ -59,14 +59,14 @@ public class ClientCom
       serverPortNumb = portNumb;
    }
 
-  /**
-   *  Abertura do canal de comunicação.
-   *  Instanciação de um socket de comunicação e sua associação ao endereço do servidor.
-   *  Abertura dos streams de entrada e de saída do socket.
-   *
-   *    @return <li>true, se o canal de comunicação foi aberto
-   *            <li>false, em caso contrário
-   */
+    /**
+     * Abertura do canal de comunicação. Instanciação de um socket de
+     * comunicação e sua associação ao endereço do servidor. Abertura dos
+     * streams de entrada e de saída do socket.
+     *
+     * @return true, se o canal de comunicação foi aberto false, em caso
+     * contrário
+     */
 
    public boolean open ()
    {

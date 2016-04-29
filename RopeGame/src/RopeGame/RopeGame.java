@@ -140,7 +140,7 @@ public class RopeGame {
     }
 
     /**
-     * Function to generate a random strength when a player is instantiated.
+     * Function to generate a random strength when a player is instantiated
      *
      * @return a strength for a player instantiation
      */

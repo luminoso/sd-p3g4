@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Interface server implementation for contestants bench access
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt

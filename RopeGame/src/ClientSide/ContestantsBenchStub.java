@@ -1,6 +1,7 @@
 package ClientSide;
 
 import Communication.Message;
+import static Communication.Message.MessageType.COACH_STATE_CHANGE;
 import Others.InterfaceCoach;
 import Others.InterfaceContestant;
 import Others.InterfaceContestantsBench;
@@ -20,22 +21,20 @@ import java.util.Set;
  */
 public class ContestantsBenchStub implements InterfaceContestantsBench {
 
-    /**
-     * Team number of this Stub
-     */
-    private final int team;
+    private final int team; // team number of this Stub
 
     /**
-     * Private constructor to be used in the doubleton.
+     * Private constructor to be used in the doubleton
      *
-     * @param team Team identifier.
+     * @param team identifier
      */
     public ContestantsBenchStub(int team) {
         this.team = team;
     }
 
     /**
-     * Initiates the connection to the Server according to the ServerConfigs
+     * Initiates the connection to the Server according to the server
+     * configuration
      *
      * @return ClientCom with the opened connection
      */
@@ -125,15 +124,9 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
 
         inMessage = (Message) con.readObject();
 
-        switch(inMessage.getType()) {
-            case OK:
-                con.close();
-                break;
-            default:
-                con.close();
-                out.println("Returned message with wrong type");
-                System.exit(1);
-                break;
+        if (inMessage.getType() != Message.MessageType.OK) {
+            out.println("Returned message with wrong type");
+            System.exit(1);
         }
     }
 
@@ -232,22 +225,12 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
 
         inMessage = (Message) con.readObject();
 
-        switch(inMessage.getType()) {
-            case COACH_STATE_CHANGE:
-                coach.setCoachState(inMessage.getCoachState());
-                con.close();
-                break;
-            case OK:
-                con.close();
-                break;
-            default:
-                con.close();
-                out.println("Returned message with wrong type");
-                System.exit(1);
-                break;
+        if (inMessage.getType() != COACH_STATE_CHANGE) {
+            out.println("Returned message with wrong type");
+            System.exit(1);
         }
 
-        
+        coach.setCoachState(inMessage.getCoachState());
     }
 
     @Override
@@ -277,7 +260,7 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
 
         con.close();
     }
-    
+
     @Override
     public void interrupt() {
         ClientCom con = initiateConnection();
@@ -316,7 +299,7 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
         }
 
         con.close();
-        
+
         return false;
     }
 }

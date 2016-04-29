@@ -14,82 +14,58 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * General Description: This is an active class implements the Referee and his
- * interactions in the passive classes
+ * This is an active class implements the Referee and his interactions in the
+ * passive classes
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
  * @version 2016-2
  */
 public class Referee extends Thread implements InterfaceReferee {
-    /**
-     * 
-     */
-    private final InterfaceRefereeSite refereeSite;
-    
-    /**
-     * 
-     */
-    private final InterfacePlayground playground;
-    
-    /**
-     * 
-     */
-    private final InterfaceGeneralInformationRepository informationRepository;
-    
-    /**
-     * 
-     */
-    private final List<InterfaceContestantsBench> benchs;
-    
-    /**
-     * 
-     */
-    private RefereeState state;     // Referee state
 
- 
+    private final InterfaceRefereeSite refereeSite; // referee site interface to be used
+    private final InterfacePlayground playground; // playground interface to be used
+    private final InterfaceGeneralInformationRepository informationRepository; // general Information Repository interface to be used
+    private final List<InterfaceContestantsBench> benchs; // list of benches to be used
+
+    // referee definition
+    private RefereeState state;
+
+    /**
+     * Referee initialisation
+     *
+     * @param name of the referee
+     */
     public Referee(String name) {
         super(name);
 
         state = RefereeState.START_OF_THE_MATCH;
         benchs = new ArrayList<>();
-        
-        for(int i = 1; i <= 2; i++)
+
+        for (int i = 1; i <= 2; i++) {
             benchs.add(new ContestantsBenchStub(i));
-        
+        }
+
         playground = new PlaygroundStub();
         refereeSite = new RefereeSiteStub();
         informationRepository = new GeneralInformationRepositoryStub();
     }
 
-    /**
-     * Get the current Referee state
-     *
-     * @return Referee state
-     */
     @Override
     public RefereeState getRefereeState() {
         return state;
     }
 
-    /**
-     * Sets the current Referee state
-     *
-     * @param state RefereeState
-     */
     @Override
     public void setRefereeState(RefereeState state) {
         this.state = state;
     }
 
-    /**
-     * Runs this object thread
-     */
     @Override
     public void run() {
         informationRepository.updateReferee();
         informationRepository.printHeader();
-        
+
         while (state != END_OF_THE_MATCH) {
             switch (state) {
                 case START_OF_THE_MATCH:
@@ -124,8 +100,8 @@ public class Referee extends Thread implements InterfaceReferee {
     }
 
     /**
-     * Reset trial points and flag position when starting a new game. Updates
-     * state to START_OF_A_GAME.
+     * Announces a new game. It also sets trial points, flag, etc to original
+     * positions for that a new game takes place.
      */
     private void announceNewGame() {
         refereeSite.resetTrialPoints();
@@ -281,7 +257,7 @@ public class Referee extends Thread implements InterfaceReferee {
     /**
      * Checks if the match has ended
      *
-     * @return true if match as ended.
+     * @return true if match as ended
      */
     private boolean checkForMatchEnd() {
         List<GameScore> gamePoints = refereeSite.getGamePoints();

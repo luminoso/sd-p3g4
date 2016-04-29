@@ -20,7 +20,8 @@ import java.util.List;
 public class PlaygroundStub implements InterfacePlayground {
 
     /**
-     * Initiates the connection to the Server according to the ServerConfigs
+     * Initiates the connection to the Server according to the server
+     * configuration
      *
      * @return ClientCom with the opened connection
      */
@@ -133,7 +134,7 @@ public class PlaygroundStub implements InterfacePlayground {
         Message inMessage, outMessage;
 
         outMessage = new Message(Message.MessageType.PG_GET_FLAG_POSITION,
-                referee.getRefereeState());;
+                referee.getRefereeState());
 
         con.writeObject(outMessage);
 
@@ -309,7 +310,7 @@ public class PlaygroundStub implements InterfacePlayground {
 
         coach.setCoachState(inMessage.getCoachState());
     }
-    
+
     @Override
     public boolean shutdown() {
         ClientCom con = initiateConnection();
@@ -328,7 +329,7 @@ public class PlaygroundStub implements InterfacePlayground {
         }
 
         con.close();
-        
+
         return false;
     }
 }

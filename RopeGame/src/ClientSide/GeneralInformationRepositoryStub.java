@@ -20,7 +20,8 @@ import static java.lang.System.out;
 public class GeneralInformationRepositoryStub implements InterfaceGeneralInformationRepository {
 
     /**
-     * Initiates the connection to the Server according to the ServerConfigs
+     * Initiates the connection to the Server according to the server
+     * configuration
      *
      * @return ClientCom with the opened connection
      */
@@ -29,8 +30,9 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
                 ServerConfigs.GENERAL_INFORMATION_REPOSITORY_PORT);
 
         if (!con.open()) {
-            // TODO: handle later
-            //return false; // server doesn't accept more connections
+            out.println("Couldn't initiate connection to "
+                    + ServerConfigs.GENERAL_INFORMATION_REPOSITORY_ADDRESS + ":"
+                    + ServerConfigs.GENERAL_INFORMATION_REPOSITORY_PORT);
         }
 
         return con;
@@ -44,7 +46,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
 
         Message inMessage, outMessage;
 
-        // Problably defining a variable coach was better?
+        // problably defining a variable coach was better?
         // handled in GeneralRepositoryInterface in the same way
         outMessage = new Message(Message.MessageType.GIR_UPDATE_COACH,
                 coach.getCoachState(),
@@ -88,13 +90,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         con.close();
     }
 
-    /**
-     * Updates the Contestant strength
-     *
-     * @param team of the contestant
-     * @param id of the contestant
-     * @param strength to be updated to
-     */
+    @Override
     public void updateContestantStrength(int team, int id, int strength) {
         ClientCom con = initiateConnection();
 
@@ -424,7 +420,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
 
         con.close();
     }
-    
+
     @Override
     public boolean shutdown() {
         ClientCom con = initiateConnection();
@@ -443,7 +439,7 @@ public class GeneralInformationRepositoryStub implements InterfaceGeneralInforma
         }
 
         con.close();
-        
+
         return false;
     }
 }

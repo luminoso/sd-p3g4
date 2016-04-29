@@ -4,7 +4,7 @@ import Others.InterfaceCoach.CoachState;
 
 /**
  * Interface that defines the operations available over the objects that
- * represent the coach.
+ * represent the coach
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
@@ -15,14 +15,14 @@ public interface InterfaceCoach {
     /**
      * Get the current Coach state
      *
-     * @return CoachState
+     * @return coach state
      */
     CoachState getCoachState();
 
     /**
      * Sets the current Coach state
      *
-     * @param state CoachState
+     * @param state to set
      */
     void setCoachState(CoachState state);
 
@@ -36,7 +36,7 @@ public interface InterfaceCoach {
     /**
      * Sets the current Coach team
      *
-     * @param team of the coach
+     * @param team to set
      */
     void setCoachTeam(int team);
 
@@ -50,7 +50,7 @@ public interface InterfaceCoach {
     /**
      * Sets the current Coach state
      *
-     * @param strategy of the coach
+     * @param strategy to set
      */
     void setCoachStrategy(CoachStrategy strategy);
 
@@ -68,8 +68,8 @@ public interface InterfaceCoach {
         /**
          * Create a CoachState enum
          *
-         * @param id of the enum Coach state
-         * @param state Initials of the coach state
+         * @param id of the enum coach state
+         * @param state initials of the coach state
          */
         CoachState(int id, String state) {
             this.id = id;
@@ -77,27 +77,9 @@ public interface InterfaceCoach {
         }
 
         /**
-         * Gets the ID of the CoachState enum
-         *
-         * @return id of the coach state
-         */
-        public int getId() {
-            return id;
-        }
-
-        /**
-         * Gets the enum Coach state
-         *
-         * @return Coach state enum string
-         */
-        public String getState() {
-            return state;
-        }
-
-        /**
          * Converts current Coach state to String
          *
-         * @return String describing Contestant sate
+         * @return string describing Contestant sate
          */
         @Override
         public String toString() {

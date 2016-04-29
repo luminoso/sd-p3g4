@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Interface that defines the operations available over the objects that
- * represent the referee site.
+ * represent the referee site
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
@@ -15,16 +15,16 @@ import java.util.List;
 public interface InterfaceRefereeSite {
 
     /**
-     * The method allows to set the game points for both team.
+     * The method allows to set the game points for both team
      *
-     * @param score Game points of both teams.
+     * @param score game points of both teams
      */
     void addGamePoint(GameScore score);
 
     /**
-     * The method allows to set the trial points for both team.
+     * The method allows to set the trial points for both team
      *
-     * @param score Trial points of both teams.
+     * @param score trial points of both teams
      */
     void addTrialPoint(TrialScore score);
 
@@ -34,9 +34,9 @@ public interface InterfaceRefereeSite {
     void bothTeamsReady();
 
     /**
-     * The method returns the game points in the form of an array.
+     * The method returns the game points in the form of an array
      *
-     * @return Game points.
+     * @return game points
      */
     List<GameScore> getGamePoints();
 
@@ -55,16 +55,16 @@ public interface InterfaceRefereeSite {
     int getRemainingTrials();
 
     /**
-     * The method returns the trial points in the form of an array.
+     * The method returns the trial points in the form of an array
      *
-     * @return Trial points.
+     * @return trial points.
      */
     List<TrialScore> getTrialPoints();
 
     /**
      * Checks if the match has ended
      *
-     * @return True if no more matches to play. False if otherwise.
+     * @return true if no more matches to play. False if otherwise
      */
     boolean hasMatchEnded();
 
@@ -87,15 +87,16 @@ public interface InterfaceRefereeSite {
     void setHasMatchEnded(boolean hasMatchEnded);
 
     /**
-     * 
+     * Checks if the game should be shut down
+     *
+     * @return true if the game must be shut down
      */
     boolean shutdown();
-    
+
     /**
-     *
+     * Enums that describe the trial score
      */
     public enum TrialScore {
-
         DRAW(0, "D"),
         VICTORY_TEAM_1(1, "VT1"),
         VICTORY_TEAM_2(2, "VT2");
@@ -104,7 +105,7 @@ public interface InterfaceRefereeSite {
         private final String status;
 
         /**
-         * Initializes the TrialScore
+         * Initializes the trial score enum
          *
          * @param id of the trial
          * @param status of the trial
@@ -113,30 +114,12 @@ public interface InterfaceRefereeSite {
             this.id = id;
             this.status = status;
         }
-
-        /**
-         *
-         * @return
-         */
-        public int getId() {
-            return this.id;
-        }
-
-        /**
-         * Returns the
-         *
-         * @return
-         */
-        public String getStatus() {
-            return this.status;
-        }
     }
 
     /**
-     * Enums that describe the GameScore
+     * Enums that describe the game score
      */
     public enum GameScore {
-
         DRAW(0, "D"),
         VICTORY_TEAM_1_BY_POINTS(1, "VT1PT"),
         VICTORY_TEAM_1_BY_KNOCKOUT(2, "VT1KO"),
@@ -147,7 +130,7 @@ public interface InterfaceRefereeSite {
         private final String status;
 
         /**
-         * Initializes the GameScore
+         * Initializes the game score
          *
          * @param id of the score
          * @param status of the score

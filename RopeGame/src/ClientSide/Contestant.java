@@ -7,7 +7,7 @@ import Others.InterfacePlayground;
 import Others.InterfaceRefereeSite;
 
 /**
- * This is active class Contestant which implements the InterfaceContestant.
+ * This is active class Contestant which implements the InterfaceContestant
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
@@ -15,54 +15,25 @@ import Others.InterfaceRefereeSite;
  */
 public class Contestant extends Thread implements Comparable<InterfaceContestant>, InterfaceContestant {
 
-    /**
-     * Bench interface to be used
-     */
-    private final InterfaceContestantsBench bench;
+    private final InterfaceContestantsBench bench; // bench interface to be used
+    private final InterfacePlayground playground; // playground interface to be used
+    private final InterfaceRefereeSite refereeSite; // refereeSite interface to be used
+    private final InterfaceGeneralInformationRepository informationRepository; // general Information Repository interface to be used
 
-    /**
-     * Playground interface to be used
-     */
-    private final InterfacePlayground playground;
-
-    /**
-     * RefereeSite interface to be used
-     */
-    private final InterfaceRefereeSite refereeSite;
-
-    /**
-     * General Information Repository interface to be used
-     */
-    private final InterfaceGeneralInformationRepository informationRepository;
-
-    /**
-     * Current Contestant state
-     */
+    // contestant definition
     private ContestantState state;
-
-    /**
-     * Current Contestant strength
-     */
     private int strength;
-
-    /**
-     * Current contestant team
-     */
     private int team;
-
-    /**
-     * Current contestant id
-     */
     private int id;
 
     /**
      * Creates a Contestant instantiation for running in a distributed
-     * environment.
+     * environment
      *
-     * @param name Name of the contestant
-     * @param team Team of the contestant
-     * @param id Id of the contestant
-     * @param strength Strength of the contestant
+     * @param name of the contestant
+     * @param team of the contestant
+     * @param id of the contestant
+     * @param strength of the contestant
      */
     public Contestant(String name, int team, int id, int strength) {
         super(name);
@@ -119,9 +90,6 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
         this.strength = strength;
     }
 
-    /**
-     * Runs this object thread
-     */
     @Override
     public void run() {
         informationRepository.updateContestant();
@@ -145,7 +113,7 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
 
     /**
      * Contestant checks if is selected to the game. If so, goes to the
-     * playground.
+     * playground
      */
     private void followCoachAdvice() {
         bench.getContestant();

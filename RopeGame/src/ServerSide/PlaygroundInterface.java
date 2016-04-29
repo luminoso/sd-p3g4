@@ -8,6 +8,7 @@ import Others.InterfaceContestant;
 import Others.InterfaceReferee;
 
 /**
+ * Interface server implementation for contestants bench access
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
@@ -15,14 +16,10 @@ import Others.InterfaceReferee;
  */
 class PlaygroundInterface implements InterfaceServer {
 
-    /**
-     *
-     */
     private final Playground pg;
 
     /**
-     *
-     * @param pg
+     * Constructor that initiates the interface
      */
     public PlaygroundInterface() {
         this.pg = Playground.getInstance();

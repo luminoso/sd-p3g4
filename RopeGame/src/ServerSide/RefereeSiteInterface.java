@@ -6,6 +6,7 @@ import Communication.MessageException;
 import Others.InterfaceReferee;
 
 /**
+ * Interface server implementation for contestants bench access
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
@@ -13,14 +14,10 @@ import Others.InterfaceReferee;
  */
 class RefereeSiteInterface implements InterfaceServer {
 
-    /**
-     *
-     */
     private final RefereeSite rs;
 
     /**
-     *
-     * @param rf
+     * Constructor that initiates the interface
      */
     public RefereeSiteInterface() {
         this.rs = RefereeSite.getInstance();

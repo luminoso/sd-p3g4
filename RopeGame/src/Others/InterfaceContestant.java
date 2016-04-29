@@ -4,7 +4,7 @@ import Others.InterfaceContestant.ContestantState;
 
 /**
  * Interface that defines the operations available over the objects that
- * represent the contestant.
+ * represent the contestant
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
@@ -13,93 +13,77 @@ import Others.InterfaceContestant.ContestantState;
 public interface InterfaceContestant {
 
     /**
-     * Gets the Contestant id.
+     * Gets the Contestant id
      *
      * @return contestant id number
      */
     int getContestantId();
 
     /**
-     * Sets the current Contestant id.
+     * Sets the current Contestant id
      *
-     * @param id of the contestant
+     * @param id to set
      */
     void setContestantId(int id);
 
     /**
      * Get the current Contestant state.
      *
-     * @return Contestant state
+     * @return contestant state
      */
     ContestantState getContestantState();
 
     /**
-     * Sets the current Contestant state.
+     * Sets the current Contestant state
      *
-     * @param state ContestantState
+     * @param state to set
      */
     void setContestantState(ContestantState state);
 
     /**
-     * Gets the Contestant strength.
+     * Gets the Contestant strength
      *
      * @return contestant strength
      */
     int getContestantStrength();
 
     /**
-     * Sets the Contestant strength.
+     * Sets the Contestant strength
      *
-     * @param strength contestant strength
+     * @param strength to set
      */
     void setContestantStrength(int strength);
 
     /**
-     * Gets the Contestant team number.
+     * Gets the Contestant team number
      *
      * @return contestant team number
      */
     int getContestantTeam();
 
     /**
-     * Sets the current Contestant team.
+     * Sets the current Contestant team
      *
-     * @param team of the contestant
+     * @param team to set
      */
     void setContestantTeam(int team);
 
     /**
-     * Enums of possible Contestant states
+     * Enums of possible contestant states
      */
     public enum ContestantState {
-        /**
-         *
-         */
         SEAT_AT_THE_BENCH(1, "STB"),
-        /**
-         *
-         */
         STAND_IN_POSITION(2, "SIP"),
-        /**
-         *
-         */
         DO_YOUR_BEST(3, "DYB");
 
-        /**
-         *
-         */
         private final int id;
-
-        /**
-         *
-         */
         private final String state;
 
         /**
-         * Create a ContestantState enum
+         * Create a contestant state enum
          *
-         * @param id of the enum Contestant state
-         * @param state Initials of the Contestant state
+         * @param id of the enum contestant state
+         * @param state initials of the contestant state
          */
         ContestantState(int id, String state) {
             this.id = id;
@@ -107,27 +91,9 @@ public interface InterfaceContestant {
         }
 
         /**
-         * Gets the ID of the ContestantState enum
+         * Converts current contestant state to String
          *
-         * @return id of the Contestant state
-         */
-        public int getId() {
-            return id;
-        }
-
-        /**
-         * Gets the enum Contestant state
-         *
-         * @return Contestant state enum string
-         */
-        public String getState() {
-            return state;
-        }
-
-        /**
-         * Converts current Contestant state to String
-         *
-         * @return String describing Contestant sate
+         * @return string describing contestant sate
          */
         @Override
         public String toString() {

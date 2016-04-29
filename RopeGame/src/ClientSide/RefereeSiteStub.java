@@ -20,7 +20,8 @@ import java.util.List;
 public class RefereeSiteStub implements InterfaceRefereeSite {
 
     /**
-     * Initiates the connection to the Server according to the ServerConfigs
+     * Initiates the connection to the Server according to the server
+     * configuration
      *
      * @return ClientCom with the opened connection
      */
@@ -308,7 +309,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
 
         con.close();
     }
-    
+
     @Override
     public boolean shutdown() {
         ClientCom con = initiateConnection();
@@ -327,7 +328,7 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
         }
 
         con.close();
-        
+
         return false;
     }
 }

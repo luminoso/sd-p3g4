@@ -6,6 +6,7 @@ import Communication.MessageException;
 import Others.InterfaceContestant;
 
 /**
+ * Interface server implementation for general information repository access
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
@@ -13,14 +14,10 @@ import Others.InterfaceContestant;
  */
 class GeneralInformationRepositoryInterface implements InterfaceServer {
 
-    /**
-     *
-     */
     private final GeneralInformationRepository ir;
 
     /**
-     *
-     * @param informationRepository
+     * Constructor that initiates the interface
      */
     public GeneralInformationRepositoryInterface() {
         ir = GeneralInformationRepository.getInstance();
