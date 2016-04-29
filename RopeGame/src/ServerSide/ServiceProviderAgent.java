@@ -2,6 +2,7 @@ package ServerSide;
 
 import ClientSide.Contestant;
 import Communication.Message;
+import Communication.MessageException;
 import Others.CoachStrategy;
 import Others.InterfaceCoach;
 import Others.InterfaceCoach.CoachState;
@@ -9,6 +10,8 @@ import Others.InterfaceContestant;
 import Others.InterfaceContestant.ContestantState;
 import Others.InterfaceReferee;
 import Others.InterfaceReferee.RefereeState;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class implements all Coach, Contestant and Referee interfaces. The
@@ -91,14 +94,14 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
 
             try {
                 outMessage = servInterface.processAndReply(inMessage);
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (MessageException ex) {
+                Logger.getLogger(ServiceProviderAgent.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             sconi.writeObject(outMessage);
             sconi.close();
         }
-
+        
     }
 
     // Coach methods

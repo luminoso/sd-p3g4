@@ -97,7 +97,7 @@ public class Playground implements InterfacePlayground {
 
             startTrial.await();
         } catch (InterruptedException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         lock.unlock();
@@ -118,7 +118,7 @@ public class Playground implements InterfacePlayground {
                 this.teamsInPosition.await();
             }
         } catch (InterruptedException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
             lock.unlock();
             return;
         }
@@ -139,7 +139,7 @@ public class Playground implements InterfacePlayground {
         try {
             this.resultAssert.await();
         } catch (InterruptedException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
             lock.unlock();
             return;
         }
@@ -165,7 +165,7 @@ public class Playground implements InterfacePlayground {
 
             this.resultAssert.await();
         } catch (InterruptedException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
             lock.unlock();
             return;
         }
@@ -200,7 +200,7 @@ public class Playground implements InterfacePlayground {
             try {
                 finishedPulling.await();
             } catch (InterruptedException ex) {
-                ex.printStackTrace();
+                Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
                 lock.unlock();
                 return;
             }
@@ -280,9 +280,7 @@ public class Playground implements InterfacePlayground {
         try {
             this.finishedPulling.await();
         } catch (InterruptedException ex) {
-            ex.printStackTrace();
             Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
-            
         }
         lock.unlock();
     }

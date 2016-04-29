@@ -16,6 +16,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This is an passive class that logs entities activity
@@ -67,7 +69,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         try {
             printer = new PrintWriter(Constants.FILE_NAME);
         } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(GeneralInformationRepository.class.getName()).log(Level.SEVERE, null, ex);
             printer = null;
         }
 

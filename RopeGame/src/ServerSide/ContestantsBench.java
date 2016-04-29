@@ -20,6 +20,8 @@ import java.util.TreeSet;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This is an passive class that describes the contestants bench for each team
@@ -115,7 +117,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
                 playersSelected.await();
             } while (!isContestantSelected() && !refereeSite.hasMatchEnded());
         } catch (InterruptedException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(ContestantsBench.class.getName()).log(Level.SEVERE, null, ex);
             lock.unlock();
             return;
         }
@@ -153,7 +155,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
                 allPlayersSeated.await();
             }
         } catch (InterruptedException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(ContestantsBench.class.getName()).log(Level.SEVERE, null, ex);
             lock.unlock();
             return null;
         }
@@ -203,7 +205,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
                 waitForCoach.await();
             }
         } catch (InterruptedException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(ContestantsBench.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         waitForNextTrial.signal();

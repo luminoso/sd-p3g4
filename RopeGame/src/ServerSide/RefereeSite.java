@@ -164,7 +164,6 @@ public class RefereeSite implements InterfaceRefereeSite {
                 informReferee.await();
             }
         } catch (InterruptedException ex) {
-            ex.printStackTrace();
             Logger.getLogger(RefereeSite.class.getName()).log(Level.SEVERE, null, ex);
         }
 
