@@ -1,11 +1,14 @@
 package ServerSide;
 
 import ClientSide.GeneralInformationRepositoryStub;
+import ClientSide.RefereeSiteStub;
 import Others.InterfaceCoach;
 import Others.InterfaceCoach.CoachState;
 import Others.InterfaceContestant;
 import Others.InterfaceContestant.ContestantState;
 import Others.InterfaceContestantsBench;
+import Others.InterfaceGeneralInformationRepository;
+import Others.InterfaceRefereeSite;
 import Others.Tuple;
 import RopeGame.Constants;
 import java.util.HashSet;
@@ -57,10 +60,17 @@ public class ContestantsBench implements InterfaceContestantsBench {
      */
     private boolean coachWaiting;
 
+    private int shutdownVotes;
+    
+    /**
+     * 
+     */
+    private final InterfaceRefereeSite refereeSite;
+    
     /**
      * General Information Repository implementation to be used
      */
-    private final GeneralInformationRepositoryStub informationRepository;
+    private final InterfaceGeneralInformationRepository informationRepository;
 
     /**
      * Gets all the instances of the Contestants Bench.
@@ -94,7 +104,9 @@ public class ContestantsBench implements InterfaceContestantsBench {
         waitForCoach = lock.newCondition();
         bench = new TreeSet<>();
         selectedContestants = new TreeSet<>();
+        refereeSite = new RefereeSiteStub();
         informationRepository = new GeneralInformationRepositoryStub();
+        shutdownVotes = 0;
     }
 
     @Override
@@ -114,11 +126,11 @@ public class ContestantsBench implements InterfaceContestantsBench {
         if (checkAllPlayersSeated()) {
             allPlayersSeated.signal();
         }
-
+        
         try {
             do {
                 playersSelected.await();
-            } while (!isContestantSelected() && !RefereeSite.getInstance().hasMatchEnded());
+            } while (!isContestantSelected() && !refereeSite.hasMatchEnded());
         } catch (InterruptedException ex) {
             ex.printStackTrace();
             lock.unlock();
@@ -231,9 +243,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
 
         try {
             waitForNextTrial.await();
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-        }
+        } catch (InterruptedException ex) {}
 
         coachWaiting = false;
 
@@ -256,6 +266,45 @@ public class ContestantsBench implements InterfaceContestantsBench {
         lock.unlock();
     }
 
+    /**
+     * 
+     */
+    @Override
+    public void interrupt() {
+        lock.lock();
+        
+        while (!checkAllPlayersSeated()) {
+            try {
+                allPlayersSeated.await();
+            } catch (InterruptedException ex) {}
+        }
+        playersSelected.signalAll();
+        
+        while (!coachWaiting) {
+            try {
+                waitForCoach.await();
+            } catch (InterruptedException ex) {}
+        }
+        waitForNextTrial.signal();
+        
+        lock.unlock();
+    }
+    
+    @Override
+    public boolean shutdown() {
+        boolean result = false;
+        
+        lock.lock();
+        
+        shutdownVotes++;
+        
+        result = shutdownVotes == (1 + 2 * (1 + Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH));
+        
+        lock.unlock();
+        
+        return result;
+    }
+    
     /**
      * Gets the selected contestants array.
      *

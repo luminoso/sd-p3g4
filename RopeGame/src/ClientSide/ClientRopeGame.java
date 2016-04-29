@@ -1,10 +1,17 @@
 package ClientSide;
 
 import Others.CoachStrategy;
+import Others.InterfaceContestantsBench;
+import Others.InterfaceGeneralInformationRepository;
+import Others.InterfacePlayground;
+import Others.InterfaceRefereeSite;
 import Others.KeepWinningTeam;
 import Others.MostStrengthStrategy;
 import RopeGame.Constants;
+import ServerSide.RefereeSite;
 import static java.lang.System.out;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class implements the Client of RopeGame client-server architecture. It
@@ -38,6 +45,25 @@ public class ClientRopeGame {
                     Referee ref = new Referee("Referee");
                     ref.start();
                     out.println("Client Referee started");
+                    
+                    try {
+                        ref.join();
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(ClientRopeGame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    InterfaceContestantsBench bench = new ContestantsBenchStub(1);
+                    InterfaceRefereeSite refereeSite = new RefereeSiteStub();
+                    InterfacePlayground playground = new PlaygroundStub();
+                    InterfaceGeneralInformationRepository informationRepository = new GeneralInformationRepositoryStub();
+                    
+                    bench.interrupt();
+                    
+                    bench.shutdown();
+                    refereeSite.shutdown();
+                    playground.shutdown();
+                    informationRepository.shutdown();
+                    
                     break;
                 }
                 case "CH": {
@@ -46,6 +72,23 @@ public class ClientRopeGame {
                     Coach coach = new Coach("Coach " + team, team, strategy);
                     coach.start();
                     out.println("Client Coach started. Team:" + team);
+                    
+                    try {
+                        coach.join();
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(ClientRopeGame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    InterfaceContestantsBench bench = new ContestantsBenchStub(1);
+                    InterfaceRefereeSite refereeSite = new RefereeSiteStub();
+                    InterfacePlayground playground = new PlaygroundStub();
+                    InterfaceGeneralInformationRepository informationRepository = new GeneralInformationRepositoryStub();
+                    
+                    bench.shutdown();
+                    refereeSite.shutdown();
+                    playground.shutdown();
+                    informationRepository.shutdown();
+                    
                     break;
                 }
                 case "CT": {
@@ -55,6 +98,23 @@ public class ClientRopeGame {
                     Contestant contestant = new Contestant("Contestant " + team + ":" + id, team, id, strength);
                     contestant.start();
                     out.println("Client Contestant started. Team:" + team + " ID:" + id);
+                    
+                    try {
+                        contestant.join();
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(ClientRopeGame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    InterfaceContestantsBench bench = new ContestantsBenchStub(1);
+                    InterfaceRefereeSite refereeSite = new RefereeSiteStub();
+                    InterfacePlayground playground = new PlaygroundStub();
+                    InterfaceGeneralInformationRepository informationRepository = new GeneralInformationRepositoryStub();
+                    
+                    bench.shutdown();
+                    refereeSite.shutdown();
+                    playground.shutdown();
+                    informationRepository.shutdown();
+                    
                     break;
                 }
                 default: {

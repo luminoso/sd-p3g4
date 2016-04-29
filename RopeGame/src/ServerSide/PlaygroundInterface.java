@@ -97,4 +97,9 @@ class PlaygroundInterface implements InterfaceServer {
 
         return outMessage;
     }
+
+    @Override
+    public boolean goingToShutdown() {
+        return pg.shutdown();
+    }
 }

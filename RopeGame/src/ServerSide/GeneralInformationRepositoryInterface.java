@@ -113,4 +113,9 @@ class GeneralInformationRepositoryInterface implements InterfaceServer {
 
         return outMessage;
     }
+
+    @Override
+    public boolean goingToShutdown() {
+        return ir.shutdown();
+    }
 }

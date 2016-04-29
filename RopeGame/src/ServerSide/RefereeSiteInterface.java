@@ -95,4 +95,9 @@ class RefereeSiteInterface implements InterfaceServer {
 
         return outMessage;
     }
+
+    @Override
+    public boolean goingToShutdown() {
+        return rs.shutdown();
+    }
 }

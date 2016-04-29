@@ -532,6 +532,8 @@ public class Message implements Serializable {
          * Type of return of messages.
          */
         OK(MessageCategory.GENERIC),
+        INTERRUPT(MessageCategory.GENERIC),
+        SHUTDOWN(MessageCategory.GENERIC),
         /**
          * Type of embed that in the message.
          */

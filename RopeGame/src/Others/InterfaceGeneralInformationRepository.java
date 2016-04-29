@@ -111,4 +111,9 @@ public interface InterfaceGeneralInformationRepository {
      * @param trialNumber to set
      */
      void setTrialNumber(int trialNumber);
+     
+    /**
+     * 
+     */
+    boolean shutdown();
 }

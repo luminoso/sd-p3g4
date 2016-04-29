@@ -12,4 +12,6 @@ import Communication.MessageException;
 interface InterfaceServer {
 
     Message processAndReply(Message inMessage) throws MessageException;
+    
+    boolean goingToShutdown();
 }

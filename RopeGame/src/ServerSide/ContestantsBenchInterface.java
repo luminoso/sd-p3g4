@@ -77,10 +77,21 @@ class ContestantsBenchInterface implements InterfaceServer {
                 outMessage = new Message(OK);
                 break;
             }
+            case INTERRUPT: {
+                benchs.get(0).interrupt();
+                benchs.get(1).interrupt();
+                outMessage = new Message(OK);
+                break;
+            }
             default:
                 throw new MessageException("Method in PG not found", outMessage);
         }
 
         return outMessage;
+    }
+
+    @Override
+    public boolean goingToShutdown() {
+        return benchs.get(0).shutdown() && benchs.get(1).shutdown();
     }
 }

@@ -25,6 +25,11 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
      *
      */
     private final ServerCom sconi;
+    
+    /**
+     *
+     */
+    private final ServerCom scon;
 
     /**
      *
@@ -67,10 +72,11 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
      * @param sconi connection to be dispatched
      * @param servInterface server interface to be used
      */
-    ServiceProviderAgent(ServerCom sconi,
+    ServiceProviderAgent(ServerCom scon, ServerCom sconi,
             InterfaceServer servInterface) {
 
         super(Integer.toString(serviceProviderAgentId++));
+        this.scon = scon;
         this.sconi = sconi;
         this.servInterface = servInterface;
 
@@ -90,20 +96,34 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
 
         inMessage = (Message) sconi.readObject();
 
-        // TODO: validate message
-        this.state = inMessage.getState();
-        this.team = inMessage.getTeam();
-        this.contestantId = inMessage.getContestantId();
-        this.strength = inMessage.getStrength();
+        if(inMessage.getType() == Message.MessageType.SHUTDOWN) {
+                boolean shutdown = servInterface.goingToShutdown();
+                
+                outMessage = new Message(Message.MessageType.OK);
+                
+                sconi.writeObject(outMessage);
+                sconi.close();
+                
+                if(shutdown)
+                    System.exit(0);
+        } else {
+            // TODO: validate message
+            this.state = inMessage.getState();
+            this.team = inMessage.getTeam();
+            this.contestantId = inMessage.getContestantId();
+            this.strength = inMessage.getStrength();
 
-        try {
-            outMessage = servInterface.processAndReply(inMessage);
-        } catch (Exception e) {
-            e.printStackTrace();
+            try {
+                outMessage = servInterface.processAndReply(inMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            sconi.writeObject(outMessage);
+            sconi.close();
         }
-
-        sconi.writeObject(outMessage);
-        sconi.close();
+        
+        
     }
 
     // Coach methods

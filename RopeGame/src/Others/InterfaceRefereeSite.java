@@ -87,6 +87,11 @@ public interface InterfaceRefereeSite {
     void setHasMatchEnded(boolean hasMatchEnded);
 
     /**
+     * 
+     */
+    boolean shutdown();
+    
+    /**
      *
      */
     public enum TrialScore {

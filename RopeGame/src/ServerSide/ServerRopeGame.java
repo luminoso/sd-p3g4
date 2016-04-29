@@ -47,7 +47,7 @@ public class ServerRopeGame {
 
         while (true) {
             sconi = scon.accept();
-            sps = new ServiceProviderAgent(sconi, servInterface);
+            sps = new ServiceProviderAgent(scon, sconi, servInterface);
             sps.start();
         }
     }

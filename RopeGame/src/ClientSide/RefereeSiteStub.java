@@ -308,4 +308,26 @@ public class RefereeSiteStub implements InterfaceRefereeSite {
 
         con.close();
     }
+    
+    @Override
+    public boolean shutdown() {
+        ClientCom con = initiateConnection();
+
+        Message inMessage, outMessage;
+
+        outMessage = new Message(Message.MessageType.SHUTDOWN);
+
+        con.writeObject(outMessage);
+
+        inMessage = (Message) con.readObject();
+
+        if (inMessage.getType() != Message.MessageType.OK) {
+            out.println("Returned message with wrong type");
+            System.exit(1);
+        }
+
+        con.close();
+        
+        return false;
+    }
 }

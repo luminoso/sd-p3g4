@@ -72,6 +72,8 @@ public class Playground implements InterfacePlayground {
      */
     private int lastFlagPosition;                         // last flag position
 
+    private int shutdownVotes;
+    
     /**
      *
      */
@@ -95,6 +97,7 @@ public class Playground implements InterfacePlayground {
 
         return instance;
     }
+    
 
     /**
      * Private constructor to be used in the singleton.
@@ -112,6 +115,7 @@ public class Playground implements InterfacePlayground {
         this.teams[0] = new ArrayList<>();
         this.teams[1] = new ArrayList<>();
         this.informationRepository = new GeneralInformationRepositoryStub();
+        this.shutdownVotes = 0;
     }
 
     @Override
@@ -342,6 +346,21 @@ public class Playground implements InterfacePlayground {
         return teamslist;
     }
 
+    @Override
+    public boolean shutdown() {
+        boolean result = false;
+        
+        lock.lock();
+        
+        shutdownVotes++;
+        
+        result = shutdownVotes == (1 + 2 * (1 + Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH));
+        
+        lock.unlock();
+        
+        return result;
+    }
+    
     /**
      * Updates the flag position accordingly with the teams joint forces
      */

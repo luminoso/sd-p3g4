@@ -83,6 +83,8 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
 
     private boolean headerPrinted;
 
+    private int shutdownVotes;
+    
     /**
      *
      * @return
@@ -123,6 +125,8 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         team2Placement = new LinkedList<>();
 
         flagPosition = 0;
+        
+        shutdownVotes = 0;
     }
 
     @Override
@@ -478,5 +482,23 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         printer.close();
 
         lock.unlock();
+    }
+
+    @Override
+    public boolean shutdown() {
+        boolean result = false;
+        
+        lock.lock();
+        
+        shutdownVotes++;
+        
+        if(shutdownVotes == (1 + 2 * (1 + Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH))) {
+            result = true;
+            close();
+        }
+        
+        lock.unlock();
+        
+        return result;
     }
 }

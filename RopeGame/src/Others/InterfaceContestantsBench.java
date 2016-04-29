@@ -64,4 +64,14 @@ public interface InterfaceContestantsBench {
      * @param delta difference to be applied to the contestant
      */
     void updateContestantStrength(int id, int delta);
+    
+    /**
+     * 
+     */
+    void interrupt();
+    
+    /**
+     * 
+     */
+    boolean shutdown();
 }

@@ -125,11 +125,16 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
 
         inMessage = (Message) con.readObject();
 
-        if (inMessage.getType() != Message.MessageType.OK) {
-            out.println("Returned message with wrong type");
-            System.exit(1);
+        switch(inMessage.getType()) {
+            case OK:
+                con.close();
+                break;
+            default:
+                con.close();
+                out.println("Returned message with wrong type");
+                System.exit(1);
+                break;
         }
-
     }
 
     @Override
@@ -227,14 +232,22 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
 
         inMessage = (Message) con.readObject();
 
-        if (inMessage.getType() != Message.MessageType.COACH_STATE_CHANGE) {
-            out.println("Returned message with wrong type");
-            System.exit(1);
+        switch(inMessage.getType()) {
+            case COACH_STATE_CHANGE:
+                coach.setCoachState(inMessage.getCoachState());
+                con.close();
+                break;
+            case OK:
+                con.close();
+                break;
+            default:
+                con.close();
+                out.println("Returned message with wrong type");
+                System.exit(1);
+                break;
         }
 
-        coach.setCoachState(inMessage.getCoachState());
-
-        con.close();
+        
     }
 
     @Override
@@ -263,5 +276,47 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
         coach.setCoachState(inMessage.getCoachState());
 
         con.close();
+    }
+    
+    @Override
+    public void interrupt() {
+        ClientCom con = initiateConnection();
+
+        Message inMessage, outMessage;
+
+        outMessage = new Message(Message.MessageType.INTERRUPT);
+
+        con.writeObject(outMessage);
+
+        inMessage = (Message) con.readObject();
+
+        if (inMessage.getType() != Message.MessageType.OK) {
+            out.println("Returned message with wrong type");
+            System.exit(1);
+        }
+
+        con.close();
+    }
+
+    @Override
+    public boolean shutdown() {
+        ClientCom con = initiateConnection();
+
+        Message inMessage, outMessage;
+
+        outMessage = new Message(Message.MessageType.SHUTDOWN);
+
+        con.writeObject(outMessage);
+
+        inMessage = (Message) con.readObject();
+
+        if (inMessage.getType() != Message.MessageType.OK) {
+            out.println("Returned message with wrong type");
+            System.exit(1);
+        }
+
+        con.close();
+        
+        return false;
     }
 }

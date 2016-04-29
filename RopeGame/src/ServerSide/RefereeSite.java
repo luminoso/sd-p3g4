@@ -56,6 +56,8 @@ public class RefereeSite implements InterfaceRefereeSite {
      */
     private List<TrialScore> trialStatus;               // current trial status
 
+    private int shutdownVotes;
+    
     /**
      *
      */
@@ -90,6 +92,7 @@ public class RefereeSite implements InterfaceRefereeSite {
         informRefereeCounter = 0;
         hasMatchEnded = false;
         informationRepository = new GeneralInformationRepositoryStub();
+        shutdownVotes = 0;
     }
 
     @Override
@@ -223,6 +226,21 @@ public class RefereeSite implements InterfaceRefereeSite {
         out.println("setting has match ended");
         this.hasMatchEnded = hasMatchEnded;
         lock.unlock();
+    }
+
+    @Override
+    public boolean shutdown() {
+        boolean result = false;
+        
+        lock.lock();
+        
+        shutdownVotes++;
+        
+        result = shutdownVotes == (1 + 2 * (1 + Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH));
+        
+        lock.unlock();
+        
+        return result;
     }
 
 }

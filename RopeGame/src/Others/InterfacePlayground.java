@@ -89,4 +89,9 @@ public interface InterfacePlayground {
      * Synchronisation point for watching the trial in progress
      */
     void watchTrial();
+    
+    /**
+     * 
+     */
+    boolean shutdown();
 }
