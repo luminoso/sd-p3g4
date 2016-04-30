@@ -10,6 +10,7 @@ import Others.InterfaceContestant;
 import Others.InterfaceContestant.ContestantState;
 import Others.InterfaceReferee;
 import Others.InterfaceReferee.RefereeState;
+import static java.lang.System.out;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,7 +28,6 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
         InterfaceReferee,
         Comparable<InterfaceContestant> {
 
-    private final ServerCom scon;
     private final ServerCom sconi;
     private final InterfaceServer servInterface;
 
@@ -51,11 +51,10 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
      * @param sconi connection accepted by the main server
      * @param servInterface server interface to be provided
      */
-    ServiceProviderAgent(ServerCom scon, ServerCom sconi,
+    ServiceProviderAgent(ServerCom sconi,
             InterfaceServer servInterface) {
 
         super(Integer.toString(serviceProviderAgentId++));
-        this.scon = scon;
         this.sconi = sconi;
         this.servInterface = servInterface;
         this.state = null;
@@ -73,6 +72,8 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
         Thread.currentThread().setName("SPA-" + Integer.toString(serviceProviderAgentId++));
 
         inMessage = (Message) sconi.readObject();
+
+        out.println(Thread.currentThread().getName() + ": " + inMessage.getType());
 
         if (inMessage.getType() == Message.MessageType.SHUTDOWN) {
             boolean shutdown = servInterface.goingToShutdown();
@@ -101,7 +102,7 @@ public class ServiceProviderAgent extends Thread implements InterfaceCoach,
             sconi.writeObject(outMessage);
             sconi.close();
         }
-        
+
     }
 
     // Coach methods

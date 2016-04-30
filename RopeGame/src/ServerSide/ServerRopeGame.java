@@ -1,6 +1,7 @@
 package ServerSide;
 
 import RopeGame.ServerConfigs;
+import static java.lang.System.out;
 
 /**
  * This class implements the Server of RopeGame client-server architecture. It
@@ -57,10 +58,11 @@ public class ServerRopeGame {
         }
 
         scon.start();
+        out.println("Server started and listening for connections...");
 
         while (true) {
             sconi = scon.accept();
-            sps = new ServiceProviderAgent(scon, sconi, servInterface);
+            sps = new ServiceProviderAgent(sconi, servInterface);
             sps.start();
         }
     }
