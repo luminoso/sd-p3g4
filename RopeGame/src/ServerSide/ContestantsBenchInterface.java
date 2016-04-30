@@ -93,6 +93,6 @@ class ContestantsBenchInterface implements InterfaceServer {
 
     @Override
     public boolean goingToShutdown() {
-        return benchs.get(0).shutdown() && benchs.get(1).shutdown();
+        return benchs.get(0).shutdown();
     }
 }
