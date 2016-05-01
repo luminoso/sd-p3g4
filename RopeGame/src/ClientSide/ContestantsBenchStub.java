@@ -302,4 +302,26 @@ public class ContestantsBenchStub implements InterfaceContestantsBench {
 
         return false;
     }
+
+    @Override
+    public void waitForEveryoneToStart() {
+        ClientCom con = initiateConnection();
+
+        Message inMessage, outMessage;
+
+        outMessage = new Message(Message.MessageType.WAIT_FOR_EVERYONE_TO_START);
+
+        con.writeObject(outMessage);
+
+        inMessage = (Message) con.readObject();
+
+        if (inMessage.getType() != Message.MessageType.OK) {
+            out.println("Returned message with wrong type");
+            System.exit(1);
+        }
+
+        con.close();
+    }
+
+
 }

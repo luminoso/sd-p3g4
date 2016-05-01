@@ -75,4 +75,9 @@ public interface InterfaceContestantsBench {
      * @return true if the game must be shut down
      */
     boolean shutdown();
+    
+    /**
+     * The referee waits for everyone before starting first game
+     */
+    void waitForEveryoneToStart();
 }

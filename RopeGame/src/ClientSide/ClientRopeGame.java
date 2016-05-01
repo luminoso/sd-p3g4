@@ -40,17 +40,19 @@ public class ClientRopeGame {
         if (args.length >= 1) {
             switch (args[0]) {
                 case "RF": {
+                    InterfaceContestantsBench bench = new ContestantsBenchStub(1);
+                    bench.waitForEveryoneToStart();
+
                     Referee ref = new Referee("Referee");
                     ref.start();
                     out.println("Client Referee started");
-
+                    
                     try {
                         ref.join();
                     } catch (InterruptedException ex) {
                         Logger.getLogger(ClientRopeGame.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
-                    InterfaceContestantsBench bench = new ContestantsBenchStub(1);
                     InterfaceRefereeSite refereeSite = new RefereeSiteStub();
                     InterfacePlayground playground = new PlaygroundStub();
                     InterfaceGeneralInformationRepository informationRepository = new GeneralInformationRepositoryStub();
@@ -77,7 +79,7 @@ public class ClientRopeGame {
                         Logger.getLogger(ClientRopeGame.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
-                    InterfaceContestantsBench bench = new ContestantsBenchStub(1);
+                    InterfaceContestantsBench bench = new ContestantsBenchStub(team);
                     InterfaceRefereeSite refereeSite = new RefereeSiteStub();
                     InterfacePlayground playground = new PlaygroundStub();
                     InterfaceGeneralInformationRepository informationRepository = new GeneralInformationRepositoryStub();
@@ -103,7 +105,7 @@ public class ClientRopeGame {
                         Logger.getLogger(ClientRopeGame.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
-                    InterfaceContestantsBench bench = new ContestantsBenchStub(1);
+                    InterfaceContestantsBench bench = new ContestantsBenchStub(team);
                     InterfaceRefereeSite refereeSite = new RefereeSiteStub();
                     InterfacePlayground playground = new PlaygroundStub();
                     InterfaceGeneralInformationRepository informationRepository = new GeneralInformationRepositoryStub();

@@ -84,6 +84,11 @@ class ContestantsBenchInterface implements InterfaceServer {
                 outMessage = new Message(OK);
                 break;
             }
+            case WAIT_FOR_EVERYONE_TO_START:
+                benchs.get(0).waitForEveryoneToStart();
+                benchs.get(1).waitForEveryoneToStart();
+                outMessage = new Message(OK);
+                break;
             default:
                 throw new MessageException("Method in PG not found", outMessage);
         }

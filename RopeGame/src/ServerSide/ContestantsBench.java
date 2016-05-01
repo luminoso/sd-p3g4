@@ -49,7 +49,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
     private final Set<Integer> selectedContestants;
 
     private boolean coachWaiting; // sets if the coach is waiting
-    private int shutdownVotes; // counts if everyone's ready to shutdown
+    private static int shutdownVotes; // counts if everyone's ready to shutdown
 
     // referee site implementation to be used
     private final InterfaceRefereeSite refereeSite;
@@ -92,6 +92,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
         refereeSite = new RefereeSiteStub();
         informationRepository = new GeneralInformationRepositoryStub();
         shutdownVotes = 0;
+        coachWaiting = false;
     }
 
     @Override
@@ -109,7 +110,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
         }
 
         if (checkAllPlayersSeated()) {
-            allPlayersSeated.signal();
+            allPlayersSeated.signalAll();
         }
 
         try {
@@ -276,8 +277,29 @@ public class ContestantsBench implements InterfaceContestantsBench {
     }
 
     @Override
+    public void waitForEveryoneToStart() {
+        lock.lock();
+
+        while (!checkAllPlayersSeated()) {
+            try {
+                allPlayersSeated.await();
+            } catch (InterruptedException ex) {
+            }
+        }
+
+        while (!coachWaiting) {
+            try {
+                waitForCoach.await();
+            } catch (InterruptedException ex) {
+            }
+        }
+
+        lock.unlock();
+    }
+
+    @Override
     public boolean shutdown() {
-        boolean result = false;
+        boolean result;
 
         lock.lock();
 

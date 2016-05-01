@@ -508,6 +508,7 @@ public class Message implements Serializable {
         OK(MessageCategory.GENERIC),
         INTERRUPT(MessageCategory.GENERIC),
         SHUTDOWN(MessageCategory.GENERIC),
+        WAIT_FOR_EVERYONE_TO_START(MessageCategory.GENERIC),
         
         // type of embed that in the message
         BENCH(MessageCategory.GENERIC),
