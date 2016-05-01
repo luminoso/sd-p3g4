@@ -230,6 +230,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
         try {
             waitForNextTrial.await();
         } catch (InterruptedException ex) {
+            Logger.getLogger(ContestantsBench.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         coachWaiting = false;
@@ -261,7 +262,9 @@ public class ContestantsBench implements InterfaceContestantsBench {
             try {
                 allPlayersSeated.await();
             } catch (InterruptedException ex) {
+                Logger.getLogger(ContestantsBench.class.getName()).log(Level.SEVERE, null, ex);
             }
+
         }
         playersSelected.signalAll();
 
@@ -269,7 +272,9 @@ public class ContestantsBench implements InterfaceContestantsBench {
             try {
                 waitForCoach.await();
             } catch (InterruptedException ex) {
+                Logger.getLogger(ContestantsBench.class.getName()).log(Level.SEVERE, null, ex);
             }
+
         }
         waitForNextTrial.signal();
 
@@ -284,14 +289,18 @@ public class ContestantsBench implements InterfaceContestantsBench {
             try {
                 allPlayersSeated.await();
             } catch (InterruptedException ex) {
+                Logger.getLogger(ContestantsBench.class.getName()).log(Level.SEVERE, null, ex);
             }
+
         }
 
         while (!coachWaiting) {
             try {
                 waitForCoach.await();
             } catch (InterruptedException ex) {
+                Logger.getLogger(ContestantsBench.class.getName()).log(Level.SEVERE, null, ex);
             }
+
         }
 
         lock.unlock();
