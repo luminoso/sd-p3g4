@@ -9,6 +9,27 @@ package RopeGame;
  */
 public class RopeGame {
 
+    /**
+     * Initializes the Client of RopeGame Client/Server implementation.
+     * 
+     * Client:
+     * <ul>
+     * <li>Referee: RF
+     * <li>Coach: ClientRopeGame CH team strategy
+     * <li>Contestant: ClientRopeGame CT team id
+     * </ul>
+     *
+     * Server:
+     * <ul>
+     * <li>Playground: PG
+     * <li>RefereeSite: RS
+     * <li>General Information Repository: GR
+     * <li>ContestantsBech: CB
+     * </ul>
+     *
+     * @param args --help for full details
+     * @throws InterruptedException if early termination
+     */
     public static void main(String[] args) throws InterruptedException {
 
         Thread cb, pg, rs, gr,
@@ -39,12 +60,4 @@ public class RopeGame {
 
     }
 
-    /**
-     * Function to generate a random strength when a player is instantiated
-     *
-     * @return a strength for a player instantiation
-     */
-    private static int randomStrength() {
-        return Constants.INITIAL_MINIMUM_FORCE + (int) (Math.random() * (Constants.INITIAL_MAXIMUM_FORCE - Constants.INITIAL_MINIMUM_FORCE));
-    }
 }
