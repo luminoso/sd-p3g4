@@ -124,9 +124,17 @@ public class ClientRopeGame {
             }
         } else {
             out.println("No arguments given. Use one of the following arguments:");
+            out.println("");
+            out.println("Clients:");
             out.println("- Referee: ClientRopeGame RF");
             out.println("- Coach: ClientRopeGame CH <int:team> <int:strategy>");
             out.println("- Contestant: ClientRopeGame CT <int:team> <int:id>");
+            out.println("");
+            out.println("Server:");
+            out.println("- Playground: PG");
+            out.println("- RefereeSite: RS");
+            out.println("- General Information Repository: GR");
+            out.println("- ContestantsBech: CB");
             System.exit(1);
         }
     }

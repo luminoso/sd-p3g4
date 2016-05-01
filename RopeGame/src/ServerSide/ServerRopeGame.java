@@ -58,7 +58,7 @@ public class ServerRopeGame {
         }
 
         scon.start();
-        out.println("Server started and listening for connections...");
+        out.println("Server " + args[0] +" started and listening for connections...");
 
         while (true) {
             sconi = scon.accept();
