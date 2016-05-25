@@ -328,8 +328,6 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
 
     /**
      * Prints active entities states
-     *
-     * @return a single string with all states
      */
     private void printActiveEntitiesStates() {
         lock.lock();
@@ -365,7 +363,6 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
      *
      * @param trialNumber number of the trial
      * @param flagPosition position of the flag
-     * @return a String with all the information in a single string
      */
     private void printTrialResult(int trialNumber, int flagPosition) {
         lock.lock();

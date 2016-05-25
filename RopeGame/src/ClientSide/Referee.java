@@ -141,8 +141,6 @@ public class Referee extends Thread implements InterfaceReferee {
 
     /**
      * Decides the trial winner and steps the flag accordingly
-     *
-     * @return true if all trials over, false if more trials to play
      */
     private void assertTrialDecision() {
         int lastFlagPosition = playground.getLastFlagPosition();
@@ -164,8 +162,6 @@ public class Referee extends Thread implements InterfaceReferee {
 
     /**
      * Decides the Game winner and sets the gamePoints accordingly
-     *
-     * @return true if more games to play, false if all games ended
      */
     private void declareGameWinner() {
         List<TrialScore> trialPoints = refereeSite.getTrialPoints();

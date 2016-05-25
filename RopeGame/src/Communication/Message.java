@@ -19,8 +19,6 @@ import java.util.Set;
  */
 public class Message implements Serializable {
 
-    private static final long serialVersionUID = 20160412;
-
     // type of this message
     private final MessageType type;
 
@@ -602,10 +600,10 @@ public class Message implements Serializable {
      * Enums for the MessageCategory
      */
     public enum MessageCategory {
-        GENERIC, // generic means no specific shared memory method
-        CB, // contestants bench methods
-        PG, // playground methods
-        GIR, // general repository information methods
-        RS; // refere site methods.
+        GENERIC,    // generic means no specific shared memory method
+        CB,         // contestants bench methods
+        PG,         // playground methods
+        GIR,        // general repository information methods
+        RS          // referee site methods.
     }
 }

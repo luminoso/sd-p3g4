@@ -32,12 +32,6 @@ public class RopeGame {
      */
     public static void main(String[] args) throws InterruptedException {
 
-        Thread cb, pg, rs, gr,
-                c11, c12, c13, c14, c15,
-                c21, c22, c23, c24, c25,
-                c1, c2,
-                rf;
-
         Thread server, client;
 
         if (args.length == 1) {

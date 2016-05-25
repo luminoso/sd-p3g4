@@ -78,8 +78,6 @@ public class ContestantsBench implements InterfaceContestantsBench {
 
     /**
      * Private constructor to be used in the doubleton
-     *
-     * @param team identifier
      */
     private ContestantsBench() {
         lock = new ReentrantLock();
@@ -186,7 +184,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
 
     @Override
     public Set<Integer> getSelectedContestants() {
-        Set<Integer> selected = null;
+        Set<Integer> selected;
 
         lock.lock();
 

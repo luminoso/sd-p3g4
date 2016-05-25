@@ -96,7 +96,7 @@ public interface InterfaceRefereeSite {
     /**
      * Enums that describe the trial score
      */
-    public enum TrialScore {
+    enum TrialScore {
         DRAW(0, "D"),
         VICTORY_TEAM_1(1, "VT1"),
         VICTORY_TEAM_2(2, "VT2");
@@ -110,7 +110,7 @@ public interface InterfaceRefereeSite {
          * @param id of the trial
          * @param status of the trial
          */
-        private TrialScore(int id, String status) {
+         TrialScore(int id, String status) {
             this.id = id;
             this.status = status;
         }
@@ -119,7 +119,7 @@ public interface InterfaceRefereeSite {
     /**
      * Enums that describe the game score
      */
-    public enum GameScore {
+    enum GameScore {
         DRAW(0, "D"),
         VICTORY_TEAM_1_BY_POINTS(1, "VT1PT"),
         VICTORY_TEAM_1_BY_KNOCKOUT(2, "VT1KO"),
@@ -135,7 +135,7 @@ public interface InterfaceRefereeSite {
          * @param id of the score
          * @param status of the score
          */
-        private GameScore(int id, String status) {
+         GameScore(int id, String status) {
             this.id = id;
             this.status = status;
         }

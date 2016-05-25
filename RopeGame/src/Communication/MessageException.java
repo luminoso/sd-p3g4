@@ -10,7 +10,7 @@ public class MessageException extends Exception
    *  Mensagem que originou a excepção
    */
 
-   private Message msg;
+   private final Message msg;
 
   /**
    *  Instanciação de uma mensagem.
