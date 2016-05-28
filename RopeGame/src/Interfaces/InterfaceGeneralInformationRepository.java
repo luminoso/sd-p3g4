@@ -1,6 +1,6 @@
 package Interfaces;
 
-import Interfaces.InterfaceRefereeSite.GameScore;
+import Others.GameScore;
 import Others.VectorTimestamp;
 import java.rmi.Remote;
 import java.rmi.RemoteException;

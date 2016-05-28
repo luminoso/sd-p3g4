@@ -1,7 +1,7 @@
 package Interfaces;
 
-import Interfaces.InterfaceRefereeSite.GameScore;
-import Interfaces.InterfaceRefereeSite.TrialScore;
+import Others.GameScore;
+import Others.TrialScore;
 import Others.Tuple;
 import Others.VectorTimestamp;
 import java.rmi.Remote;
@@ -124,68 +124,4 @@ public interface InterfaceRefereeSite extends Remote {
      * @throws java.rmi.RemoteException
      */
     public Tuple<VectorTimestamp, Boolean> shutdown() throws RemoteException;
-
-    /**
-     * Enums that describe the trial score
-     */
-    enum TrialScore {
-        DRAW(0, "D"),
-        VICTORY_TEAM_1(1, "VT1"),
-        VICTORY_TEAM_2(2, "VT2");
-
-        private final int id;
-        private final String status;
-
-        /**
-         * Initializes the trial score enum
-         *
-         * @param id of the trial
-         * @param status of the trial
-         */
-        TrialScore(int id, String status) {
-            this.id = id;
-            this.status = status;
-        }
-        
-        public int getId() {
-            return id;
-        } 
-        
-        public String getStatus() {
-            return status;
-        }
-    }
-
-    /**
-     * Enums that describe the game score
-     */
-    enum GameScore {
-        DRAW(0, "D"),
-        VICTORY_TEAM_1_BY_POINTS(1, "VT1PT"),
-        VICTORY_TEAM_1_BY_KNOCKOUT(2, "VT1KO"),
-        VICTORY_TEAM_2_BY_POINTS(3, "VT2PT"),
-        VICTORY_TEAM_2_BY_KNOCKOUT(4, "VT2KO");
-
-        private final int id;
-        private final String status;
-
-        /**
-         * Initializes the game score
-         *
-         * @param id of the score
-         * @param status of the score
-         */
-        GameScore(int id, String status) {
-            this.id = id;
-            this.status = status;
-        }
-        
-        public int getId() {
-            return id;
-        }
-        
-        public String getStatus() {
-            return status;
-        }
-    }
 }

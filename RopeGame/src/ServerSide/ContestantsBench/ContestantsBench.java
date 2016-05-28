@@ -7,11 +7,14 @@ import Others.InterfaceCoach;
 import Others.InterfaceCoach.CoachState;
 import Others.InterfaceContestant;
 import Others.InterfaceContestant.ContestantState;
+import Others.Triple;
 import Others.Tuple;
+import Others.VectorTimestamp;
 import RopeGame.Constants;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -29,24 +32,21 @@ import java.util.logging.Logger;
  * @version 2016-2
  */
 public class ContestantsBench implements InterfaceContestantsBench {
-
-    // doubleton containing the two teams benches
-    private static final ContestantsBench[] instances = new ContestantsBench[2];
-
     // conditions for waiting
     private final Lock lock;
-    private final Condition allPlayersSeated;
-    private final Condition playersSelected;
-    private final Condition waitForNextTrial;
-    private final Condition waitForCoach;
+    private final Condition[] allPlayersSeated;
+    private final Condition[] playersSelected;
+    private final Condition[] waitForNextTrial;
+    private final Condition[] waitForCoach;
 
     // structure that contains the players in the bench
-    private final Set<InterfaceContestant> bench;
+    private final List<List<Triple<Integer, ContestantState, Integer>>> bench;
 
     // selected contestants to play the trial
-    private final Set<Integer> selectedContestants;
+    private final List<List<Integer>> selectedContestants;
 
-    private boolean coachWaiting; // sets if the coach is waiting
+    private boolean[] coachWaiting; // sets if the coach is waiting
+    
     private static int shutdownVotes; // counts if everyone's ready to shutdown
 
     // referee site implementation to be used
@@ -56,48 +56,44 @@ public class ContestantsBench implements InterfaceContestantsBench {
     private final InterfaceGeneralInformationRepository informationRepository;
 
     /**
-     * Gets all the instances of the Contestants Bench
-     *
-     * @return list containing contestants benches
-     */
-    public static synchronized List<ContestantsBench> getInstances() {
-        List<ContestantsBench> temp = new LinkedList<>();
-
-        for (int i = 0; i < instances.length; i++) {
-            if (instances[i] == null) {
-                instances[i] = new ContestantsBench();
-            }
-
-            temp.add(instances[i]);
-        }
-
-        return temp;
-    }
-
-    /**
      * Private constructor to be used in the doubleton
+     * @param refSiteInt
+     * @param girInt
      */
-    private ContestantsBench() {
+    public ContestantsBench(InterfaceRefereeSite refSiteInt, InterfaceGeneralInformationRepository girInt) {
         lock = new ReentrantLock();
-        allPlayersSeated = lock.newCondition();
-        playersSelected = lock.newCondition();
-        waitForNextTrial = lock.newCondition();
-        waitForCoach = lock.newCondition();
-        bench = new TreeSet<>();
-        selectedContestants = new TreeSet<>();
-        refereeSite = new RefereeSiteStub();
-        informationRepository = new GeneralInformationRepositoryStub();
+        
+        allPlayersSeated = new Condition[2];
+        playersSelected = new Condition[2];
+        waitForNextTrial = new Condition[2];
+        waitForCoach = new Condition[2];
+        coachWaiting = new boolean[2];
+        
+        bench = new ArrayList<>();
+        selectedContestants = new ArrayList<>();
+        
+        for(int i = 0; i < 2; i++) {
+            allPlayersSeated[i] = lock.newCondition();
+            playersSelected[i] = lock.newCondition();
+            waitForNextTrial[i] = lock.newCondition();
+            waitForCoach[i] = lock.newCondition();
+            coachWaiting[i] = false;
+            
+            bench.add(new ArrayList<>());
+            selectedContestants.add(new ArrayList<>());
+        }
+        
+        refereeSite = refSiteInt;
+        informationRepository = girInt;
+        
         shutdownVotes = 0;
-        coachWaiting = false;
     }
 
     @Override
-    public void addContestant() {
-        InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
-
+    public Triple<VectorTimestamp, Integer, Integer> addContestant(int id, int team, int state, int strength, VectorTimestamp vt) throws RemoteException {
         lock.lock();
 
-        bench.add(contestant);
+        bench.get(team-1).add(new Triple<>(id, ContestantState.getById(state), strength));
 
         if (contestant.getContestantState() != ContestantState.SEAT_AT_THE_BENCH) {
             contestant.setContestantState(ContestantState.SEAT_AT_THE_BENCH);

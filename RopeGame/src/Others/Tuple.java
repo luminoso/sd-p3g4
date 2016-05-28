@@ -12,12 +12,16 @@ import java.io.Serializable;
  * @param <Y> right value to be stored
  */
 public class Tuple<X, Y> implements Serializable {
+    private static final long serialVersionUID = -3629017338254731903L;
+    
     private final X first;
     private final Y second;
 
     /**
      * Tuple constructor
      *
+     * @param first
+     * @param second
      * @param left value to be stored
      * @param right value to be stored
      */
