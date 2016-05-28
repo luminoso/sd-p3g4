@@ -12,9 +12,8 @@ import java.io.Serializable;
  * @param <Y> right value to be stored
  */
 public class Tuple<X, Y> implements Serializable {
-
-    private final X left;
-    private final Y right;
+    private final X first;
+    private final Y second;
 
     /**
      * Tuple constructor
@@ -22,9 +21,9 @@ public class Tuple<X, Y> implements Serializable {
      * @param left value to be stored
      * @param right value to be stored
      */
-    public Tuple(X left, Y right) {
-        this.left = left;
-        this.right = right;
+    public Tuple(X first, Y second) {
+        this.first = first;
+        this.second = second;
     }
 
     /**
@@ -32,8 +31,8 @@ public class Tuple<X, Y> implements Serializable {
      *
      * @return left value
      */
-    public X getLeft() {
-        return left;
+    public X getFirst() {
+        return first;
     }
 
     /**
@@ -41,7 +40,7 @@ public class Tuple<X, Y> implements Serializable {
      *
      * @return right value
      */
-    public Y getRight() {
-        return right;
+    public Y getSecond() {
+        return second;
     }
 }
