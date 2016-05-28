@@ -3,14 +3,13 @@ package ClientSide.Referee;
 import Interfaces.InterfaceContestantsBench;
 import Interfaces.InterfaceGeneralInformationRepository;
 import Interfaces.InterfacePlayground;
-import Others.InterfaceReferee;
-import Others.InterfaceReferee.RefereeState;
-import static Others.InterfaceReferee.RefereeState.END_OF_THE_MATCH;
 import Interfaces.InterfaceRefereeSite;
 import Interfaces.InterfaceRefereeSite.GameScore;
 import Interfaces.InterfaceRefereeSite.TrialScore;
+import Others.InterfaceReferee;
+import Others.InterfaceReferee.RefereeState;
+import static Others.InterfaceReferee.RefereeState.END_OF_THE_MATCH;
 import RopeGame.Constants;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,19 +35,21 @@ public class Referee extends Thread implements InterfaceReferee {
      *
      * @param name of the referee
      */
-    public Referee(String name) {
+    public Referee(String name,
+            InterfaceContestantsBench bench,
+            InterfacePlayground playground,
+            InterfaceRefereeSite refereeSite,
+            InterfaceGeneralInformationRepository informationRepository) {
+        
         super(name);
 
         state = RefereeState.START_OF_THE_MATCH;
-        benchs = new ArrayList<>();
+        
+        benchs = bench.getBenches();
 
-        for (int i = 1; i <= 2; i++) {
-            benchs.add(new ContestantsBenchStub(i));
-        }
-
-        playground = new PlaygroundStub();
-        refereeSite = new RefereeSiteStub();
-        informationRepository = new GeneralInformationRepositoryStub();
+        this.playground = playground;
+        this.refereeSite = refereeSite;
+        this.informationRepository = informationRepository;
     }
 
     @Override

@@ -1,11 +1,11 @@
 package ClientSide.Coach;
 
-import Others.CoachStrategy;
-import Others.InterfaceCoach;
 import Interfaces.InterfaceContestantsBench;
 import Interfaces.InterfaceGeneralInformationRepository;
 import Interfaces.InterfacePlayground;
 import Interfaces.InterfaceRefereeSite;
+import Others.CoachStrategy;
+import Others.InterfaceCoach;
 import Others.Tuple;
 import RopeGame.Constants;
 import java.util.Set;
@@ -36,7 +36,11 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
      * @param team of the coach
      * @param strategy to be used by the coach
      */
-    public Coach(String name, int team, CoachStrategy strategy) {
+    public Coach(String name, int team, CoachStrategy strategy,
+            InterfaceContestantsBench bench,
+            InterfaceRefereeSite refereeSite,
+            InterfacePlayground playground,
+            InterfaceGeneralInformationRepository informationRepository) {
         super(name);                    // giving name to thread
 
         // initial state
@@ -44,11 +48,11 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
 
         this.team = team;               // team assignement
         this.strategy = strategy;       // team picking strategy
-
-        bench = new ContestantsBenchStub(team);
-        refereeSite = new RefereeSiteStub();
-        playground = new PlaygroundStub();
-        informationRepository = new GeneralInformationRepositoryStub();
+        
+        this.bench = bench;
+        this.refereeSite = refereeSite;
+        this.playground = playground;
+        this.informationRepository = informationRepository;
     }
 
     @Override

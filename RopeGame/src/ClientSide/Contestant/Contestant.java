@@ -1,10 +1,10 @@
 package ClientSide.Contestant;
 
-import Others.InterfaceContestant;
 import Interfaces.InterfaceContestantsBench;
 import Interfaces.InterfaceGeneralInformationRepository;
 import Interfaces.InterfacePlayground;
 import Interfaces.InterfaceRefereeSite;
+import Others.InterfaceContestant;
 
 /**
  * This is active class Contestant which implements the InterfaceContestant
@@ -35,7 +35,11 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
      * @param id of the contestant
      * @param strength of the contestant
      */
-    public Contestant(String name, int team, int id, int strength) {
+    public Contestant(String name, int team, int id, int strength,
+            InterfaceContestantsBench bench,
+            InterfacePlayground playground,
+            InterfaceRefereeSite refereeSite,
+            InterfaceGeneralInformationRepository informationRepository) {
         super(name);
 
         state = ContestantState.SEAT_AT_THE_BENCH;
@@ -44,10 +48,10 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
         this.id = id;
         this.strength = strength;
 
-        bench = new ContestantsBenchStub(team);
-        playground = new PlaygroundStub();
-        refereeSite = new RefereeSiteStub();
-        informationRepository = new GeneralInformationRepositoryStub();
+        this.bench = bench;
+        this.playground = playground;
+        this.refereeSite = refereeSite;
+        this.informationRepository = informationRepository;
     }
 
     @Override
