@@ -1,6 +1,8 @@
 package Others;
 
-import Others.InterfaceRefereeSite.TrialScore;
+import Interfaces.InterfaceRefereeSite;
+import Interfaces.InterfaceContestantsBench;
+import Interfaces.InterfaceRefereeSite.TrialScore;
 import RopeGame.Constants;
 import java.util.Collections;
 import java.util.HashSet;

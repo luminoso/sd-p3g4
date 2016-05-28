@@ -1,11 +1,11 @@
-package ServerSide;
+package ServerSide.Playground;
 
 import ClientSide.GeneralInformationRepositoryStub;
 import Others.InterfaceCoach;
 import Others.InterfaceCoach.CoachState;
 import Others.InterfaceContestant;
 import Others.InterfaceContestant.ContestantState;
-import Others.InterfacePlayground;
+import Interfaces.InterfacePlayground;
 import Others.InterfaceReferee;
 import Others.InterfaceReferee.RefereeState;
 import RopeGame.Constants;

@@ -1,5 +1,7 @@
 package Others;
 
+import Interfaces.InterfaceRefereeSite;
+import Interfaces.InterfaceContestantsBench;
 import java.io.Serializable;
 import java.util.Set;
 

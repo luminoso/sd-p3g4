@@ -1,13 +1,13 @@
-package ServerSide;
+package ServerSide.GIR;
 
 import Others.InterfaceCoach;
 import Others.InterfaceCoach.CoachState;
 import Others.InterfaceContestant;
 import Others.InterfaceContestant.ContestantState;
-import Others.InterfaceGeneralInformationRepository;
+import Interfaces.InterfaceGeneralInformationRepository;
 import Others.InterfaceReferee;
 import Others.InterfaceReferee.RefereeState;
-import Others.InterfaceRefereeSite.GameScore;
+import Interfaces.InterfaceRefereeSite.GameScore;
 import Others.Tuple;
 import RopeGame.Constants;
 import java.io.FileNotFoundException;

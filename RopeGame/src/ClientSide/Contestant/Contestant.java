@@ -1,10 +1,10 @@
-package ClientSide;
+package ClientSide.Contestant;
 
 import Others.InterfaceContestant;
-import Others.InterfaceContestantsBench;
-import Others.InterfaceGeneralInformationRepository;
-import Others.InterfacePlayground;
-import Others.InterfaceRefereeSite;
+import Interfaces.InterfaceContestantsBench;
+import Interfaces.InterfaceGeneralInformationRepository;
+import Interfaces.InterfacePlayground;
+import Interfaces.InterfaceRefereeSite;
 
 /**
  * This is active class Contestant which implements the InterfaceContestant

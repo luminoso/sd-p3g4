@@ -1,11 +1,11 @@
-package ClientSide;
+package ClientSide.Coach;
 
 import Others.CoachStrategy;
 import Others.InterfaceCoach;
-import Others.InterfaceContestantsBench;
-import Others.InterfaceGeneralInformationRepository;
-import Others.InterfacePlayground;
-import Others.InterfaceRefereeSite;
+import Interfaces.InterfaceContestantsBench;
+import Interfaces.InterfaceGeneralInformationRepository;
+import Interfaces.InterfacePlayground;
+import Interfaces.InterfaceRefereeSite;
 import Others.Tuple;
 import RopeGame.Constants;
 import java.util.Set;

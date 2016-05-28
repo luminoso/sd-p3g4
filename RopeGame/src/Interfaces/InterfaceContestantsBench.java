@@ -1,5 +1,6 @@
-package Others;
+package Interfaces;
 
+import Others.Tuple;
 import java.util.Set;
 
 /**

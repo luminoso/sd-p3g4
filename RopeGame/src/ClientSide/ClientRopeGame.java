@@ -1,10 +1,13 @@
 package ClientSide;
 
+import ClientSide.Referee.Referee;
+import ClientSide.Contestant.Contestant;
+import ClientSide.Coach.Coach;
 import Others.CoachStrategy;
-import Others.InterfaceContestantsBench;
-import Others.InterfaceGeneralInformationRepository;
-import Others.InterfacePlayground;
-import Others.InterfaceRefereeSite;
+import Interfaces.InterfaceContestantsBench;
+import Interfaces.InterfaceGeneralInformationRepository;
+import Interfaces.InterfacePlayground;
+import Interfaces.InterfaceRefereeSite;
 import Others.KeepWinningTeam;
 import Others.MostStrengthStrategy;
 import RopeGame.Constants;

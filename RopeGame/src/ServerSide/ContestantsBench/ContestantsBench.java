@@ -1,14 +1,12 @@
-package ServerSide;
+package ServerSide.ContestantsBench;
 
-import ClientSide.GeneralInformationRepositoryStub;
-import ClientSide.RefereeSiteStub;
+import Interfaces.InterfaceContestantsBench;
+import Interfaces.InterfaceGeneralInformationRepository;
+import Interfaces.InterfaceRefereeSite;
 import Others.InterfaceCoach;
 import Others.InterfaceCoach.CoachState;
 import Others.InterfaceContestant;
 import Others.InterfaceContestant.ContestantState;
-import Others.InterfaceContestantsBench;
-import Others.InterfaceGeneralInformationRepository;
-import Others.InterfaceRefereeSite;
 import Others.Tuple;
 import RopeGame.Constants;
 import java.util.HashSet;

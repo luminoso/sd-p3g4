@@ -5,4 +5,4 @@
  * @author Guilherme Cardoso - gjc@ua.pt
  * @version 2016-2
  */
-package Communication;
+package Interfaces;

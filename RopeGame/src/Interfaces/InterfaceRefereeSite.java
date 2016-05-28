@@ -1,7 +1,7 @@
-package Others;
+package Interfaces;
 
-import Others.InterfaceRefereeSite.GameScore;
-import Others.InterfaceRefereeSite.TrialScore;
+import Interfaces.InterfaceRefereeSite.GameScore;
+import Interfaces.InterfaceRefereeSite.TrialScore;
 import java.util.List;
 
 /**

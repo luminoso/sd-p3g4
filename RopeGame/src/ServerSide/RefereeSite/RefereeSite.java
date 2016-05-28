@@ -1,11 +1,11 @@
-package ServerSide;
+package ServerSide.RefereeSite;
 
 import ClientSide.GeneralInformationRepositoryStub;
 import Others.InterfaceReferee;
 import Others.InterfaceReferee.RefereeState;
-import Others.InterfaceRefereeSite;
-import Others.InterfaceRefereeSite.GameScore;
-import Others.InterfaceRefereeSite.TrialScore;
+import Interfaces.InterfaceRefereeSite;
+import Interfaces.InterfaceRefereeSite.GameScore;
+import Interfaces.InterfaceRefereeSite.TrialScore;
 import RopeGame.Constants;
 import static java.lang.System.out;
 import java.util.LinkedList;

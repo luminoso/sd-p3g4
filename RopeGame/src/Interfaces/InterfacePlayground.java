@@ -1,5 +1,6 @@
-package Others;
+package Interfaces;
 
+import Others.InterfaceContestant;
 import java.util.List;
 
 /**

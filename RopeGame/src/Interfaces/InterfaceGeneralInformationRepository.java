@@ -1,6 +1,6 @@
-package Others;
+package Interfaces;
 
-import ServerSide.RefereeSite;
+import ServerSide.RefereeSite.RefereeSite;
 
 /**
  * Interface that defines the operations available over the objects that

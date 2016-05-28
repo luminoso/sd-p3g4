@@ -1,8 +1,5 @@
 package ServerSide;
 
-import RopeGame.ServerConfigs;
-import static java.lang.System.out;
-
 /**
  * This class implements the Server of RopeGame client-server architecture. It
  * also implements initialization of the passive ententies.
@@ -25,6 +22,8 @@ public class ServerRopeGame {
      * @param args --help for more info
      */
     public static void main(String[] args) {
+        
+        /*
         ServerCom scon = null, sconi;
         ServiceProviderAgent sps;
         InterfaceServer servInterface = null;
@@ -65,6 +64,7 @@ public class ServerRopeGame {
             sps = new ServiceProviderAgent(sconi, servInterface);
             sps.start();
         }
+    */
     }
 
 }

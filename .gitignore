@@ -1,6 +1,10 @@
 ## Netbeans files
 /RopeGame/nbproject
 
+## IntelliJ Files
+.idea
+*.iml
+
 ## KDE files
 .directory
 /RopeGame/build/

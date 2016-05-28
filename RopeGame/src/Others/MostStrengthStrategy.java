@@ -1,5 +1,7 @@
 package Others;
 
+import Interfaces.InterfaceRefereeSite;
+import Interfaces.InterfaceContestantsBench;
 import RopeGame.Constants;
 import java.util.Comparator;
 import java.util.HashSet;

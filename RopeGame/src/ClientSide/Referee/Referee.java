@@ -1,14 +1,14 @@
-package ClientSide;
+package ClientSide.Referee;
 
-import Others.InterfaceContestantsBench;
-import Others.InterfaceGeneralInformationRepository;
-import Others.InterfacePlayground;
+import Interfaces.InterfaceContestantsBench;
+import Interfaces.InterfaceGeneralInformationRepository;
+import Interfaces.InterfacePlayground;
 import Others.InterfaceReferee;
 import Others.InterfaceReferee.RefereeState;
 import static Others.InterfaceReferee.RefereeState.END_OF_THE_MATCH;
-import Others.InterfaceRefereeSite;
-import Others.InterfaceRefereeSite.GameScore;
-import Others.InterfaceRefereeSite.TrialScore;
+import Interfaces.InterfaceRefereeSite;
+import Interfaces.InterfaceRefereeSite.GameScore;
+import Interfaces.InterfaceRefereeSite.TrialScore;
 import RopeGame.Constants;
 import java.util.ArrayList;
 import java.util.List;
