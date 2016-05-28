@@ -75,7 +75,11 @@ public interface InterfaceCoach {
             this.id = id;
             this.state = state;
         }
-
+        
+        public int getId(){
+            return this.id;
+        }
+        
         /**
          * Converts current Coach state to String
          *

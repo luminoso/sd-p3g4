@@ -41,4 +41,8 @@ public enum ContestantState {
         
         return null;
     }
+
+    public int getId() {
+        return this.id;
+    }
 }

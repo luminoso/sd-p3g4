@@ -58,5 +58,9 @@ public interface InterfaceReferee {
         public String toString() {
             return state;
         }
+
+        public int getId() {
+            return this.id;
+        }
     }
 }
