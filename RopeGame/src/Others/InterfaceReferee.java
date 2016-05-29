@@ -6,7 +6,7 @@ package Others;
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
- * @version 2016-2
+ * @version 2016-3
  */
 public interface InterfaceReferee {
 
@@ -62,5 +62,16 @@ public interface InterfaceReferee {
         public int getId() {
             return this.id;
         }
+    }
+
+    static RefereeState getState(int id) {
+
+        for (RefereeState st : RefereeState.values()) {
+            if (st.getId() == id) {
+                return st;
+            }
+        }
+
+        return null;
     }
 }

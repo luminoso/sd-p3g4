@@ -1,13 +1,13 @@
 package ServerSide.GIR;
 
+import Interfaces.InterfaceGeneralInformationRepository;
+import Others.GameScore;
 import Others.InterfaceCoach;
 import Others.InterfaceCoach.CoachState;
 import Others.InterfaceContestant;
 import Others.InterfaceContestant.ContestantState;
-import Interfaces.InterfaceGeneralInformationRepository;
 import Others.InterfaceReferee;
 import Others.InterfaceReferee.RefereeState;
-import Interfaces.InterfaceRefereeSite.GameScore;
 import Others.Tuple;
 import RopeGame.Constants;
 import java.io.FileNotFoundException;
@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
- * @version 2016-2
+ * @version 2016-3
  */
 public class GeneralInformationRepository implements InterfaceGeneralInformationRepository {
 

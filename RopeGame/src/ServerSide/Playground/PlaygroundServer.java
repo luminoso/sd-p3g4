@@ -13,9 +13,12 @@ import java.rmi.server.UnicastRemoteObject;
 
 /**
  *
- * @author ed1000
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-3
  */
 public class PlaygroundServer {
+
     public static void main(String args[]) {
         /* obtenção da localização do serviço de registo RMI */
         String rmiRegHostName;
@@ -23,23 +26,23 @@ public class PlaygroundServer {
 
         rmiRegHostName = RegistryConfig.RMI_HOSTNAME;
         rmiRegPortNumb = RegistryConfig.RMI_PORTNUMBER;
-        
+
         /* localização por nome do objecto remoto no serviço de registos RMI */
         InterfaceGeneralInformationRepository girInterface = null;
 
-        try { 
+        try {
             Registry registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
-            girInterface = (InterfaceGeneralInformationRepository) registry.lookup (RegistryConfig.REGISTRY_GIR_NAME);
-        } catch (RemoteException e) { 
-            System.out.println("Excepção na localização do General Information Repository: " + e.getMessage () + "!");
+            girInterface = (InterfaceGeneralInformationRepository) registry.lookup(RegistryConfig.REGISTRY_GIR_NAME);
+        } catch (RemoteException e) {
+            System.out.println("Excepção na localização do General Information Repository: " + e.getMessage() + "!");
             e.printStackTrace();
-            System.exit (1);
-        } catch (NotBoundException e) { 
-            System.out.println("O General Information Repository não está registado: " + e.getMessage () + "!");
+            System.exit(1);
+        } catch (NotBoundException e) {
+            System.out.println("O General Information Repository não está registado: " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
         }
-        
+
         /* instanciação e instalação do gestor de segurança */
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
@@ -48,7 +51,7 @@ public class PlaygroundServer {
         /* instanciação do objecto remoto que representa a barbearia e geração de um stub para ele */
         Playground playground = null;
         InterfacePlayground playgroundInterface = null;
-        
+
         playground = new Playground(girInterface);
         try {
             playgroundInterface = (InterfacePlayground) UnicastRemoteObject.exportObject(playground, RegistryConfig.REGISTRY_PLAYGROUND_PORT);
@@ -97,7 +100,7 @@ public class PlaygroundServer {
             e.printStackTrace();
             System.exit(1);
         }
-        
+
         System.out.println("O Playground foi registado!");
     }
 }

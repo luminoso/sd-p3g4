@@ -13,9 +13,11 @@ import java.rmi.RemoteException;
  * @author Guilherme Cardoso - gjc@ua.pt
  * @version 2016-3
  */
-public interface InterfaceGeneralInformationRepository extends Remote{
+public interface InterfaceGeneralInformationRepository extends Remote {
+
     /**
      * Adds a Coach to General Information Repository
+     *
      * @param team
      * @param status
      * @param vt
@@ -25,6 +27,7 @@ public interface InterfaceGeneralInformationRepository extends Remote{
 
     /**
      * Adds a Referee to General Information Repository
+     *
      * @param id
      * @param team
      * @param status
@@ -47,6 +50,7 @@ public interface InterfaceGeneralInformationRepository extends Remote{
 
     /**
      * Adds a Referee to General Information Repository
+     *
      * @param status
      * @param vt
      * @throws java.rmi.RemoteException
@@ -55,6 +59,7 @@ public interface InterfaceGeneralInformationRepository extends Remote{
 
     /**
      * Prints an line with updated information about game state
+     *
      * @param vt
      * @throws java.rmi.RemoteException
      */
@@ -62,12 +67,14 @@ public interface InterfaceGeneralInformationRepository extends Remote{
 
     /**
      * Closes log file
+     *
      * @throws java.rmi.RemoteException
      */
     public void close() throws RemoteException;
 
     /**
      * Print game header
+     *
      * @param vt
      * @throws java.rmi.RemoteException
      */
@@ -84,6 +91,7 @@ public interface InterfaceGeneralInformationRepository extends Remote{
 
     /**
      * Print general information repository header
+     *
      * @param vt
      * @throws java.rmi.RemoteException
      */
@@ -91,6 +99,7 @@ public interface InterfaceGeneralInformationRepository extends Remote{
 
     /**
      * Prints game logger legend
+     *
      * @param vt
      * @throws java.rmi.RemoteException
      */
@@ -98,6 +107,7 @@ public interface InterfaceGeneralInformationRepository extends Remote{
 
     /**
      * Prints that was a draw
+     *
      * @param vt
      * @throws java.rmi.RemoteException
      */
@@ -116,6 +126,7 @@ public interface InterfaceGeneralInformationRepository extends Remote{
 
     /**
      * Resets team placement
+     *
      * @param vt
      * @throws java.rmi.RemoteException
      */
@@ -141,6 +152,7 @@ public interface InterfaceGeneralInformationRepository extends Remote{
 
     /**
      * Sets a team placement
+     *
      * @param vt
      * @throws java.rmi.RemoteException
      */

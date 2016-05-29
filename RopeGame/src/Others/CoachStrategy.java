@@ -1,8 +1,7 @@
 package Others;
 
-import Interfaces.InterfaceRefereeSite;
-import Interfaces.InterfaceContestantsBench;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -11,16 +10,20 @@ import java.util.Set;
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
- * @version 2016-2
+ * @version 2016-3
  */
 public interface CoachStrategy extends Serializable {
 
     /**
      * Method in which the coach picks the Contestants to go to referee site
      *
-     * @param bench with all the contestants
-     * @param site implementation
+     * @param contestants Set containing Tuples of id,strength of all players
+     * (same as getBench())
+     * @param selectedContestants Set with selected contestants id
+     * @param trialPoints List containing trial points
      * @return set with the picked contestants
      */
-    Set<Integer> pickTeam(InterfaceContestantsBench bench, InterfaceRefereeSite site);
+    Set<Integer> pickTeam(Set<Tuple<Integer, Integer>> contestants,
+            Set<Integer> selectedContestants,
+            List<TrialScore> trialPoints);
 }

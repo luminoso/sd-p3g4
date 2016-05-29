@@ -6,8 +6,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author ed1000
+ * Implementation of a Vectorial Clock
+ * 
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-3
  */
 public class VectorTimestamp implements Cloneable, Serializable {
     private static final long serialVersionUID = -424825419083102993L;

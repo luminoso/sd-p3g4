@@ -8,7 +8,7 @@ import Others.InterfaceCoach.CoachState;
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
- * @version 2016-2
+ * @version 2016-3
  */
 public interface InterfaceCoach {
 
@@ -75,11 +75,11 @@ public interface InterfaceCoach {
             this.id = id;
             this.state = state;
         }
-        
-        public int getId(){
+
+        public int getId() {
             return this.id;
         }
-        
+
         /**
          * Converts current Coach state to String
          *
@@ -89,5 +89,16 @@ public interface InterfaceCoach {
         public String toString() {
             return state;
         }
+    }
+
+    static CoachState getState(int id) {
+
+        for (CoachState st : CoachState.values()) {
+            if (st.getId() == id) {
+                return st;
+            }
+        }
+
+        return null;
     }
 }

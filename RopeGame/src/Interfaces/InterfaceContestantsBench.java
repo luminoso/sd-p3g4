@@ -16,66 +16,67 @@ import java.util.Set;
  * @version 2016-3
  */
 public interface InterfaceContestantsBench extends Remote {
+
     /**
-     * The method adds a contestant to the bench
-     * @param id
-     * @param team
-     * @param state
-     * @param strength
-     * @param vt
-     * @return 
-     * @throws java.rmi.RemoteException
+     * Adds a contestant to the bench
+     *
+     * @param id of the contestant
+     * @param team of the contestant
+     * @param state Id of the contestant
+     * @param strength of the contestant
+     * @param vt clock
+     * @return Triple with VT, ContestantState Id, Strength
+     * @throws RemoteException
      */
     public Triple<VectorTimestamp, Integer, Integer> addContestant(int id, int team, int state, int strength, VectorTimestamp vt) throws RemoteException;
 
     /**
      * This method returns the bench which contains the contestants
      *
-     * @param team
-     * @param vt
-     * @return list of the contestants in the bench
+     * @param team bench to get
+     * @param vt clock
+     * @return tuple with clock and the Set with contestants iD, strength. State
+     * is SEAT_AT_THE_BENCH
      * @throws java.rmi.RemoteException
      */
-    public Set<Tuple<Integer, Integer>> getBench(int team) throws RemoteException;
+    public Tuple<VectorTimestamp, Set<Tuple<Integer, Integer>>> getBench(int team, VectorTimestamp vt) throws RemoteException;
 
     /**
-     * The method removes a contestant from the bench.
-     * @param id
-     * @param team
-     * @param vt
-     * @return 
+     * Removes a contestant from the bench.
+     *
+     * @param id of the contestant
+     * @param team of the contestant
      * @throws java.rmi.RemoteException
      */
-    public VectorTimestamp getContestant(int id, int team, VectorTimestamp vt) throws RemoteException;
+    public void getContestant(int id, int team) throws RemoteException;
 
     /**
      * Gets the selected contestants to play
      *
-     * @param team
-     * @param vt
-     * @return set with the selected contestants
+     * @param team of the selected contestants
+     * @param vt clock
+     * @return clock and an set with the selected contestants iDs
      * @throws java.rmi.RemoteException
      */
-    public Set<Integer> getSelectedContestants(int team) throws RemoteException;
+    public Tuple<VectorTimestamp, Set<Integer>> getSelectedContestants(int team, VectorTimestamp vt) throws RemoteException;
 
     /**
      * Synchronisation point where the Referee waits for the Coaches to pick the
      * teams
-     * @param team
-     * @param vt
-     * @return 
+     *
+     * @param team of the coach waiting
      * @throws java.rmi.RemoteException
      */
-    public VectorTimestamp pickYourTeam(int team, VectorTimestamp vt) throws RemoteException;
+    public void pickYourTeam(int team) throws RemoteException;
 
     /**
      * Set selected contestants array. This arrays should be filled with the IDs
      * of the players for the next round.
      *
-     * @param team
-     * @param selected identifiers for the selected players
-     * @param vt
-     * @return 
+     * @param team of the selected contestants
+     * @param selected iDs for the selected players
+     * @param vt clock
+     * @return updated clock
      * @throws java.rmi.RemoteException
      */
     public VectorTimestamp setSelectedContestants(int team, Set<Integer> selected, VectorTimestamp vt) throws RemoteException;
@@ -83,9 +84,10 @@ public interface InterfaceContestantsBench extends Remote {
     /**
      * Synchronisation point where Coaches wait for the next trial instructed by
      * the Referee
-     * @param team
-     * @param vt
-     * @return 
+     *
+     * @param team of the coach waiting
+     * @param vt current clock
+     * @return updated clock and coach state iD
      * @throws java.rmi.RemoteException
      */
     public Tuple<VectorTimestamp, Integer> waitForNextTrial(int team, VectorTimestamp vt) throws RemoteException;
@@ -94,18 +96,18 @@ public interface InterfaceContestantsBench extends Remote {
      * Updates the contestant strength
      *
      * @param id of the contestants to be updated
-     * @param team
+     * @param team of the contestant to be updated
      * @param delta difference to be applied to the contestant
-     * @param vt
-     * @return 
+     * @param vt clock
+     * @return updated clock
      * @throws java.rmi.RemoteException
      */
     public VectorTimestamp updateContestantStrength(int id, int team, int delta, VectorTimestamp vt) throws RemoteException;
 
     /**
      * Sends an interrupt to shut down the game
-     * @param team
-     * @return 
+     *
+     * @param team to be interrupted
      * @throws java.rmi.RemoteException
      */
     public void interrupt(int team) throws RemoteException;
@@ -117,11 +119,15 @@ public interface InterfaceContestantsBench extends Remote {
      * @throws java.rmi.RemoteException
      */
     public boolean shutdown() throws RemoteException;
-    
+
     /**
      * The referee waits for everyone before starting first game
+     *
      * @param team
+     * @param vt clock
+     * @return updated clock
      * @throws java.rmi.RemoteException
      */
-    public void waitForEveryoneToStart(int team) throws RemoteException;
+    public VectorTimestamp waitForEveryoneToStart(int team, VectorTimestamp vt) throws RemoteException;
+
 }

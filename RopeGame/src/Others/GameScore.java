@@ -2,8 +2,10 @@ package Others;
 
 /**
  * Enums that describe the game score.
- * 
- * @author ed1000
+ *
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-3
  */
 public enum GameScore {
     DRAW(0, "D"),
@@ -33,12 +35,14 @@ public enum GameScore {
     public String getStatus() {
         return status;
     }
-    
+
     public static GameScore getById(int id) {
-        for(GameScore score : values())
-            if(score.id == id)
+        for (GameScore score : values()) {
+            if (score.id == id) {
                 return score;
-        
+            }
+        }
+
         return null;
     }
 }

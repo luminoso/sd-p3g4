@@ -7,9 +7,9 @@ import java.io.Serializable;
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
- * @version 2016-2
- * @param <X> left value to be stored
- * @param <Y> right value to be stored
+ * @version 2016-3
+ * @param <X> first value to be stored
+ * @param <Y> second value to be stored
  */
 public class Tuple<X, Y> implements Serializable {
     private static final long serialVersionUID = -3629017338254731903L;

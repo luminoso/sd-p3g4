@@ -17,12 +17,13 @@ import java.util.List;
  * @version 2016-3
  */
 public interface InterfaceRefereeSite extends Remote {
+
     /**
      * The method allows to set the game points for both team
      *
      * @param score game points of both teams
-     * @param vt
-     * @return 
+     * @param vt clock
+     * @return updated clock
      * @throws java.rmi.RemoteException
      */
     public VectorTimestamp addGamePoint(GameScore score, VectorTimestamp vt) throws RemoteException;
@@ -31,19 +32,20 @@ public interface InterfaceRefereeSite extends Remote {
      * The method allows to set the trial points for both team
      *
      * @param score trial points of both teams
-     * @param vt
-     * @return 
+     * @param vt clock
+     * @return updated clock
      * @throws java.rmi.RemoteException
      */
     public VectorTimestamp addTrialPoint(TrialScore score, VectorTimestamp vt) throws RemoteException;
 
     /**
      * Synchronization point where the Referee waits for both teams to be ready
-     * @param vt
-     * @return 
+     *
+     * @param vt clock
+     * @return clock and new state id
      * @throws java.rmi.RemoteException
      */
-    public VectorTimestamp bothTeamsReady(VectorTimestamp vt) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> bothTeamsReady(VectorTimestamp vt) throws RemoteException;
 
     /**
      * The method returns the game points in the form of an array
@@ -84,25 +86,27 @@ public interface InterfaceRefereeSite extends Remote {
     /**
      * Checks if the match has ended
      *
-     * @param vt
-     * @return true if no more matches to play. False if otherwise
+     * @return clock and boolean: true if no more matches to play. False if
+     * otherwise
      * @throws java.rmi.RemoteException
      */
-    public Tuple<VectorTimestamp, Boolean> hasMatchEnded(VectorTimestamp vt) throws RemoteException;
+    public boolean hasMatchEnded() throws RemoteException;
 
     /**
      * Synchronisation point where the Coaches inform the Referee that they're
      * ready
+     *
      * @param vt
-     * @return 
+     * @return
      * @throws java.rmi.RemoteException
      */
     public VectorTimestamp informReferee(VectorTimestamp vt) throws RemoteException;
 
     /**
      * Resets the trial points
+     *
      * @param vt
-     * @return 
+     * @return
      * @throws java.rmi.RemoteException
      */
     public VectorTimestamp resetTrialPoints(VectorTimestamp vt) throws RemoteException;
@@ -112,7 +116,7 @@ public interface InterfaceRefereeSite extends Remote {
      *
      * @param hasMatchEnded true if match ended
      * @param vt
-     * @return 
+     * @return
      * @throws java.rmi.RemoteException
      */
     public VectorTimestamp setHasMatchEnded(boolean hasMatchEnded, VectorTimestamp vt) throws RemoteException;

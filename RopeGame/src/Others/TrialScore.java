@@ -3,7 +3,9 @@ package Others;
 /**
  * Enums that describe the trial score.
  * 
- * @author ed1000
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-3
  */
 public enum TrialScore {
     DRAW(0, "D"),

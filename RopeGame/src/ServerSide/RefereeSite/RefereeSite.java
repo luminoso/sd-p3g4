@@ -1,11 +1,12 @@
 package ServerSide.RefereeSite;
 
-import ClientSide.GeneralInformationRepositoryStub;
-import Others.InterfaceReferee;
-import Others.InterfaceReferee.RefereeState;
+import Interfaces.InterfaceGeneralInformationRepository;
 import Interfaces.InterfaceRefereeSite;
-import Interfaces.InterfaceRefereeSite.GameScore;
-import Interfaces.InterfaceRefereeSite.TrialScore;
+import Others.GameScore;
+import Others.InterfaceReferee.RefereeState;
+import Others.TrialScore;
+import Others.Tuple;
+import Others.VectorTimestamp;
 import RopeGame.Constants;
 import static java.lang.System.out;
 import java.util.LinkedList;
@@ -21,7 +22,7 @@ import java.util.logging.Logger;
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
- * @version 2016-2
+ * @version 2016-3
  */
 public class RefereeSite implements InterfaceRefereeSite {
 
@@ -38,17 +39,20 @@ public class RefereeSite implements InterfaceRefereeSite {
     private int shutdownVotes;                  // count if all votes are met to shutdown
     private final List<GameScore> gameStatus;   // current game status
 
-    private final GeneralInformationRepositoryStub informationRepository;
+    private final InterfaceGeneralInformationRepository informationRepository;
+
+    private VectorTimestamp vt;
 
     /**
      * The method returns the RefereeSite object. The method is thread-safe and
      * uses the implicit monitor of the class.
      *
+     * @param informationRepository interface to use
      * @return referee site object to be used
      */
-    public static synchronized RefereeSite getInstance() {
+    public static synchronized RefereeSite getInstance(InterfaceGeneralInformationRepository informationRepository) {
         if (instance == null) {
-            instance = new RefereeSite();
+            instance = new RefereeSite(informationRepository);
         }
 
         return instance;
@@ -57,7 +61,7 @@ public class RefereeSite implements InterfaceRefereeSite {
     /**
      * Private constructor to be used in singleton
      */
-    private RefereeSite() {
+    private RefereeSite(InterfaceGeneralInformationRepository informationRepository) {
         lock = new ReentrantLock();
 
         trialStatus = new LinkedList<>();
@@ -66,99 +70,129 @@ public class RefereeSite implements InterfaceRefereeSite {
         informReferee = lock.newCondition();
         informRefereeCounter = 0;
         hasMatchEnded = false;
-        informationRepository = new GeneralInformationRepositoryStub();
+        this.informationRepository = informationRepository;
         shutdownVotes = 0;
+
+        //TODO: initialise vt
+        vt = null;
     }
 
     @Override
-    public List<GameScore> getGamePoints() {
+    public Tuple<VectorTimestamp, List<GameScore>> getGamePoints(VectorTimestamp vt) {
         List<GameScore> gamePoints;
 
         lock.lock();
 
         gamePoints = new LinkedList<>(this.gameStatus);
 
+        vt.increment();
+        vt.update(vt);
+
         lock.unlock();
 
-        return gamePoints;
+        return new Tuple<>(vt.clone(), gamePoints);
     }
 
     @Override
-    public List<TrialScore> getTrialPoints() {
+    public Tuple<VectorTimestamp, List<TrialScore>> getTrialPoints(VectorTimestamp vt) {
         List<TrialScore> trialPoints;
 
         lock.lock();
 
         trialPoints = new LinkedList<>(this.trialStatus);
 
+        vt.increment();
+        vt.update(vt);
+
         lock.unlock();
 
-        return trialPoints;
+        return new Tuple<>(vt.clone(), trialPoints);
     }
 
     @Override
-    public void resetTrialPoints() {
+    public VectorTimestamp resetTrialPoints(VectorTimestamp vt) {
         lock.lock();
 
         this.trialStatus = new LinkedList<>();
 
+        vt.increment();
+        vt.update(vt);
+
         lock.unlock();
+
+        return vt.clone();
     }
 
     @Override
-    public int getRemainingTrials() {
+    public Tuple<VectorTimestamp, Integer> getRemainingTrials(VectorTimestamp vt) {
         int remaining;
 
         lock.lock();
 
         remaining = Constants.NUMBER_OF_TRIALS - this.trialStatus.size();
 
+        vt.increment();
+        vt.update(vt);
+
         lock.unlock();
 
-        return remaining;
+        return new Tuple<>(vt.clone(), remaining);
     }
 
     @Override
-    public int getRemainingGames() {
+    public Tuple<VectorTimestamp, Integer> getRemainingGames(VectorTimestamp vt) {
         int remaining;
 
         lock.lock();
 
         remaining = Constants.NUMBER_OF_GAMES - this.gameStatus.size();
 
+        vt.increment();
+        vt.update(vt);
+
         lock.unlock();
 
-        return remaining;
+        return new Tuple<>(vt.clone(), remaining);
     }
 
     @Override
-    public void addGamePoint(GameScore score) {
+    public VectorTimestamp addGamePoint(GameScore score, VectorTimestamp vt) {
         lock.lock();
 
         this.gameStatus.add(score);
         this.trialStatus.clear();
 
+        vt.increment();
+        vt.update(vt);
+
         lock.unlock();
+
+        return vt.clone();
     }
 
     @Override
-    public void addTrialPoint(TrialScore score) {
+    public VectorTimestamp addTrialPoint(TrialScore score, VectorTimestamp vt) {
         lock.lock();
 
         this.trialStatus.add(score);
 
+        vt.increment();
+        vt.update(vt);
+
         lock.unlock();
+
+        return vt.clone();
     }
 
     @Override
-    public void bothTeamsReady() {
-        InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
+    public Tuple<VectorTimestamp, Integer> bothTeamsReady(VectorTimestamp vt) {
+        //InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
 
         lock.lock();
         try {
-            referee.setRefereeState(RefereeState.TEAMS_READY);
-            informationRepository.updateReferee();
-            informationRepository.printLineUpdate();
+            //referee.setRefereeState(RefereeState.TEAMS_READY);
+            //informationRepository.updateReferee();
+            //informationRepository.printLineUpdate();
 
             if (informRefereeCounter != 2) {
                 informReferee.await();
@@ -170,10 +204,12 @@ public class RefereeSite implements InterfaceRefereeSite {
         informRefereeCounter = 0;
 
         lock.unlock();
+
+        return new Tuple<>(vt.clone(), RefereeState.TEAMS_READY.getId());
     }
 
     @Override
-    public void informReferee() {
+    public VectorTimestamp informReferee(VectorTimestamp vt) {
         lock.lock();
 
         informRefereeCounter++;
@@ -182,28 +218,43 @@ public class RefereeSite implements InterfaceRefereeSite {
             informReferee.signal();
         }
 
+        vt.increment();
+        vt.update(vt);
+
         lock.unlock();
+
+        return vt.clone();
     }
 
     @Override
     public boolean hasMatchEnded() {
         boolean hasEnded;
         lock.lock();
+
         hasEnded = hasMatchEnded;
+
         lock.unlock();
+
         return hasEnded;
     }
 
     @Override
-    public void setHasMatchEnded(boolean hasMatchEnded) {
+    public VectorTimestamp setHasMatchEnded(boolean hasMatchEnded, VectorTimestamp vt) {
         lock.lock();
-        out.println("setting has match ended");
+
+        out.println("Setting has match ended");
         this.hasMatchEnded = hasMatchEnded;
+
+        vt.increment();
+        vt.update(vt);
+
         lock.unlock();
+
+        return vt.clone();
     }
 
     @Override
-    public boolean shutdown() {
+    public Tuple<VectorTimestamp, Boolean> shutdown() {
         boolean result;
 
         lock.lock();
@@ -214,7 +265,7 @@ public class RefereeSite implements InterfaceRefereeSite {
 
         lock.unlock();
 
-        return result;
+        return new Tuple<>(vt.clone(), result);
     }
 
 }

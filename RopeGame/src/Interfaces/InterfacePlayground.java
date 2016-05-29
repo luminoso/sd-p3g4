@@ -16,14 +16,16 @@ import java.util.List;
  * @version 2016-3
  */
 public interface InterfacePlayground extends Remote {
+
     /**
-     * The method adds a contestant to the playground
-     * @param id
-     * @param team
-     * @param status
-     * @param strength
-     * @param vt
-     * @return 
+     * Adds a contestant to the playground
+     *
+     * @param id of the contestant
+     * @param team of the contestant
+     * @param status of the contestant
+     * @param strength of the contestant
+     * @param vt clock of the contestant
+     * @return clock and new contestant state id
      * @throws java.rmi.RemoteException
      */
     public Tuple<VectorTimestamp, Integer> addContestant(int id, int team, int status, int strength, VectorTimestamp vt) throws RemoteException;
@@ -31,40 +33,40 @@ public interface InterfacePlayground extends Remote {
     /**
      * Checks if all contestants are ready to pull the rope
      *
-     * @param vt
      * @return true if every Contestant is in place to pull the rope
-     * @throws java.rmi.RemoteException
      */
-    public Tuple<VectorTimestamp, Boolean> checkAllContestantsReady(VectorTimestamp vt) throws RemoteException;
+    public boolean checkAllContestantsReady();
 
     /**
      * Synchronisation point for waiting for the teams to be ready
-     * @param team
-     * @param vt
-     * @return 
+     *
+     * @param team number
+     * @param vt clock
+     * @return tuple with updated clock and new coach state id
      * @throws java.rmi.RemoteException
      */
     public Tuple<VectorTimestamp, Integer> checkTeamPlacement(int team, VectorTimestamp vt) throws RemoteException;
 
     /**
-     * The method removes the contestant from the playground
-     * @param id
-     * @param team
-     * @param vt
-     * @return 
+     * Removes the contestant from the playground
+     *
+     * @param id of the contestant
+     * @param team of the contestant
+     * @param vt clock
+     * @return updated clock
      * @throws java.rmi.RemoteException
      */
     public VectorTimestamp getContestant(int id, int team, VectorTimestamp vt) throws RemoteException;
 
     /**
      * The method returns the flag position in relation to the middle. Middle =
-     * 0.
+     * 0
      *
-     * @param vt
-     * @return position of the flag
+     * @param vt clock
+     * @return updated clock and flag position
      * @throws java.rmi.RemoteException
      */
-    public int getFlagPosition() throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> getFlagPosition(VectorTimestamp vt) throws RemoteException;
 
     /**
      * Gets the last flag position
@@ -73,7 +75,7 @@ public interface InterfacePlayground extends Remote {
      * @return flag position before the current position
      * @throws java.rmi.RemoteException
      */
-    public int getLastFlagPosition() throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> getLastFlagPosition(VectorTimestamp vt) throws RemoteException;
 
     /**
      * Gets the current teams in the playground
@@ -86,50 +88,51 @@ public interface InterfacePlayground extends Remote {
 
     /**
      * Checks if everyone pulled the rope
+     *
      * @param vt
-     * @return 
+     * @return
      * @throws java.rmi.RemoteException
      */
     public VectorTimestamp haveAllPulled(VectorTimestamp vt) throws RemoteException;
 
     /**
      * Contestant pulls the rope
-     * @param vt
-     * @return 
+     *
      * @throws java.rmi.RemoteException
      */
-    public VectorTimestamp pullRope(VectorTimestamp vt) throws RemoteException;
+    public void pullRope() throws RemoteException;
 
     /**
      * Synchronisation point for signalling the result is asserted
-     * @param vt
-     * @return 
+     *
      * @throws java.rmi.RemoteException
      */
-    public VectorTimestamp resultAsserted(VectorTimestamp vt) throws RemoteException;
+    public void resultAsserted() throws RemoteException;
 
     /**
      * Sets the flag position
      *
      * @param flagPosition position of the flag
      * @param vt
-     * @return 
+     * @return
      * @throws java.rmi.RemoteException
      */
     public VectorTimestamp setFlagPosition(int flagPosition, VectorTimestamp vt) throws RemoteException;
 
     /**
      * Referee instructs the Contestants to start pulling the rope
+     *
      * @param vt
-     * @return 
+     * @return updated clock and new referee state id
      * @throws java.rmi.RemoteException
      */
     public Tuple<VectorTimestamp, Integer> startPulling(VectorTimestamp vt) throws RemoteException;
 
     /**
      * Synchronisation point for watching the trial in progress
-     * @param vt
-     * @return 
+     *
+     * @param vt clock
+     * @return with updated clock and updated coach state id
      * @throws java.rmi.RemoteException
      */
     public Tuple<VectorTimestamp, Integer> watchTrial(VectorTimestamp vt) throws RemoteException;

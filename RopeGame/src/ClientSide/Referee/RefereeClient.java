@@ -24,6 +24,7 @@ import java.util.logging.Logger;
  * @author luminoso
  */
 public class RefereeClient {
+
     public static void main(String[] args) {
 
         // Initialise RMI configurations
@@ -33,7 +34,7 @@ public class RefereeClient {
 
         // Initialise Coach configurations from args
         String refereeName = "Referee";
-        
+
         // Initialise RMI invocations
         InterfaceGeneralInformationRepository girInt = null;
         InterfacePlayground playgroundInt = null;

@@ -24,14 +24,14 @@ import java.util.logging.Logger;
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
- * @version 2016-2
+ * @version 2016-3
  */
 public class Referee extends Thread implements InterfaceReferee {
 
     private final InterfaceRefereeSite refereeSite; // referee site interface to be used
     private final InterfacePlayground playground; // playground interface to be used
     private final InterfaceGeneralInformationRepository informationRepository; // general Information Repository interface to be used
-    private final List<InterfaceContestantsBench> benchs; // list of benches to be used
+    private final InterfaceContestantsBench bench; // list of benches to be used
 
     // referee definition
     private RefereeState state;
@@ -41,18 +41,22 @@ public class Referee extends Thread implements InterfaceReferee {
      * Referee initialisation
      *
      * @param name of the referee
+     * @param bench interface
+     * @param playground interface
+     * @param refereeSite interface
+     * @param informationRepository interface
      */
     public Referee(String name,
             InterfaceContestantsBench bench,
             InterfacePlayground playground,
             InterfaceRefereeSite refereeSite,
             InterfaceGeneralInformationRepository informationRepository) {
-        
+
         super(name);
 
         state = RefereeState.START_OF_THE_MATCH;
-        
-        benchs = bench.getBenches();
+
+        this.bench = bench;
 
         this.playground = playground;
         this.refereeSite = refereeSite;
@@ -74,11 +78,11 @@ public class Referee extends Thread implements InterfaceReferee {
     public void run() {
         try {
             vt.increment();
-            informationRepository.updateReferee(state.getId(),vt.clone());
-            
+            informationRepository.updateReferee(state.getId(), vt.clone());
+
             vt.increment();
             informationRepository.printHeader(vt.clone());
-            
+
             while (state != END_OF_THE_MATCH) {
                 switch (state) {
                     case START_OF_THE_MATCH:
@@ -92,7 +96,7 @@ public class Referee extends Thread implements InterfaceReferee {
                         break;
                     case WAIT_FOR_TRIAL_CONCLUSION:
                         assertTrialDecision();
-                        
+
                         if (checkForGameEnd()) {
                             declareGameWinner();
                         } else {
@@ -121,7 +125,7 @@ public class Referee extends Thread implements InterfaceReferee {
      * positions for that a new game takes place.
      */
     private void announceNewGame() throws RemoteException {
-        
+
         /*
         
 
@@ -130,8 +134,7 @@ public class Referee extends Thread implements InterfaceReferee {
         setRefereeState(RefereeState.START_OF_A_GAME);
         informationRepository.updateReferee();
         informationRepository.printLineUpdate();
-        */
-        
+         */
         vt.increment();
         vt.update(refereeSite.resetTrialPoints(vt.clone()));
 
@@ -155,7 +158,10 @@ public class Referee extends Thread implements InterfaceReferee {
                     }
                     vt.update(gamePoints.getFirst());
                     return gamePoints.getSecond().size() + 1;
-                }).get(), ((Supplier<VectorTimestamp>)()->{vt.increment(); return vt.clone();}).get() );
+                }).get(), ((Supplier<VectorTimestamp>) () -> {
+                    vt.increment();
+                    return vt.clone();
+                }).get());
 
         vt.increment();
         informationRepository.printGameHeader(vt.clone());
@@ -185,15 +191,19 @@ public class Referee extends Thread implements InterfaceReferee {
             }
             vt.update(trialPoints.getFirst());
             return trialPoints.getSecond().size();
-        }).get() + 1, ((Supplier<VectorTimestamp>) () -> {vt.increment();return vt.clone();}).get());
-        
-        for (InterfaceContestantsBench bench : benchs) {
+        }).get() + 1, ((Supplier<VectorTimestamp>) () -> {
             vt.increment();
-            vt.update(bench.pickYourTeam(1,vt.clone()));
-        }
-        
+            return vt.clone();
+        }).get());
+
+        // TODO: this can look better
+        bench.pickYourTeam(1);
+        bench.pickYourTeam(2);
+
         vt.increment();
-        vt.update(refereeSite.bothTeamsReady(vt.clone()));
+        Tuple<VectorTimestamp, Integer> bothTeamsReady = refereeSite.bothTeamsReady(vt.clone());
+        vt.update(bothTeamsReady.getFirst());
+        state = InterfaceReferee.getState(bothTeamsReady.getSecond());
     }
 
     /**
@@ -203,7 +213,10 @@ public class Referee extends Thread implements InterfaceReferee {
      */
     private void startTrial() throws RemoteException {
         vt.increment();
-        vt.update(playground.startPulling(vt.clone()));
+        Tuple<VectorTimestamp, Integer> startPulling = playground.startPulling(vt.clone());
+        vt.update(startPulling.getFirst());
+
+        state = InterfaceReferee.getState(startPulling.getSecond());
     }
 
     /**
@@ -236,8 +249,7 @@ public class Referee extends Thread implements InterfaceReferee {
         vt.increment();
         informationRepository.printLineUpdate(vt.clone());
 
-        vt.increment();
-        vt.update(playground.resultAsserted(vt.clone()));
+        playground.resultAsserted();
     }
 
     /**
@@ -249,18 +261,18 @@ public class Referee extends Thread implements InterfaceReferee {
         Tuple<VectorTimestamp, List<TrialScore>> trialPointsT = refereeSite.getTrialPoints(vt.clone());
         vt.update(trialPointsT.getFirst());
         List<TrialScore> trialPoints = trialPointsT.getSecond();
-        
+
         vt.increment();
         Tuple<VectorTimestamp, Integer> flagPositionT = playground.getFlagPosition(vt.clone());
         vt.update(flagPositionT.getFirst());
-        
+
         int flagPosition = flagPositionT.getSecond();
 
         switch (flagPosition) {
             // To the left
             case -Constants.KNOCK_OUT_FLAG_POSITION:
                 vt.increment();
-                vt.update(refereeSite.addGamePoint(GameScore.VICTORY_TEAM_1_BY_KNOCKOUT,vt.clone()));
+                vt.update(refereeSite.addGamePoint(GameScore.VICTORY_TEAM_1_BY_KNOCKOUT, vt.clone()));
                 break;
             // To the right
             case Constants.KNOCK_OUT_FLAG_POSITION:
@@ -293,12 +305,12 @@ public class Referee extends Thread implements InterfaceReferee {
         }
 
         setRefereeState(RefereeState.END_OF_A_GAME);
-        
+
         vt.increment();
         informationRepository.updateReferee(state.getId(), vt.clone());
         vt.increment();
         informationRepository.printLineUpdate(vt.clone());
-        
+
         informationRepository.printGameResult(((Supplier<GameScore>) () -> {
             vt.increment();
             Tuple<VectorTimestamp, List<GameScore>> gamePoints = null;
@@ -310,7 +322,10 @@ public class Referee extends Thread implements InterfaceReferee {
             vt.update(gamePoints.getFirst());
             return gamePoints.getSecond().get(gamePoints.getSecond().size() - 1);
 
-        }).get(), ((Supplier<VectorTimestamp>) () -> {vt.increment();return vt.clone();}).get());
+        }).get(), ((Supplier<VectorTimestamp>) () -> {
+            vt.increment();
+            return vt.clone();
+        }).get());
     }
 
     /**

@@ -4,13 +4,11 @@ import Interfaces.InterfaceContestantsBench;
 import Interfaces.InterfaceGeneralInformationRepository;
 import Interfaces.InterfacePlayground;
 import Interfaces.InterfaceRefereeSite;
-import Others.ContestantState;
 import Others.InterfaceContestant;
 import Others.Triple;
 import Others.Tuple;
 import Others.VectorTimestamp;
 import java.rmi.RemoteException;
-import java.util.function.BooleanSupplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
- * @version 2016-2
+ * @version 2016-3
  */
 public class Contestant extends Thread implements Comparable<InterfaceContestant>, InterfaceContestant {
 
@@ -53,7 +51,7 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
             InterfacePlayground playground,
             InterfaceRefereeSite refereeSite,
             InterfaceGeneralInformationRepository informationRepository) {
-        
+
         super(name);
 
         state = ContestantState.SEAT_AT_THE_BENCH;
@@ -118,21 +116,9 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
             vt.increment();
             Triple<VectorTimestamp, Integer, Integer> addContestant = bench.addContestant(id, team, state.getId(), strength, vt.clone());
             vt.update(addContestant.getFirst());
-            //TODO
-            //addContestant.getSecond();
-            //addContestant.getThird();
-            
-            while (((BooleanSupplier) () -> {
-                Tuple<VectorTimestamp, Boolean> hasMatchEnded = null;
-                try {
-                    vt.increment();
-                    hasMatchEnded = refereeSite.hasMatchEnded(vt.clone());
-                    vt.update(hasMatchEnded.getFirst());
-                } catch (RemoteException ex) {
-                    Logger.getLogger(Contestant.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                return hasMatchEnded.getSecond();
-            }).getAsBoolean()) {
+            //addContestant.getSecond() and addContestant.getThird() not needed, since there are no updates
+
+            while (!refereeSite.hasMatchEnded()) {
                 switch (state) {
                     case SEAT_AT_THE_BENCH:
                         followCoachAdvice();
@@ -157,26 +143,16 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
      * playground
      */
     private void followCoachAdvice() throws RemoteException {
-        vt.increment();
-        vt.update(bench.getContestant(id,team,vt.clone()));
 
-        if (!((BooleanSupplier) () -> {
-                Tuple<VectorTimestamp, Boolean> hasMatchEnded = null;
-                try {
-                    vt.increment();
-                    hasMatchEnded = refereeSite.hasMatchEnded(vt.clone());
-                    vt.update(hasMatchEnded.getFirst());
-                } catch (RemoteException ex) {
-                    Logger.getLogger(Contestant.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                return hasMatchEnded.getSecond();
-            }).getAsBoolean()) {
-            
+        bench.getContestant(id, team);
+
+        if (!refereeSite.hasMatchEnded()) {
+
             vt.increment();
-            Tuple<VectorTimestamp, Integer> addContestant = playground.addContestant(id,team,state.getId(),strength,vt.clone());
+            Tuple<VectorTimestamp, Integer> addContestant = playground.addContestant(id, team, state.getId(), strength, vt.clone());
             vt.update(addContestant.getFirst());
-            
-            //TODO addContestant.getSecond();
+
+            state = ContestantState.getById(addContestant.getSecond());
         }
     }
 
@@ -185,10 +161,10 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
      */
     private void getReady() throws RemoteException {
         setContestantState(ContestantState.DO_YOUR_BEST);
-        
+
         vt.increment();
-        informationRepository.updateContestant(id,team,state.getId(),strength,vt.clone());
-        
+        informationRepository.updateContestant(id, team, state.getId(), strength, vt.clone());
+
         vt.increment();
         informationRepository.printLineUpdate(vt.clone());
     }
@@ -197,8 +173,7 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
      * Contestant pulls the rope
      */
     private void pullTheRope() throws RemoteException {
-        vt.increment();
-        vt.update(playground.pullRope(vt.clone()));
+        playground.pullRope();
     }
 
     /**
@@ -207,15 +182,14 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
      */
     private void seatDown() throws RemoteException {
         vt.increment();
-        vt.update(playground.getContestant(id,team,vt.clone()));
-        
+        vt.update(playground.getContestant(id, team, vt.clone()));
+
         vt.increment();
-        Triple<VectorTimestamp, Integer, Integer> addContestant = bench.addContestant(id,team,state.getId(),strength,vt.clone());
+        Triple<VectorTimestamp, Integer, Integer> addContestant = bench.addContestant(id, team, state.getId(), strength, vt.clone());
         vt.update(addContestant.getFirst());
-        
-        //TODO
-        //addContestant.getSecond();
-        //addContestant.getThird();
+
+        state = ContestantState.getById(addContestant.getSecond());
+        strength = addContestant.getThird();
     }
 
     @Override

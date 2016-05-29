@@ -1,8 +1,5 @@
 package Others;
 
-import Interfaces.InterfaceRefereeSite;
-import Interfaces.InterfaceContestantsBench;
-import Interfaces.InterfaceRefereeSite.TrialScore;
 import RopeGame.Constants;
 import java.util.Collections;
 import java.util.HashSet;
@@ -16,13 +13,14 @@ import java.util.Set;
  *
  * @author Eduardo Sousa - eduardosousa@ua.pt
  * @author Guilherme Cardoso - gjc@ua.pt
- * @version 2016-2
+ * @version 2016-3
  */
 public class KeepWinningTeam implements CoachStrategy {
 
     @Override
-    public Set<Integer> pickTeam(InterfaceContestantsBench bench, InterfaceRefereeSite site) {
-        List<TrialScore> trialPoints = site.getTrialPoints();
+    public Set<Integer> pickTeam(Set<Tuple<Integer, Integer>> contestants,
+            Set<Integer> selectedContestants,
+            List<TrialScore> trialPoints) {
 
         int team = ((InterfaceCoach) Thread.currentThread()).getCoachTeam();
 
@@ -30,6 +28,8 @@ public class KeepWinningTeam implements CoachStrategy {
 
         // we can only make a decicion if there are any trial points
         if (trialPoints.size() > 0) {
+            //TrialScore lastScore = trialPoints.get(trialPoints.size() - 1);
+
             TrialScore lastScore = trialPoints.get(trialPoints.size() - 1);
 
             if (team == 1 && lastScore == TrialScore.VICTORY_TEAM_2) {
@@ -41,24 +41,24 @@ public class KeepWinningTeam implements CoachStrategy {
 
         // if we lost of if it is the first game we're going to pick random Contestants
         if (didWeLost || trialPoints.isEmpty()) {
-            List<Tuple<Integer, Integer>> contestants = new LinkedList<>(bench.getBench());
-            Collections.shuffle(contestants);
+            List<Tuple<Integer, Integer>> contestants_list = new LinkedList<>(contestants);
+            Collections.shuffle(contestants_list);
 
             Set<Integer> pickedTeam = new HashSet<>();
 
-            for (Tuple<Integer, Integer> contestant : contestants) {
+            for (Tuple<Integer, Integer> contestant : contestants_list) {
                 if (pickedTeam.size() == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND) {
                     break;
                 }
 
-                pickedTeam.add(contestant.getLeft());
+                pickedTeam.add(contestant.getFirst());
             }
 
             return pickedTeam;
 
         } else {
             // just return the same winning team
-            return bench.getSelectedContestants();
+            return selectedContestants;
         }
 
     }

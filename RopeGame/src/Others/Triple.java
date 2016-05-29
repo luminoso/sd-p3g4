@@ -8,11 +8,14 @@ package Others;
 import java.io.Serializable;
 
 /**
- *
- * @author ed1000
- * @param <X>
- * @param <Y>
- * @param <Z>
+ * Generic Triple implementation
+ * 
+ * @author Eduardo Sousa - eduardosousa@ua.pt
+ * @author Guilherme Cardoso - gjc@ua.pt
+ * @version 2016-3
+ * @param <X> 1st value
+ * @param <Y> 2nd value
+ * @param <Z> 3rd value
  */
 public class Triple<X, Y, Z> implements Serializable {
     private static final long serialVersionUID = -2457813912764797410L;

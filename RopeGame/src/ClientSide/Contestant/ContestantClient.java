@@ -25,6 +25,7 @@ import java.util.logging.Logger;
  * @author luminoso
  */
 public class ContestantClient {
+
     public static void main(String[] args) {
 
         // Initialise RMI configurations
@@ -37,7 +38,7 @@ public class ContestantClient {
         int id = Integer.parseInt(args[2]);
         int strength = randomStrength();
         String contestantName = "Contestant " + team + ":" + id;
-        
+
         // Initialise RMI invocations
         InterfaceGeneralInformationRepository girInt = null;
         InterfacePlayground playgroundInt = null;
@@ -78,7 +79,7 @@ public class ContestantClient {
 
         out.println(contestantName + " finished his job.");
     }
-    
+
     /**
      * Function to generate a random strength when a player is instantiated
      *
