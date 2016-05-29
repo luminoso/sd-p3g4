@@ -38,4 +38,7 @@ public class Constants {
 
     // file where the game log will be stored
     public static final String FILE_NAME = "game.log";
+    
+    // 2*team size + 2 coachs + 1 Referee
+    public static final int VECTOR_TIMESTAMP_SIZE = 3 + (NUMBER_OF_PLAYERS_IN_THE_BENCH * 2);
 }

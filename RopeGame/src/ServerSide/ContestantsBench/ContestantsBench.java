@@ -86,8 +86,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
         
         shutdownVotes = 0;
         
-        //TODO: initialise vt
-        vt = null;
+        vt = new VectorTimestamp(Constants.VECTOR_TIMESTAMP_SIZE, 0);
     }
 
     @Override
@@ -118,7 +117,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
         // returns vt, state Id and strength
         Triple<VectorTimestamp,Integer,Integer> tmp = null;
         
-        vt.increment();
+        vt.update(vt);
         for(Triple<Integer,ContestantState,Integer> ct : bench[team-1]){
             if(ct.getFirst() == id)
                 tmp = new Triple<>(vt.clone(), ct.getSecond().getId(), ct.getThird());
@@ -170,7 +169,6 @@ public class ContestantsBench implements InterfaceContestantsBench {
         for (Triple<Integer, ContestantState, Integer> contestant : bench[team-1])
             temp.add(new Tuple<>(contestant.getFirst(), contestant.getThird()));
         
-        vt.increment();
         vt.update(vt);
         
         lock.unlock();
@@ -187,7 +185,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
 
         playersSelected[team-1].signalAll();
 
-        vt.increment();
+        vt.update(vt);
        
         lock.unlock();
         
@@ -202,7 +200,6 @@ public class ContestantsBench implements InterfaceContestantsBench {
 
         selected = new TreeSet<>(selectedContestants[team-1]);
 
-        vt.increment();
         vt.update(vt);
         
         lock.unlock();
@@ -247,7 +244,6 @@ public class ContestantsBench implements InterfaceContestantsBench {
 
         coachWaiting[team-1] = false;
 
-        vt.increment();
         vt.update(vt);
         
         lock.unlock();
@@ -276,7 +272,6 @@ public class ContestantsBench implements InterfaceContestantsBench {
             }
         }
         
-        vt.increment();
         vt.update(vt);
 
         lock.unlock();
@@ -338,7 +333,6 @@ public class ContestantsBench implements InterfaceContestantsBench {
             }
         }
 
-        vt.increment();
         vt.update(vt);
         
         lock.unlock();

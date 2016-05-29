@@ -69,8 +69,7 @@ public class Playground implements InterfacePlayground {
 
         shutdownVotes = 0;
 
-        //TODO: initialise vt
-        vt = null;
+        vt = new VectorTimestamp(Constants.VECTOR_TIMESTAMP_SIZE, 0);
     }
 
     @Override
@@ -94,7 +93,6 @@ public class Playground implements InterfacePlayground {
         }
 
         vt.update(vt);
-        vt.increment();
 
         lock.unlock();
 
@@ -119,7 +117,6 @@ public class Playground implements InterfacePlayground {
         }
 
         vt.update(vt);
-        vt.increment();
 
         lock.unlock();
 
@@ -141,7 +138,6 @@ public class Playground implements InterfacePlayground {
         }
 
         vt.update(vt);
-        vt.increment();
 
         lock.unlock();
 
@@ -202,7 +198,6 @@ public class Playground implements InterfacePlayground {
         }
 
         vt.update(vt);
-        vt.increment();
 
         lock.unlock();
 
@@ -227,7 +222,6 @@ public class Playground implements InterfacePlayground {
         //informationRepository.resetTeamPlacement();
         //informationRepository.printLineUpdate();
         vt.update(vt);
-        vt.increment();
 
         lock.unlock();
 
@@ -242,7 +236,6 @@ public class Playground implements InterfacePlayground {
 
         result = flagPosition;
 
-        vt.increment();
         vt.update(vt);
 
         lock.unlock();
@@ -258,7 +251,6 @@ public class Playground implements InterfacePlayground {
 
         result = lastFlagPosition;
 
-        vt.increment();
         vt.update(vt);
         lock.unlock();
 
@@ -273,7 +265,6 @@ public class Playground implements InterfacePlayground {
         this.flagPosition = flagPosition;
 
         vt.update(vt);
-        vt.increment();
 
         lock.unlock();
 
@@ -304,7 +295,6 @@ public class Playground implements InterfacePlayground {
         }
 
         vt.update(vt);
-        vt.increment();
 
         lock.unlock();
 
@@ -333,8 +323,8 @@ public class Playground implements InterfacePlayground {
 
         //teamslist[0] = new ArrayList<>(this.teams[0]);
         //teamslist[1] = new ArrayList<>(this.teams[1]);
+
         vt.update(vt);
-        vt.increment();
 
         lock.unlock();
 

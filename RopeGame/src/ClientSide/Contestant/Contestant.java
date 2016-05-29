@@ -8,6 +8,7 @@ import Others.InterfaceContestant;
 import Others.Triple;
 import Others.Tuple;
 import Others.VectorTimestamp;
+import RopeGame.Constants;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,7 +65,8 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
         this.playground = playground;
         this.refereeSite = refereeSite;
         this.informationRepository = informationRepository;
-        this.vt = null;
+        this.vt = new VectorTimestamp(Constants.VECTOR_TIMESTAMP_SIZE,
+        3 + (team-1)*Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH + id  );
     }
 
     @Override

@@ -73,8 +73,7 @@ public class RefereeSite implements InterfaceRefereeSite {
         this.informationRepository = informationRepository;
         shutdownVotes = 0;
 
-        //TODO: initialise vt
-        vt = null;
+        vt = new VectorTimestamp(Constants.VECTOR_TIMESTAMP_SIZE, 0);
     }
 
     @Override
@@ -85,7 +84,6 @@ public class RefereeSite implements InterfaceRefereeSite {
 
         gamePoints = new LinkedList<>(this.gameStatus);
 
-        vt.increment();
         vt.update(vt);
 
         lock.unlock();
@@ -101,7 +99,6 @@ public class RefereeSite implements InterfaceRefereeSite {
 
         trialPoints = new LinkedList<>(this.trialStatus);
 
-        vt.increment();
         vt.update(vt);
 
         lock.unlock();
@@ -115,7 +112,6 @@ public class RefereeSite implements InterfaceRefereeSite {
 
         this.trialStatus = new LinkedList<>();
 
-        vt.increment();
         vt.update(vt);
 
         lock.unlock();
@@ -131,7 +127,6 @@ public class RefereeSite implements InterfaceRefereeSite {
 
         remaining = Constants.NUMBER_OF_TRIALS - this.trialStatus.size();
 
-        vt.increment();
         vt.update(vt);
 
         lock.unlock();
@@ -147,7 +142,6 @@ public class RefereeSite implements InterfaceRefereeSite {
 
         remaining = Constants.NUMBER_OF_GAMES - this.gameStatus.size();
 
-        vt.increment();
         vt.update(vt);
 
         lock.unlock();
@@ -162,7 +156,6 @@ public class RefereeSite implements InterfaceRefereeSite {
         this.gameStatus.add(score);
         this.trialStatus.clear();
 
-        vt.increment();
         vt.update(vt);
 
         lock.unlock();
@@ -176,7 +169,6 @@ public class RefereeSite implements InterfaceRefereeSite {
 
         this.trialStatus.add(score);
 
-        vt.increment();
         vt.update(vt);
 
         lock.unlock();
@@ -218,7 +210,6 @@ public class RefereeSite implements InterfaceRefereeSite {
             informReferee.signal();
         }
 
-        vt.increment();
         vt.update(vt);
 
         lock.unlock();
@@ -245,7 +236,6 @@ public class RefereeSite implements InterfaceRefereeSite {
         out.println("Setting has match ended");
         this.hasMatchEnded = hasMatchEnded;
 
-        vt.increment();
         vt.update(vt);
 
         lock.unlock();

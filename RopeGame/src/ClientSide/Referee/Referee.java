@@ -61,7 +61,7 @@ public class Referee extends Thread implements InterfaceReferee {
         this.playground = playground;
         this.refereeSite = refereeSite;
         this.informationRepository = informationRepository;
-        this.vt = null;
+        this.vt = new VectorTimestamp(Constants.VECTOR_TIMESTAMP_SIZE, 0);
     }
 
     @Override
