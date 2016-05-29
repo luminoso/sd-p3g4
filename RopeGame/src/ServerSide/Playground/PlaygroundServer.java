@@ -1,8 +1,7 @@
-package ServerSide.ContestantsBench;
+package ServerSide.Playground;
 
-import Interfaces.InterfaceContestantsBench;
 import Interfaces.InterfaceGeneralInformationRepository;
-import Interfaces.InterfaceRefereeSite;
+import Interfaces.InterfacePlayground;
 import Interfaces.Register;
 import Registry.RegistryConfig;
 import java.rmi.AlreadyBoundException;
@@ -16,8 +15,8 @@ import java.rmi.server.UnicastRemoteObject;
  *
  * @author ed1000
  */
-public class ContestantsBenchServer {
-    public static void main(String[] args) throws AlreadyBoundException {
+public class PlaygroundServer {
+    public static void main(String args[]) {
         /* obtenção da localização do serviço de registo RMI */
         String rmiRegHostName;
         int rmiRegPortNumb;
@@ -27,7 +26,6 @@ public class ContestantsBenchServer {
         
         /* localização por nome do objecto remoto no serviço de registos RMI */
         InterfaceGeneralInformationRepository girInterface = null;
-        InterfaceRefereeSite refSiteInterface = null;
 
         try { 
             Registry registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
@@ -42,41 +40,28 @@ public class ContestantsBenchServer {
             System.exit(1);
         }
         
-        try { 
-            Registry registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
-            refSiteInterface = (InterfaceRefereeSite) registry.lookup(RegistryConfig.REGISTRY_REFEREE_SITE_NAME);
-        } catch (RemoteException e) { 
-            System.out.println("Excepção na localização do Referee Site: " + e.getMessage () + "!");
-            e.printStackTrace();
-            System.exit (1);
-        } catch (NotBoundException e) { 
-            System.out.println("O Referee Site não está registado: " + e.getMessage () + "!");
-            e.printStackTrace();
-            System.exit(1);
-        }
-        
         /* instanciação e instalação do gestor de segurança */
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
         }
 
         /* instanciação do objecto remoto que representa a barbearia e geração de um stub para ele */
-        ContestantsBench bench = null;
-        InterfaceContestantsBench benchInterface = null;
+        Playground playground = null;
+        InterfacePlayground playgroundInterface = null;
         
-        bench = new ContestantsBench(refSiteInterface, girInterface);
+        playground = new Playground(girInterface);
         try {
-            benchInterface = (InterfaceContestantsBench) UnicastRemoteObject.exportObject(bench, RegistryConfig.REGISTRY_CONTESTANTS_BENCH_PORT);
+            playgroundInterface = (InterfacePlayground) UnicastRemoteObject.exportObject(playground, RegistryConfig.REGISTRY_PLAYGROUND_PORT);
         } catch (RemoteException e) {
-            System.out.println("Excepção na geração do stub para os Contestant Benchs: " + e.getMessage());
+            System.out.println("Excepção na geração do stub para o Playground: " + e.getMessage());
             e.printStackTrace();
             System.exit(1);
         }
-        System.out.println("O stub para os Contestant Benchs foram gerados!");
+        System.out.println("O stub para o Playground foi gerado!");
 
         /* seu registo no serviço de registo RMI */
         String nameEntryBase = RegistryConfig.RMI_NAME;
-        String nameEntryObject = RegistryConfig.REGISTRY_CONTESTANTS_BENCH_NAME;
+        String nameEntryObject = RegistryConfig.REGISTRY_PLAYGROUND_NAME;
         Registry registry = null;
         Register reg = null;
 
@@ -102,17 +87,17 @@ public class ContestantsBenchServer {
         }
 
         try {
-            reg.bind(nameEntryObject, benchInterface);
+            reg.bind(nameEntryObject, playgroundInterface);
         } catch (RemoteException e) {
-            System.out.println("Excepção no registo dos Contestant Benchs: " + e.getMessage());
+            System.out.println("Excepção no registo do Playground: " + e.getMessage());
             e.printStackTrace();
             System.exit(1);
         } catch (AlreadyBoundException e) {
-            System.out.println("Os Contestant Benchs já estão registados: " + e.getMessage());
+            System.out.println("O Playground já está registado: " + e.getMessage());
             e.printStackTrace();
             System.exit(1);
         }
         
-        System.out.println("Os Contestant Benchs foram registados!");
+        System.out.println("O Playground foi registado!");
     }
 }

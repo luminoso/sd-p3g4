@@ -1,14 +1,18 @@
 package ServerSide.Playground;
 
-import ClientSide.GeneralInformationRepositoryStub;
+import Interfaces.InterfaceGeneralInformationRepository;
 import Others.InterfaceCoach;
 import Others.InterfaceCoach.CoachState;
 import Others.InterfaceContestant;
-import Others.InterfaceContestant.ContestantState;
 import Interfaces.InterfacePlayground;
+import Others.ContestantState;
 import Others.InterfaceReferee;
 import Others.InterfaceReferee.RefereeState;
+import Others.Triple;
+import Others.Tuple;
+import Others.VectorTimestamp;
 import RopeGame.Constants;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -26,9 +30,6 @@ import java.util.logging.Logger;
  * @version 2016-2
  */
 public class Playground implements InterfacePlayground {
-
-    private static Playground instance;         // singleton
-
     // locking and waiting condtions
     private final Lock lock;
     private final Condition startTrial;         // condition for waiting the trial start
@@ -41,204 +42,194 @@ public class Playground implements InterfacePlayground {
     private int lastFlagPosition;               // last flag position
     private int shutdownVotes;                  // count if all votes are met to shutdown
 
-    private final List<InterfaceContestant>[] teams;  // list containing the Contestant in both teams
-    private final GeneralInformationRepositoryStub informationRepository;
-
-    /**
-     * The method returns the Playground object. This method is thread-safe and
-     * uses the implicit monitor of the class.
-     *
-     * @return playground object to be used
-     */
-    public static synchronized Playground getInstance() {
-        if (instance == null) {
-            instance = new Playground();
-        }
-
-        return instance;
-    }
+    private final List<Triple<Integer, ContestantState, Integer>>[] teams;  // list containing the Contestant in both teams
+    private final InterfaceGeneralInformationRepository informationRepository;
 
     /**
      * Private constructor to be used in the singleton
+     * @param girInt
      */
-    private Playground() {
-        this.flagPosition = 0;
-        this.lastFlagPosition = 0;
-        this.lock = new ReentrantLock();
-        this.startTrial = this.lock.newCondition();
-        this.teamsInPosition = this.lock.newCondition();
-        this.finishedPulling = this.lock.newCondition();
-        this.resultAssert = this.lock.newCondition();
-        this.pullCounter = 0;
-        this.teams = new List[2];
-        this.teams[0] = new ArrayList<>();
-        this.teams[1] = new ArrayList<>();
-        this.informationRepository = new GeneralInformationRepositoryStub();
-        this.shutdownVotes = 0;
+    public Playground(InterfaceGeneralInformationRepository girInt) {
+        lock = new ReentrantLock();
+        startTrial = lock.newCondition();
+        teamsInPosition = lock.newCondition();
+        finishedPulling = lock.newCondition();
+        resultAssert = lock.newCondition();
+        
+        flagPosition = 0;
+        lastFlagPosition = 0;
+        pullCounter = 0;
+        teams = new List[2];
+        
+        for(int i = 0; i < 2; i++)
+            teams[i] = new ArrayList<>();
+        
+        informationRepository = girInt;
+        
+        shutdownVotes = 0;
     }
 
     @Override
-    public void addContestant() {
-        InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
-
+    public Tuple<VectorTimestamp, Integer> addContestant(int id, int team, int state, int strength, VectorTimestamp vt) throws RemoteException {
         lock.lock();
 
         try {
-            this.teams[contestant.getContestantTeam() - 1].add(contestant);
+            teams[team-1].add(new Triple<>(id, ContestantState.STAND_IN_POSITION, strength));
 
-            contestant.setContestantState(ContestantState.STAND_IN_POSITION);
-            informationRepository.updateContestant();
-            informationRepository.setTeamPlacement();
-            informationRepository.printLineUpdate();
+            //informationRepository.updateContestant();
+            //informationRepository.setTeamPlacement();
+            //informationRepository.printLineUpdate();
 
-            if (isTeamInPlace(contestant.getContestantTeam())) {
-                this.teamsInPosition.signalAll();
+            if (isTeamInPlace(team)) {
+                teamsInPosition.signalAll();
             }
 
             startTrial.await();
         } catch (InterruptedException ex) {
-            Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
+            lock.unlock();
+            return null;
         }
 
         lock.unlock();
+        
+        return null;
     }
 
     @Override
-    public void checkTeamPlacement() {
-        InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
-
+    public Tuple<VectorTimestamp, Integer> checkTeamPlacement(int team, VectorTimestamp vt) throws RemoteException {
         lock.lock();
 
-        coach.setCoachState(CoachState.ASSEMBLE_TEAM);
-        informationRepository.updateCoach();
-        informationRepository.printLineUpdate();
+        //coach.setCoachState(CoachState.ASSEMBLE_TEAM);
+        //informationRepository.updateCoach();
+        //informationRepository.printLineUpdate();
 
         try {
-            while (!isTeamInPlace(coach.getCoachTeam())) {
-                this.teamsInPosition.await();
+            while (!isTeamInPlace(team)) {
+                teamsInPosition.await();
             }
         } catch (InterruptedException ex) {
-            Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
             lock.unlock();
-            return;
+            return null;
         }
 
         lock.unlock();
+        
+        return null;
     }
 
     @Override
-    public void watchTrial() {
-        InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
-
+    public Tuple<VectorTimestamp, Integer> watchTrial(VectorTimestamp vt) throws RemoteException {
         lock.lock();
 
-        coach.setCoachState(CoachState.WATCH_TRIAL);
-        informationRepository.updateCoach();
-        informationRepository.printLineUpdate();
+        //coach.setCoachState(CoachState.WATCH_TRIAL);
+        //informationRepository.updateCoach();
+        //informationRepository.printLineUpdate();
 
         try {
-            this.resultAssert.await();
+            resultAssert.await();
         } catch (InterruptedException ex) {
-            Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
             lock.unlock();
-            return;
+            return null;
         }
 
         lock.unlock();
+        
+        return null;
     }
 
     @Override
-    public void pullRope() {
+    public VectorTimestamp pullRope(VectorTimestamp vt) throws RemoteException {
         lock.lock();
 
         try {
             long waitTime = (long) (Constants.MINIMUM_WAIT_TIME + Math.random() * (Constants.MAXIMUM_WAIT_TIME - Constants.MINIMUM_WAIT_TIME));
-
             Thread.currentThread().sleep(waitTime);
 
             this.pullCounter++;
 
-            if (this.pullCounter == 2 * Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND) {
+            if (pullCounter == 2 * Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND) {
                 updateFlagPosition();
-                this.finishedPulling.signal();
+                finishedPulling.signal();
             }
 
-            this.resultAssert.await();
+            resultAssert.await();
         } catch (InterruptedException ex) {
-            Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
             lock.unlock();
-            return;
+            return null;
         }
 
         lock.unlock();
+        
+        return null;
     }
 
     @Override
-    public void resultAsserted() {
+    public VectorTimestamp resultAsserted(VectorTimestamp vt) throws RemoteException {
         lock.lock();
 
-        this.pullCounter = 0;
+        pullCounter = 0;
 
-        this.resultAssert.signalAll();
+        resultAssert.signalAll();
 
         lock.unlock();
+        
+        return null;
     }
 
     @Override
-    public void startPulling() {
-        InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
-
+    public Tuple<VectorTimestamp, Integer> startPulling(VectorTimestamp vt) throws RemoteException{
         lock.lock();
 
-        this.startTrial.signalAll();
+        startTrial.signalAll();
 
-        referee.setRefereeState(RefereeState.WAIT_FOR_TRIAL_CONCLUSION);
-        informationRepository.updateReferee();
-        informationRepository.printLineUpdate();
+        //referee.setRefereeState(RefereeState.WAIT_FOR_TRIAL_CONCLUSION);
+        //informationRepository.updateReferee();
+        //informationRepository.printLineUpdate();
 
         if (pullCounter != 2 * Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND) {
             try {
                 finishedPulling.await();
             } catch (InterruptedException ex) {
-                Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
                 lock.unlock();
-                return;
+                return null;
             }
         }
 
         lock.unlock();
+        
+        return null;
     }
 
     @Override
-    public void getContestant() {
-        InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
-
+    public VectorTimestamp getContestant(int id, int team, VectorTimestamp vt) throws RemoteException {
         lock.lock();
 
-        Iterator<InterfaceContestant> it = teams[contestant.getContestantTeam() - 1].iterator();
+        Iterator<Triple<Integer, ContestantState, Integer>> it = teams[team-1].iterator();
 
         while (it.hasNext()) {
-            InterfaceContestant temp = it.next();
+            Triple<Integer, ContestantState, Integer> temp = it.next();
 
-            if (temp.getContestantId() == contestant.getContestantId()) {
+            if (temp.getFirst() == id) {
                 it.remove();
                 break;
             }
         }
 
-        informationRepository.resetTeamPlacement();
-        informationRepository.printLineUpdate();
+        //informationRepository.resetTeamPlacement();
+        //informationRepository.printLineUpdate();
 
         lock.unlock();
+        
+        return null;
     }
 
     @Override
-    public int getFlagPosition() {
+    public int getFlagPosition() throws RemoteException {
         int result;
 
         lock.lock();
 
-        result = this.flagPosition;
+        result = flagPosition;
 
         lock.unlock();
 
@@ -251,7 +242,7 @@ public class Playground implements InterfacePlayground {
 
         lock.lock();
 
-        result = this.lastFlagPosition;
+        result = lastFlagPosition;
 
         lock.unlock();
 
@@ -259,9 +250,15 @@ public class Playground implements InterfacePlayground {
     }
 
     @Override
-    public void setFlagPosition(int flagPosition) {
+    public VectorTimestamp setFlagPosition(int flagPosition, VectorTimestamp vt) throws RemoteException {
+        lock.lock();
+        
         this.lastFlagPosition = flagPosition;
         this.flagPosition = flagPosition;
+        
+        lock.unlock();
+        
+        return null;
     }
 
     /**
@@ -270,24 +267,37 @@ public class Playground implements InterfacePlayground {
      * @param teamId team id to check if the team is in place
      * @return true if team in place and ready.
      */
-    private boolean isTeamInPlace(int teamId) {
-        return this.teams[teamId - 1].size() == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND;
+    private boolean isTeamInPlace(int team) {
+        return teams[team-1].size() == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND;
     }
 
     @Override
-    public void haveAllPulled() {
+    public VectorTimestamp haveAllPulled(VectorTimestamp vt) throws RemoteException {
         lock.lock();
+        
         try {
-            this.finishedPulling.await();
+            finishedPulling.await();
         } catch (InterruptedException ex) {
-            Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
+            lock.unlock();
+            return null;
         }
+        
         lock.unlock();
+        
+        return null;
     }
 
     @Override
     public boolean checkAllContestantsReady() {
-        return (teams[0].size() + teams[1].size()) == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND * 2;
+        boolean result;
+        
+        lock.lock();
+        
+        result = (teams[0].size() + teams[1].size()) == Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND * 2;
+        
+        lock.unlock();
+        
+        return result;
     }
 
     @Override

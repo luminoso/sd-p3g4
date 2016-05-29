@@ -36,7 +36,7 @@ public interface InterfaceContestantsBench extends Remote {
      * @return list of the contestants in the bench
      * @throws java.rmi.RemoteException
      */
-    public Tuple<VectorTimestamp, Set<Tuple<Integer, Integer>>> getBench(int team, VectorTimestamp vt) throws RemoteException;
+    public Set<Tuple<Integer, Integer>> getBench(int team) throws RemoteException;
 
     /**
      * The method removes a contestant from the bench.
@@ -56,7 +56,7 @@ public interface InterfaceContestantsBench extends Remote {
      * @return set with the selected contestants
      * @throws java.rmi.RemoteException
      */
-    public Tuple<VectorTimestamp, Set<Integer>> getSelectedContestants(int team, VectorTimestamp vt) throws RemoteException;
+    public Set<Integer> getSelectedContestants(int team) throws RemoteException;
 
     /**
      * Synchronisation point where the Referee waits for the Coaches to pick the
@@ -72,21 +72,23 @@ public interface InterfaceContestantsBench extends Remote {
      * Set selected contestants array. This arrays should be filled with the IDs
      * of the players for the next round.
      *
+     * @param team
      * @param selected identifiers for the selected players
      * @param vt
      * @return 
      * @throws java.rmi.RemoteException
      */
-    public VectorTimestamp setSelectedContestants(Set<Integer> selected, VectorTimestamp vt) throws RemoteException;
+    public VectorTimestamp setSelectedContestants(int team, Set<Integer> selected, VectorTimestamp vt) throws RemoteException;
 
     /**
      * Synchronisation point where Coaches wait for the next trial instructed by
      * the Referee
+     * @param team
      * @param vt
      * @return 
      * @throws java.rmi.RemoteException
      */
-    public VectorTimestamp waitForNextTrial(VectorTimestamp vt) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> waitForNextTrial(int team, VectorTimestamp vt) throws RemoteException;
 
     /**
      * Updates the contestant strength
@@ -102,10 +104,11 @@ public interface InterfaceContestantsBench extends Remote {
 
     /**
      * Sends an interrupt to shut down the game
+     * @param team
      * @return 
      * @throws java.rmi.RemoteException
      */
-    public VectorTimestamp interrupt() throws RemoteException;
+    public void interrupt(int team) throws RemoteException;
 
     /**
      * Checks if the game should be shut down
@@ -117,7 +120,8 @@ public interface InterfaceContestantsBench extends Remote {
     
     /**
      * The referee waits for everyone before starting first game
+     * @param team
      * @throws java.rmi.RemoteException
      */
-    public void waitForEveryoneToStart() throws RemoteException;
+    public void waitForEveryoneToStart(int team) throws RemoteException;
 }

@@ -44,7 +44,7 @@ public interface InterfacePlayground extends Remote {
      * @return 
      * @throws java.rmi.RemoteException
      */
-    public VectorTimestamp checkTeamPlacement(int team, VectorTimestamp vt) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> checkTeamPlacement(int team, VectorTimestamp vt) throws RemoteException;
 
     /**
      * The method removes the contestant from the playground
@@ -64,7 +64,7 @@ public interface InterfacePlayground extends Remote {
      * @return position of the flag
      * @throws java.rmi.RemoteException
      */
-    public Tuple<VectorTimestamp, Integer> getFlagPosition(VectorTimestamp vt) throws RemoteException;
+    public int getFlagPosition() throws RemoteException;
 
     /**
      * Gets the last flag position
@@ -73,7 +73,7 @@ public interface InterfacePlayground extends Remote {
      * @return flag position before the current position
      * @throws java.rmi.RemoteException
      */
-    public Tuple<VectorTimestamp, Integer> getLastFlagPosition(VectorTimestamp vt) throws RemoteException;
+    public int getLastFlagPosition() throws RemoteException;
 
     /**
      * Gets the current teams in the playground
@@ -124,7 +124,7 @@ public interface InterfacePlayground extends Remote {
      * @return 
      * @throws java.rmi.RemoteException
      */
-    public VectorTimestamp startPulling(VectorTimestamp vt) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> startPulling(VectorTimestamp vt) throws RemoteException;
 
     /**
      * Synchronisation point for watching the trial in progress
@@ -132,7 +132,7 @@ public interface InterfacePlayground extends Remote {
      * @return 
      * @throws java.rmi.RemoteException
      */
-    public VectorTimestamp watchTrial(VectorTimestamp vt) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> watchTrial(VectorTimestamp vt) throws RemoteException;
 
     /**
      * Checks if the game should be shut down

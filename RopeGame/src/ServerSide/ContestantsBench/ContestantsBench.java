@@ -3,10 +3,7 @@ package ServerSide.ContestantsBench;
 import Interfaces.InterfaceContestantsBench;
 import Interfaces.InterfaceGeneralInformationRepository;
 import Interfaces.InterfaceRefereeSite;
-import Others.InterfaceCoach;
-import Others.InterfaceCoach.CoachState;
-import Others.InterfaceContestant;
-import Others.InterfaceContestant.ContestantState;
+import Others.ContestantState;
 import Others.Triple;
 import Others.Tuple;
 import Others.VectorTimestamp;
@@ -21,8 +18,6 @@ import java.util.TreeSet;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This is an passive class that describes the contestants bench for each team
@@ -40,10 +35,10 @@ public class ContestantsBench implements InterfaceContestantsBench {
     private final Condition[] waitForCoach;
 
     // structure that contains the players in the bench
-    private final List<List<Triple<Integer, ContestantState, Integer>>> bench;
+    private final List<Triple<Integer, ContestantState, Integer>>[] bench;
 
     // selected contestants to play the trial
-    private final List<List<Integer>> selectedContestants;
+    private final List<Integer>[] selectedContestants;
 
     private boolean[] coachWaiting; // sets if the coach is waiting
     
@@ -69,8 +64,8 @@ public class ContestantsBench implements InterfaceContestantsBench {
         waitForCoach = new Condition[2];
         coachWaiting = new boolean[2];
         
-        bench = new ArrayList<>();
-        selectedContestants = new ArrayList<>();
+        bench = new List[2];
+        selectedContestants = new List[2];
         
         for(int i = 0; i < 2; i++) {
             allPlayersSeated[i] = lock.newCondition();
@@ -79,8 +74,8 @@ public class ContestantsBench implements InterfaceContestantsBench {
             waitForCoach[i] = lock.newCondition();
             coachWaiting[i] = false;
             
-            bench.add(new ArrayList<>());
-            selectedContestants.add(new ArrayList<>());
+            bench[i] = new ArrayList<>();
+            selectedContestants[i] = new ArrayList<>();
         }
         
         refereeSite = refSiteInt;
@@ -93,71 +88,71 @@ public class ContestantsBench implements InterfaceContestantsBench {
     public Triple<VectorTimestamp, Integer, Integer> addContestant(int id, int team, int state, int strength, VectorTimestamp vt) throws RemoteException {
         lock.lock();
 
-        bench.get(team-1).add(new Triple<>(id, ContestantState.getById(state), strength));
+        bench[team-1].add(new Triple<>(id, ContestantState.SEAT_AT_THE_BENCH, strength));
 
-        if (contestant.getContestantState() != ContestantState.SEAT_AT_THE_BENCH) {
-            contestant.setContestantState(ContestantState.SEAT_AT_THE_BENCH);
-            informationRepository.updateContestant();
-            informationRepository.printLineUpdate();
+        if (ContestantState.getById(state) != ContestantState.SEAT_AT_THE_BENCH) {
+            // informationRepository.updateContestant();
+            // informationRepository.printLineUpdate();
         }
 
-        if (checkAllPlayersSeated()) {
-            allPlayersSeated.signalAll();
+        if (checkAllPlayersSeated(team)) {
+            allPlayersSeated[team-1].signalAll();
         }
 
         try {
             do {
-                playersSelected.await();
-            } while (!isContestantSelected() && !refereeSite.hasMatchEnded());
+                playersSelected[team-1].await();
+            } while (!isContestantSelected(id, team) && !refereeSite.hasMatchEnded());
         } catch (InterruptedException ex) {
-            Logger.getLogger(ContestantsBench.class.getName()).log(Level.SEVERE, null, ex);
             lock.unlock();
-            return;
+            return null;
         }
 
         lock.unlock();
+        
+        return null;
     }
 
     @Override
-    public void getContestant() {
-        InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
-
+    public VectorTimestamp getContestant(int id, int team, VectorTimestamp vt) throws RemoteException {
         lock.lock();
 
-        Iterator<InterfaceContestant> it = bench.iterator();
+        Iterator<Triple<Integer, ContestantState, Integer>> it = bench[team-1].iterator();
 
         while (it.hasNext()) {
-            InterfaceContestant temp = it.next();
+            Triple<Integer, ContestantState, Integer> temp = it.next();
 
-            if (temp.getContestantId() == contestant.getContestantId()) {
+            if (temp.getFirst() == id) {
                 it.remove();
+                break;
             }
         }
-
+        
         lock.unlock();
+        
+        return null;
     }
 
     @Override
-    public Set<Tuple<Integer, Integer>> getBench() {
+    public Set<Tuple<Integer, Integer>> getBench(int team) throws RemoteException {
         Set<Tuple<Integer, Integer>> temp;
 
         lock.lock();
 
         try {
-            while (!checkAllPlayersSeated()) {
-                allPlayersSeated.await();
+            while (!checkAllPlayersSeated(team)) {
+                allPlayersSeated[team-1].await();
             }
         } catch (InterruptedException ex) {
-            Logger.getLogger(ContestantsBench.class.getName()).log(Level.SEVERE, null, ex);
             lock.unlock();
             return null;
         }
 
         temp = new HashSet<>();
 
-        for (InterfaceContestant contestant : bench) {
-            temp.add(new Tuple<>(contestant.getContestantId(), contestant.getContestantStrength()));
-        }
+        for (Triple<Integer, ContestantState, Integer> contestant : bench[team-1])
+            temp.add(new Tuple<>(contestant.getFirst(), contestant.getThird()));
+        
 
         lock.unlock();
 
@@ -165,24 +160,26 @@ public class ContestantsBench implements InterfaceContestantsBench {
     }
 
     @Override
-    public void setSelectedContestants(Set<Integer> selected) {
+    public VectorTimestamp setSelectedContestants(int team, Set<Integer> selected, VectorTimestamp vt) throws RemoteException {
         lock.lock();
 
-        selectedContestants.clear();
-        selectedContestants.addAll(selected);
+        selectedContestants[team-1].clear();
+        selectedContestants[team-1].addAll(selected);
 
-        playersSelected.signalAll();
+        playersSelected[team-1].signalAll();
 
         lock.unlock();
+        
+        return null;
     }
 
     @Override
-    public Set<Integer> getSelectedContestants() {
+    public Set<Integer> getSelectedContestants(int team) throws RemoteException{
         Set<Integer> selected;
 
         lock.lock();
 
-        selected = new TreeSet<>(this.selectedContestants);
+        selected = new TreeSet<>(selectedContestants[team-1]);
 
         lock.unlock();
 
@@ -190,109 +187,124 @@ public class ContestantsBench implements InterfaceContestantsBench {
     }
 
     @Override
-    public void pickYourTeam() {
+    public VectorTimestamp pickYourTeam(int team, VectorTimestamp vt) throws RemoteException {
         lock.lock();
 
         try {
-            while (!coachWaiting) {
-                waitForCoach.await();
+            while (!coachWaiting[team-1]) {
+                waitForCoach[team-1].await();
             }
         } catch (InterruptedException ex) {
-            Logger.getLogger(ContestantsBench.class.getName()).log(Level.SEVERE, null, ex);
+            lock.unlock();
+            return null;
         }
 
-        waitForNextTrial.signal();
+        waitForNextTrial[team-1].signal();
 
         lock.unlock();
+        
+        return null;
     }
 
     @Override
-    public void waitForNextTrial() {
-        InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
-
+    public Tuple<VectorTimestamp, Integer> waitForNextTrial(int team, VectorTimestamp vt) throws RemoteException{
         lock.lock();
 
-        coach.setCoachState(CoachState.WAIT_FOR_REFEREE_COMMAND);
-        informationRepository.updateCoach();
-        informationRepository.printLineUpdate();
+        // informationRepository.updateCoach();
+        // informationRepository.printLineUpdate();
 
-        coachWaiting = true;
-        waitForCoach.signal();
+        coachWaiting[team-1] = true;
+        waitForCoach[team-1].signal();
 
         try {
-            waitForNextTrial.await();
+            waitForNextTrial[team-1].await();
         } catch (InterruptedException ex) {
-            Logger.getLogger(ContestantsBench.class.getName()).log(Level.SEVERE, null, ex);
+            lock.unlock();
+            return null;
         }
 
-        coachWaiting = false;
+        coachWaiting[team-1] = false;
+
+        lock.unlock();
+        
+        return null;
+    }
+
+    @Override
+    public VectorTimestamp updateContestantStrength(int id, int team, int delta, VectorTimestamp vt) throws RemoteException {
+        lock.lock();
+
+        Triple<Integer, ContestantState, Integer> sub = null;
+        Iterator<Triple<Integer, ContestantState, Integer>> it = bench[team-1].iterator();
+
+        while (it.hasNext()) {
+            Triple<Integer, ContestantState, Integer> temp = it.next();
+
+            if (temp.getFirst() == id) {
+                it.remove();
+                sub = new Triple<>(id, temp.getSecond(), temp.getThird() + delta);
+                //informationRepository.updateContestantStrength(contestant.getContestantTeam(),
+                //        contestant.getContestantId(), contestant.getContestantStrength());
+                //informationRepository.printLineUpdate();
+                bench[team-1].add(sub);
+                break;
+            }
+        }
+
+        lock.unlock();
+        
+        return null;
+    }
+
+    @Override
+    public void interrupt(int team) throws RemoteException {
+        lock.lock();
+
+        while (!checkAllPlayersSeated(team)) {
+            try {
+                allPlayersSeated[team-1].await();
+            } catch (InterruptedException ex) {
+                lock.unlock();
+                return;
+            }
+        }
+        
+        playersSelected[team-1].signalAll();
+
+        while (!coachWaiting[team-1]) {
+            try {
+                waitForCoach[team-1].await();
+            } catch (InterruptedException ex) {
+                lock.unlock();
+                return;
+            }
+        }
+        
+        waitForNextTrial[team-1].signal();
 
         lock.unlock();
     }
 
     @Override
-    public void updateContestantStrength(int id, int delta) {
+    public void waitForEveryoneToStart(int team) {
         lock.lock();
 
-        for (InterfaceContestant contestant : bench) {
-            if (contestant.getContestantId() == id) {
-                contestant.setContestantStrength(contestant.getContestantStrength() + delta);
-                informationRepository.updateContestantStrength(contestant.getContestantTeam(),
-                        contestant.getContestantId(), contestant.getContestantStrength());
-                informationRepository.printLineUpdate();
+        while (!checkAllPlayersSeated(team)) {
+            try {
+                allPlayersSeated[team-1].await();
+            } catch (InterruptedException ex) {
+                lock.unlock();
+                return;
             }
         }
 
-        lock.unlock();
-    }
-
-    @Override
-    public void interrupt() {
-        lock.lock();
-
-        while (!checkAllPlayersSeated()) {
+        while (!coachWaiting[team-1]) {
             try {
-                allPlayersSeated.await();
+                waitForCoach[team-1].await();
             } catch (InterruptedException ex) {
-                Logger.getLogger(ContestantsBench.class.getName()).log(Level.SEVERE, null, ex);
+                lock.unlock();
+                return;
             }
-
-        }
-        playersSelected.signalAll();
-
-        while (!coachWaiting) {
-            try {
-                waitForCoach.await();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(ContestantsBench.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
-        waitForNextTrial.signal();
-
-        lock.unlock();
-    }
-
-    @Override
-    public void waitForEveryoneToStart() {
-        lock.lock();
-
-        while (!checkAllPlayersSeated()) {
-            try {
-                allPlayersSeated.await();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(ContestantsBench.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
-
-        while (!coachWaiting) {
-            try {
-                waitForCoach.await();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(ContestantsBench.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
         }
 
         lock.unlock();
@@ -318,15 +330,17 @@ public class ContestantsBench implements InterfaceContestantsBench {
      *
      * @return integer array of the selected contestants for the round
      */
-    private boolean isContestantSelected() {
-        InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
-        boolean result;
+    private boolean isContestantSelected(int id, int team) {
+        boolean result = false;
 
-        lock.lock();
+        Iterator<Integer> it = selectedContestants[team-1].iterator();
 
-        result = selectedContestants.contains(contestant.getContestantId());
-
-        lock.unlock();
+        while (it.hasNext()) {
+            if (id == it.next()) {
+                result = true;
+                break;
+            }
+        }
 
         return result;
     }
@@ -336,7 +350,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
      *
      * @return true if all players seated
      */
-    private boolean checkAllPlayersSeated() {
-        return bench.size() == Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH;
+    private boolean checkAllPlayersSeated(int team) {
+        return bench[team-1].size() == Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH;
     }
 }
