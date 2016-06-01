@@ -2,10 +2,10 @@ package ServerSide.Playground;
 
 import Interfaces.InterfaceGeneralInformationRepository;
 import Interfaces.InterfacePlayground;
-import Others.InterfaceCoach.CoachState;
+import Others.CoachState;
+import Others.ContestantState;
 import Others.InterfaceContestant;
-import Others.InterfaceContestant.ContestantState;
-import Others.InterfaceReferee.RefereeState;
+import Others.RefereeState;
 import Others.Triple;
 import Others.Tuple;
 import Others.VectorTimestamp;

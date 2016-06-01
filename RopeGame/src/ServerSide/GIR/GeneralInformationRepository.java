@@ -1,14 +1,12 @@
 package ServerSide.GIR;
 
 import Interfaces.InterfaceGeneralInformationRepository;
+import Others.CoachState;
+import Others.ContestantState;
 import Others.GameScore;
-import Others.InterfaceCoach;
-import Others.InterfaceCoach.CoachState;
-import Others.InterfaceContestant;
-import Others.InterfaceContestant.ContestantState;
-import Others.InterfaceReferee;
-import Others.InterfaceReferee.RefereeState;
+import Others.RefereeState;
 import Others.Tuple;
+import Others.VectorTimestamp;
 import RopeGame.Constants;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -27,9 +25,6 @@ import java.util.logging.Logger;
  * @version 2016-3
  */
 public class GeneralInformationRepository implements InterfaceGeneralInformationRepository {
-
-    private static GeneralInformationRepository instance; // singleton
-
     // locking condtions
     private final Lock lock;
 
@@ -48,22 +43,9 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     private int shutdownVotes;
 
     /**
-     * Gets an instance of the general information repository
-     *
-     * @return general information repository instance
-     */
-    public static synchronized GeneralInformationRepository getInstance() {
-        if (instance == null) {
-            instance = new GeneralInformationRepository();
-        }
-
-        return instance;
-    }
-
-    /**
      * Private constructor for the singleton
      */
-    private GeneralInformationRepository() {
+    public GeneralInformationRepository() {
         lock = new ReentrantLock();
 
         try {
@@ -93,35 +75,30 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     }
 
     @Override
-    public void updateReferee() {
-        InterfaceReferee referee = (InterfaceReferee) Thread.currentThread();
-
+    public void updateReferee(int status, VectorTimestamp vt) {
         lock.lock();
 
-        refereeState = referee.getRefereeState();
+        refereeState = RefereeState.getStateById(status);
 
         lock.unlock();
     }
 
     @Override
-    public void updateContestant() {
-        InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
-
+    public void updateContestant(int id, int team, int status, int strength, VectorTimestamp vt) {
         lock.lock();
 
-        int team = contestant.getContestantTeam() - 1;
-        int id = contestant.getContestantId() - 1;
-
-        this.teamsState.get(team)[id] = new Tuple<>(contestant.getContestantState(), contestant.getContestantStrength());
+        this.teamsState.get(team-1)[id-1] = new Tuple<>(
+                ContestantState.getStateById(status), 
+                strength);
 
         lock.unlock();
     }
 
     @Override
-    public void updateContestantStrength(int team, int id, int strength) {
+    public void updateContestantStrength(int team, int id, int strength, VectorTimestamp vt) {
         lock.lock();
 
-        ContestantState state = teamsState.get(team - 1)[id - 1].getLeft();
+        ContestantState state = teamsState.get(team - 1)[id - 1].getFirst();
 
         this.teamsState.get(team - 1)[id - 1] = new Tuple<>(state, strength);
 
@@ -129,20 +106,16 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     }
 
     @Override
-    public void updateCoach() {
-        InterfaceCoach coach = (InterfaceCoach) Thread.currentThread();
-
+    public void updateCoach(int team, int status, VectorTimestamp vt) {
         lock.lock();
 
-        int team = coach.getCoachTeam() - 1;
-
-        this.coachesState[team] = coach.getCoachState();
+        this.coachesState[team-1] = CoachState.getStateById(status);
 
         lock.unlock();
     }
 
     @Override
-    public void setGameNumber(int gameNumber) {
+    public void setGameNumber(int gameNumber, VectorTimestamp vt) {
         lock.lock();
 
         this.gameNumber = gameNumber;
@@ -151,7 +124,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     }
 
     @Override
-    public void setTrialNumber(int trialNumber) {
+    public void setTrialNumber(int trialNumber, VectorTimestamp vt) {
         lock.lock();
 
         this.trialNumber = trialNumber;
@@ -160,7 +133,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     }
 
     @Override
-    public void setFlagPosition(int flagPosition) {
+    public void setFlagPosition(int flagPosition, VectorTimestamp vt) {
         lock.lock();
 
         this.flagPosition = flagPosition;
@@ -169,17 +142,15 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     }
 
     @Override
-    public void setTeamPlacement() {
-        InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
-
+    public void setTeamPlacement(int id, int team, VectorTimestamp vt) {
         lock.lock();
 
-        switch (contestant.getContestantTeam()) {
+        switch (team) {
             case 1:
-                team1Placement.add(contestant.getContestantId());
+                team1Placement.add(id);
                 break;
             case 2:
-                team2Placement.add(contestant.getContestantId());
+                team2Placement.add(id);
                 break;
             default:
                 System.out.println("Error: team number");
@@ -190,17 +161,15 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     }
 
     @Override
-    public void resetTeamPlacement() {
-        InterfaceContestant contestant = (InterfaceContestant) Thread.currentThread();
-
+    public void resetTeamPlacement(int id, int team, VectorTimestamp vt) {
         lock.lock();
 
-        switch (contestant.getContestantTeam()) {
+        switch (team) {
             case 1:
-                team1Placement.remove(team1Placement.indexOf(contestant.getContestantId()));
+                team1Placement.remove(team1Placement.indexOf(id));
                 break;
             case 2:
-                team2Placement.remove(team2Placement.indexOf(contestant.getContestantId()));
+                team2Placement.remove(team2Placement.indexOf(id));
                 break;
             default:
                 System.out.println("Error: team number");
@@ -211,7 +180,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     }
 
     @Override
-    public void printGameHeader() {
+    public void printGameHeader(VectorTimestamp vt) {
         lock.lock();
 
         printer.printf("Game %1d%n", gameNumber);
@@ -222,7 +191,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     }
 
     @Override
-    public void printLineUpdate() {
+    public void printLineUpdate(VectorTimestamp vt) {
         lock.lock();
 
         if (headerPrinted) {
@@ -236,7 +205,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     }
 
     @Override
-    public void printGameResult(GameScore score) {
+    public void printGameResult(GameScore score, VectorTimestamp vt) {
         lock.lock();
 
         switch (score) {
@@ -261,7 +230,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     }
 
     @Override
-    public void printMatchWinner(int team, int score1, int score2) {
+    public void printMatchWinner(int team, int score1, int score2, VectorTimestamp vt) {
         lock.lock();
 
         printer.printf("Match was won by team %d (%d-%d).%n", team, score1, score2);
@@ -271,7 +240,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     }
 
     @Override
-    public void printMatchDraw() {
+    public void printMatchDraw(VectorTimestamp vt) {
         lock.lock();
 
         printer.printf("Match was a draw.%n");
@@ -281,7 +250,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     }
 
     @Override
-    public void printLegend() {
+    public void printLegend(VectorTimestamp vt) {
         lock.lock();
 
         printer.printf("Legend:%n");
@@ -298,7 +267,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     }
 
     @Override
-    public void printHeader() {
+    public void printHeader(VectorTimestamp vt) {
         lock.lock();
 
         printer.printf("Game of the Rope - Description of the internal state%n");
@@ -339,7 +308,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
             printer.printf("  %4s", coachesState[i]);
 
             for (int j = 0; j < teamsState.get(i).length; j++) {
-                printer.printf(" %3s %2d", teamsState.get(i)[j].getLeft(), teamsState.get(i)[j].getRight());
+                printer.printf(" %3s %2d", teamsState.get(i)[j].getFirst(), teamsState.get(i)[j].getSecond());
             }
         }
 

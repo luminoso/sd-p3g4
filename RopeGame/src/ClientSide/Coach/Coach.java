@@ -4,6 +4,7 @@ import Interfaces.InterfaceContestantsBench;
 import Interfaces.InterfaceGeneralInformationRepository;
 import Interfaces.InterfacePlayground;
 import Interfaces.InterfaceRefereeSite;
+import Others.CoachState;
 import Others.CoachStrategy;
 import Others.InterfaceCoach;
 import Others.TrialScore;
@@ -191,7 +192,7 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
         vt.increment();
         Tuple<VectorTimestamp, Integer> checkTeamPlacement = playground.checkTeamPlacement(team, vt.clone());
         vt.update(checkTeamPlacement.getFirst());
-        state = InterfaceCoach.getState(checkTeamPlacement.getSecond());
+        state = CoachState.getStateById(checkTeamPlacement.getSecond());
     }
 
     /**
@@ -204,7 +205,7 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
         vt.increment();
         Tuple<VectorTimestamp, Integer> watchTrial = playground.watchTrial(vt.clone());
         vt.update(watchTrial.getFirst());
-        state = InterfaceCoach.getState(watchTrial.getSecond());
+        state = CoachState.getStateById(watchTrial.getSecond());
 
     }
 
@@ -235,7 +236,7 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
         vt.increment();
         Tuple<VectorTimestamp, Integer> waitForNextTrial = bench.waitForNextTrial(team, vt.clone());
         vt.update(waitForNextTrial.getFirst());
-        state = InterfaceCoach.getState(waitForNextTrial.getSecond());
+        state = CoachState.getStateById(waitForNextTrial.getSecond());
     }
 
     @Override

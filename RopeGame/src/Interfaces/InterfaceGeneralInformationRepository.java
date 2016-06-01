@@ -130,7 +130,7 @@ public interface InterfaceGeneralInformationRepository extends Remote {
      * @param vt
      * @throws java.rmi.RemoteException
      */
-    public void resetTeamPlacement(VectorTimestamp vt) throws RemoteException;
+    public void resetTeamPlacement(int id, int team, VectorTimestamp vt) throws RemoteException;
 
     /**
      * Sets flag position
@@ -156,7 +156,7 @@ public interface InterfaceGeneralInformationRepository extends Remote {
      * @param vt
      * @throws java.rmi.RemoteException
      */
-    public void setTeamPlacement(VectorTimestamp vt) throws RemoteException;
+    public void setTeamPlacement(int id, int team, VectorTimestamp vt) throws RemoteException;
 
     /**
      * Sets a trial score score

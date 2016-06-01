@@ -4,6 +4,7 @@ import Interfaces.InterfaceContestantsBench;
 import Interfaces.InterfaceGeneralInformationRepository;
 import Interfaces.InterfacePlayground;
 import Interfaces.InterfaceRefereeSite;
+import Others.ContestantState;
 import Others.InterfaceContestant;
 import Others.Triple;
 import Others.Tuple;
@@ -154,7 +155,7 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
             Tuple<VectorTimestamp, Integer> addContestant = playground.addContestant(id, team, state.getId(), strength, vt.clone());
             vt.update(addContestant.getFirst());
 
-            state = ContestantState.getById(addContestant.getSecond());
+            state = ContestantState.getStateById(addContestant.getSecond());
         }
     }
 
@@ -190,7 +191,7 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
         Triple<VectorTimestamp, Integer, Integer> addContestant = bench.addContestant(id, team, state.getId(), strength, vt.clone());
         vt.update(addContestant.getFirst());
 
-        state = ContestantState.getById(addContestant.getSecond());
+        state = ContestantState.getStateById(addContestant.getSecond());
         strength = addContestant.getThird();
     }
 

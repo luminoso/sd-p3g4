@@ -3,7 +3,7 @@ package ServerSide.RefereeSite;
 import Interfaces.InterfaceGeneralInformationRepository;
 import Interfaces.InterfaceRefereeSite;
 import Others.GameScore;
-import Others.InterfaceReferee.RefereeState;
+import Others.RefereeState;
 import Others.TrialScore;
 import Others.Tuple;
 import Others.VectorTimestamp;

@@ -3,8 +3,8 @@ package ServerSide.ContestantsBench;
 import Interfaces.InterfaceContestantsBench;
 import Interfaces.InterfaceGeneralInformationRepository;
 import Interfaces.InterfaceRefereeSite;
-import Others.InterfaceCoach.CoachState;
-import Others.InterfaceContestant.ContestantState;
+import Others.CoachState;
+import Others.ContestantState;
 import Others.Triple;
 import Others.Tuple;
 import Others.VectorTimestamp;
@@ -96,7 +96,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
         // (id, state, strength) defines the contestant
         bench[team-1].add(new Triple<>(id, ContestantState.SEAT_AT_THE_BENCH, strength));
 
-        if (ContestantState.getById(state) != ContestantState.SEAT_AT_THE_BENCH) {
+        if (ContestantState.getStateById(state) != ContestantState.SEAT_AT_THE_BENCH) {
             // informationRepository.updateContestant();
             // informationRepository.printLineUpdate();
         }
@@ -248,7 +248,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
         
         lock.unlock();
         
-        return new Tuple<>(vt.clone(),CoachState.WAIT_FOR_REFEREE_COMMAND.getId());
+        return new Tuple<>(vt.clone(), CoachState.WAIT_FOR_REFEREE_COMMAND.getId());
     }
 
     @Override

@@ -6,8 +6,7 @@ import Interfaces.InterfacePlayground;
 import Interfaces.InterfaceRefereeSite;
 import Others.GameScore;
 import Others.InterfaceReferee;
-import Others.InterfaceReferee.RefereeState;
-import static Others.InterfaceReferee.RefereeState.END_OF_THE_MATCH;
+import Others.RefereeState;
 import Others.TrialScore;
 import Others.Tuple;
 import Others.VectorTimestamp;
@@ -83,7 +82,7 @@ public class Referee extends Thread implements InterfaceReferee {
             vt.increment();
             informationRepository.printHeader(vt.clone());
 
-            while (state != END_OF_THE_MATCH) {
+            while (state != RefereeState.END_OF_THE_MATCH) {
                 switch (state) {
                     case START_OF_THE_MATCH:
                         announceNewGame();
