@@ -53,6 +53,7 @@ public class PlaygroundServer {
         InterfacePlayground playgroundInterface = null;
 
         playground = new Playground(girInterface);
+        
         try {
             playgroundInterface = (InterfacePlayground) UnicastRemoteObject.exportObject(playground, RegistryConfig.REGISTRY_PLAYGROUND_PORT);
         } catch (RemoteException e) {

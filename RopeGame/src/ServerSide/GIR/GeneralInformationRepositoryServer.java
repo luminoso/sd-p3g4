@@ -1,7 +1,6 @@
-package ServerSide.RefereeSite;
+package ServerSide.GIR;
 
 import Interfaces.InterfaceGeneralInformationRepository;
-import Interfaces.InterfaceRefereeSite;
 import Interfaces.Register;
 import Registry.RegistryConfig;
 import java.rmi.AlreadyBoundException;
@@ -15,9 +14,9 @@ import java.rmi.server.UnicastRemoteObject;
  *
  * @author luminoso
  */
-public class RefereeSiteServer {
+public class GeneralInformationRepositoryServer {
     
-    public static void main(String args[]) {
+        public static void main(String args[]) {
         /* obtenção da localização do serviço de registo RMI */
         String rmiRegHostName;
         int rmiRegPortNumb;
@@ -25,19 +24,6 @@ public class RefereeSiteServer {
         rmiRegHostName = RegistryConfig.RMI_HOSTNAME;
         rmiRegPortNumb = RegistryConfig.RMI_PORTNUMBER;
 
-        /* localização por nome do objecto remoto no serviço de registos RMI */
-        InterfaceGeneralInformationRepository girInterface = null;
-
-        try {
-            Registry registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
-            girInterface = (InterfaceGeneralInformationRepository) registry.lookup(RegistryConfig.REGISTRY_GIR_NAME);
-        } catch (RemoteException e) {
-            System.out.println("Excepção na localização do General Information Repository: " + e.getMessage() + "!");
-            System.exit(1);
-        } catch (NotBoundException e) {
-            System.out.println("O General Information Repository não está registado: " + e.getMessage() + "!");
-            System.exit(1);
-        }
 
         /* instanciação e instalação do gestor de segurança */
         if (System.getSecurityManager() == null) {
@@ -45,16 +31,16 @@ public class RefereeSiteServer {
         }
 
         // Instanciçãoo do RefereeSite
-        RefereeSite refereesite = RefereeSite.getInstance(girInterface);
-        InterfaceRefereeSite refereesiteInterface = null;
+        GeneralInformationRepository gir = new GeneralInformationRepository();
+        InterfaceGeneralInformationRepository girInterface = null;
 
         try {
-            refereesiteInterface = (InterfaceRefereeSite) UnicastRemoteObject.exportObject(refereesite, RegistryConfig.REGISTRY_REFEREE_PORT);
+            girInterface = (InterfaceGeneralInformationRepository) UnicastRemoteObject.exportObject(gir, RegistryConfig.REGISTRY_GIR_PORT);
         } catch (RemoteException e) {
-            System.out.println("Excepção na geração do stub para o RefereeSite: " + e.getMessage());
+            System.out.println("Excepção na geração do stub para o GeneralInformationRepository: " + e.getMessage());
             System.exit(1);
         }
-        System.out.println("O stub para o RefereSite foi gerado!");
+        System.out.println("O stub para o GeneralInformationRepository foi gerado!");
 
         /* seu registo no serviço de registo RMI */
         String nameEntryBase = RegistryConfig.RMI_NAME;
@@ -81,16 +67,16 @@ public class RefereeSiteServer {
         }
 
         try {
-            reg.bind(nameEntryObject, refereesiteInterface);
+            reg.bind(nameEntryObject, girInterface);
         } catch (RemoteException e) {
-            System.out.println("Excepção no registo do RefereeSite: " + e.getMessage());
+            System.out.println("Excepção no registo do GeneralInformationRepository: " + e.getMessage());
             System.exit(1);
         } catch (AlreadyBoundException e) {
-            System.out.println("O RefereeSite já está bounded: " + e.getMessage());
+            System.out.println("O GeneralInformationRepository já está bound: " + e.getMessage());
             System.exit(1);
         }
 
-        System.out.println("O RefereeSite foi registado!");
+        System.out.println("O GeneralInformationRepository foi registado!");
     }
     
 }
