@@ -36,6 +36,13 @@ public enum ContestantState {
         return state;
     }
 
+    @Override
+    public String toString() {
+        return state;
+    }
+
+    
+    
     public static ContestantState getStateById(int id) {
         for (ContestantState state : values())
             if (state.id == id)

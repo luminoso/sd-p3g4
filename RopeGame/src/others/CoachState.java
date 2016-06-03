@@ -37,6 +37,13 @@ public enum CoachState {
         return state;
     }
 
+    @Override
+    public String toString() {
+        return state;
+    }
+
+    
+    
     public static CoachState getStateById(int id) {
         for (CoachState st : CoachState.values())
             if (st.getId() == id)
