@@ -68,7 +68,7 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
         this.refereeSite = refereeSite;
         this.playground = playground;
         this.informationRepository = informationRepository;
-        this.vt = new VectorTimestamp(Constants.VECTOR_TIMESTAMP_SIZE, team);
+        this.vt = new VectorTimestamp(Constants.VECTOR_TIMESTAMP_SIZE, 1 + (team-1) * (Constants.NUMBER_OF_PLAYERS_IN_THE_BENCH + 1));
     }
 
     @Override
