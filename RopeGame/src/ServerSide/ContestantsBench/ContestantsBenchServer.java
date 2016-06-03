@@ -65,6 +65,7 @@ public class ContestantsBenchServer {
         InterfaceContestantsBench benchInterface = null;
         
         bench = new ContestantsBench(refSiteInterface, girInterface);
+        
         try {
             benchInterface = (InterfaceContestantsBench) UnicastRemoteObject.exportObject(bench, RegistryConfig.REGISTRY_CONTESTANTS_BENCH_PORT);
         } catch (RemoteException e) {

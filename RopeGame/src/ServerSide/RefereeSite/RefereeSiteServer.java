@@ -1,7 +1,7 @@
-package ServerSide.Playground;
+package ServerSide.RefereeSite;
 
 import Interfaces.InterfaceGeneralInformationRepository;
-import Interfaces.InterfacePlayground;
+import Interfaces.InterfaceRefereeSite;
 import Interfaces.Register;
 import Registry.RegistryConfig;
 import java.rmi.AlreadyBoundException;
@@ -13,12 +13,10 @@ import java.rmi.server.UnicastRemoteObject;
 
 /**
  *
- * @author Eduardo Sousa - eduardosousa@ua.pt
- * @author Guilherme Cardoso - gjc@ua.pt
- * @version 2016-3
+ * @author luminoso
  */
-public class PlaygroundServer {
-
+public class RefereeSiteServer {
+    
     public static void main(String args[]) {
         /* obtenção da localização do serviço de registo RMI */
         String rmiRegHostName;
@@ -35,11 +33,9 @@ public class PlaygroundServer {
             girInterface = (InterfaceGeneralInformationRepository) registry.lookup(RegistryConfig.REGISTRY_GIR_NAME);
         } catch (RemoteException e) {
             System.out.println("Excepção na localização do General Information Repository: " + e.getMessage() + "!");
-            e.printStackTrace();
             System.exit(1);
         } catch (NotBoundException e) {
             System.out.println("O General Information Repository não está registado: " + e.getMessage() + "!");
-            e.printStackTrace();
             System.exit(1);
         }
 
@@ -48,20 +44,17 @@ public class PlaygroundServer {
             System.setSecurityManager(new SecurityManager());
         }
 
-        /* instanciação do objecto remoto que representa a barbearia e geração de um stub para ele */
-        Playground playground = null;
-        InterfacePlayground playgroundInterface = null;
+        // Instanciçãoo do RefereeSite
+        RefereeSite refereesite = RefereeSite.getInstance(girInterface);
+        InterfaceRefereeSite refereesiteInterface = null;
 
-        playground = new Playground(girInterface);
-        
         try {
-            playgroundInterface = (InterfacePlayground) UnicastRemoteObject.exportObject(playground, RegistryConfig.REGISTRY_PLAYGROUND_PORT);
+            refereesiteInterface = (InterfaceRefereeSite) UnicastRemoteObject.exportObject(refereesite, RegistryConfig.REGISTRY_REFEREE_PORT);
         } catch (RemoteException e) {
-            System.out.println("Excepção na geração do stub para o Playground: " + e.getMessage());
-            e.printStackTrace();
+            System.out.println("Excepção na geração do stub para o RefereeSite: " + e.getMessage());
             System.exit(1);
         }
-        System.out.println("O stub para o Playground foi gerado!");
+        System.out.println("O stub para o RefereSite foi gerado!");
 
         /* seu registo no serviço de registo RMI */
         String nameEntryBase = RegistryConfig.RMI_NAME;
@@ -73,7 +66,6 @@ public class PlaygroundServer {
             registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
         } catch (RemoteException e) {
             System.out.println("Excepção na criação do registo RMI: " + e.getMessage());
-            e.printStackTrace();
             System.exit(1);
         }
         System.out.println("O registo RMI foi criado!");
@@ -82,26 +74,23 @@ public class PlaygroundServer {
             reg = (Register) registry.lookup(nameEntryBase);
         } catch (RemoteException e) {
             System.out.println("RegisterRemoteObject lookup exception: " + e.getMessage());
-            e.printStackTrace();
             System.exit(1);
         } catch (NotBoundException e) {
             System.out.println("RegisterRemoteObject not bound exception: " + e.getMessage());
-            e.printStackTrace();
             System.exit(1);
         }
 
         try {
-            reg.bind(nameEntryObject, playgroundInterface);
+            reg.bind(nameEntryObject, refereesiteInterface);
         } catch (RemoteException e) {
-            System.out.println("Excepção no registo do Playground: " + e.getMessage());
-            e.printStackTrace();
+            System.out.println("Excepção no registo do RefereeSite: " + e.getMessage());
             System.exit(1);
         } catch (AlreadyBoundException e) {
-            System.out.println("O Playground já está registado: " + e.getMessage());
-            e.printStackTrace();
+            System.out.println("O RefereeSite já está bounded: " + e.getMessage());
             System.exit(1);
         }
 
-        System.out.println("O Playground foi registado!");
+        System.out.println("O RefereeSite foi registado!");
     }
+    
 }
