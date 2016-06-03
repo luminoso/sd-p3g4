@@ -50,7 +50,7 @@ public class RefereeSite implements InterfaceRefereeSite {
      * @param informationRepository interface to use
      * @return referee site object to be used
      */
-    public static synchronized RefereeSite getInstance(InterfaceGeneralInformationRepository informationRepository) {
+    public static synchronized InterfaceRefereeSite getInstance(InterfaceGeneralInformationRepository informationRepository) {
         if (instance == null) {
             instance = new RefereeSite(informationRepository);
         }
