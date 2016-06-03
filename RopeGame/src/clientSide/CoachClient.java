@@ -78,5 +78,14 @@ public class CoachClient {
         }
 
         out.println(coachName + " finished his job.");
+        
+        try {
+            girInt.shutdown();
+            playgroundInt.shutdown();
+            benchInt.shutdown();
+            refsiteInt.shutdown();
+        } catch (RemoteException ex) {
+            Logger.getLogger(RefereeClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
