@@ -226,7 +226,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         formatter.format("Game %d%n", gameNumber);
         strb.append(printColumnHeader());
         
-        updates.add(new LineUpdate(strb.toString(), vt));
+        updates.add(new LineUpdate(strb.toString(), vt.clone()));
 
         lock.unlock();
     }
@@ -267,7 +267,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
 
         formatter.format("Match was won by team %d (%d-%d).%n", team, score1, score2);
         
-        updates.add(new LineUpdate(strb.toString(), vt));
+        updates.add(new LineUpdate(strb.toString(), vt.clone()));
 
         lock.unlock();
     }
@@ -281,7 +281,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
 
         formatter.format("Match was a draw.%n");
         
-        updates.add(new LineUpdate(strb.toString(), vt));
+        updates.add(new LineUpdate(strb.toString(), vt.clone()));
 
         lock.unlock();
     }
@@ -315,7 +315,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         formatter.format("VCk 11        – local clock of the contestant 4 of team 2%n");
         formatter.format("VCk 12        – local clock of the contestant 5 of team 2%n");
         
-        updates.add(new LineUpdate(strb.toString(), vt));
+        updates.add(new LineUpdate(strb.toString(), vt.clone()));
 
         lock.unlock();
     }
@@ -337,7 +337,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
 
         System.out.println("Header printed");
         
-        updates.add(new LineUpdate(strb.toString(), vt));
+        updates.add(new LineUpdate(strb.toString(), vt.clone()));
         
         lock.unlock();
     }
@@ -363,7 +363,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         formatter.format(printTrialResult(trialNumber, flagPosition));
         formatter.format(printVectorTimeStamp(vt));
 
-        updates.add(new LineUpdate(strb.toString(), vt));
+        updates.add(new LineUpdate(strb.toString(), vt.clone()));
     }
     
     /**
@@ -494,7 +494,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     @Override
     public void close() {
         lock.lock();
-
+        
         updates.sort(new Comparator<LineUpdate>() {
             @Override
             public int compare(LineUpdate o1, LineUpdate o2) {
