@@ -51,7 +51,7 @@ public class ContestantsBench implements InterfaceContestantsBench {
     // general Information repository implementation to be used
     private final InterfaceGeneralInformationRepository informationRepository;
     
-    private VectorTimestamp vt;
+    private VectorTimestamp local;
 
     /**
      * Private constructor to be used in the doubleton
@@ -86,19 +86,20 @@ public class ContestantsBench implements InterfaceContestantsBench {
         
         shutdownVotes = 0;
         
-        vt = new VectorTimestamp(Constants.VECTOR_TIMESTAMP_SIZE, 0);
+        local = new VectorTimestamp(Constants.VECTOR_TIMESTAMP_SIZE, 0);
     }
 
     @Override
     public Triple<VectorTimestamp, Integer, Integer> addContestant(int id, int team, int state, int strength, VectorTimestamp vt) throws RemoteException {
         lock.lock();
 
+        local.update(vt);
+        
         // (id, state, strength) defines the contestant
         bench[team-1].add(new Triple<>(id, ContestantState.SEAT_AT_THE_BENCH, strength));
 
         if (ContestantState.getStateById(state) != ContestantState.SEAT_AT_THE_BENCH) {
-            // informationRepository.updateContestant();
-            // informationRepository.printLineUpdate();
+            informationRepository.updateContestant(id, team, state, strength, local.clone());
         }
 
         if (checkAllPlayersSeated(team)) {
@@ -114,13 +115,12 @@ public class ContestantsBench implements InterfaceContestantsBench {
             return null;
         }
 
-        // returns vt, state Id and strength
         Triple<VectorTimestamp,Integer,Integer> tmp = null;
         
         vt.update(vt);
         for(Triple<Integer,ContestantState,Integer> ct : bench[team-1]){
             if(ct.getFirst() == id)
-                tmp = new Triple<>(vt.clone(), ct.getSecond().getId(), ct.getThird());
+                tmp = new Triple<>(local.clone(), ct.getSecond().getId(), ct.getThird());
         }
         
         lock.unlock();
@@ -154,6 +154,8 @@ public class ContestantsBench implements InterfaceContestantsBench {
 
         lock.lock();
 
+        local.update(vt);
+        
         try {
             while (!checkAllPlayersSeated(team)) {
                 allPlayersSeated[team-1].await();
@@ -169,27 +171,25 @@ public class ContestantsBench implements InterfaceContestantsBench {
         for (Triple<Integer, ContestantState, Integer> contestant : bench[team-1])
             temp.add(new Tuple<>(contestant.getFirst(), contestant.getThird()));
         
-        vt.update(vt);
-        
         lock.unlock();
 
-        return new Tuple<>(vt.clone(), temp);
+        return new Tuple<>(local.clone(), temp);
     }
 
     @Override
     public VectorTimestamp setSelectedContestants(int team, Set<Integer> selected, VectorTimestamp vt) throws RemoteException  {
         lock.lock();
 
+        local.update(vt);
+        
         selectedContestants[team-1].clear();
         selectedContestants[team-1].addAll(selected);
 
         playersSelected[team-1].signalAll();
-
-        vt.update(vt);
        
         lock.unlock();
         
-        return vt.clone();
+        return local.clone();
     }
 
     @Override
@@ -198,13 +198,13 @@ public class ContestantsBench implements InterfaceContestantsBench {
 
         lock.lock();
 
+        local.update(vt);
+        
         selected = new TreeSet<>(selectedContestants[team-1]);
-
-        vt.update(vt);
         
         lock.unlock();
 
-        return new Tuple<>(vt.clone(),selected);
+        return new Tuple<>(local.clone(),selected);
     }
 
     @Override
@@ -226,11 +226,12 @@ public class ContestantsBench implements InterfaceContestantsBench {
     }
 
     @Override
-    public Tuple<VectorTimestamp,Integer> waitForNextTrial(int team, VectorTimestamp vt) throws RemoteException{
+    public Tuple<VectorTimestamp,Integer> waitForNextTrial(int team, int status, VectorTimestamp vt) throws RemoteException{
         lock.lock();
 
-        // informationRepository.updateCoach();
-        // informationRepository.printLineUpdate();
+        local.update(vt);
+        
+        informationRepository.updateCoach(team, status, local.clone());
 
         coachWaiting[team-1] = true;
         waitForCoach[team-1].signal();
@@ -243,18 +244,18 @@ public class ContestantsBench implements InterfaceContestantsBench {
         }
 
         coachWaiting[team-1] = false;
-
-        vt.update(vt);
         
         lock.unlock();
         
-        return new Tuple<>(vt.clone(), CoachState.WAIT_FOR_REFEREE_COMMAND.getId());
+        return new Tuple<>(local.clone(), CoachState.WAIT_FOR_REFEREE_COMMAND.getId());
     }
 
     @Override
     public VectorTimestamp updateContestantStrength(int id, int team, int delta, VectorTimestamp vt) throws RemoteException {
         lock.lock();
 
+        local.update(vt);
+        
         Triple<Integer, ContestantState, Integer> sub = null;
         Iterator<Triple<Integer, ContestantState, Integer>> it = bench[team-1].iterator();
 
@@ -264,19 +265,15 @@ public class ContestantsBench implements InterfaceContestantsBench {
             if (temp.getFirst() == id) {
                 it.remove();
                 sub = new Triple<>(id, temp.getSecond(), temp.getThird() + delta);
-                //informationRepository.updateContestantStrength(contestant.getContestantTeam(),
-                //        contestant.getContestantId(), contestant.getContestantStrength());
-                //informationRepository.printLineUpdate();
+                informationRepository.updateContestantStrength(team, id, temp.getThird() + delta, local.clone());
                 bench[team-1].add(sub);
                 break;
             }
         }
-        
-        vt.update(vt);
 
         lock.unlock();
         
-        return vt.clone();
+        return local.clone();
     }
 
     @Override
@@ -310,12 +307,9 @@ public class ContestantsBench implements InterfaceContestantsBench {
 
     @Override
     public VectorTimestamp waitForEveryoneToStart(int team, VectorTimestamp vt) {
-        
-        //TODO possible useless function in RMI
-        
         lock.lock();
 
-        vt.update(vt);
+        local.update(vt);
         
         while (!checkAllPlayersSeated(team)) {
             try {
@@ -332,12 +326,10 @@ public class ContestantsBench implements InterfaceContestantsBench {
                 lock.unlock();
             }
         }
-
-        vt.update(vt);
         
         lock.unlock();
         
-        return vt.clone();
+        return local.clone();
     }
 
     @Override

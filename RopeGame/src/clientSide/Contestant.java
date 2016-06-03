@@ -136,7 +136,7 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
                 }
             }
         } catch (RemoteException ex) {
-            Logger.getLogger(Contestant.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
             System.exit(1);
         }
     }

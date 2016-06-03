@@ -90,7 +90,7 @@ public interface InterfaceContestantsBench extends Remote {
      * @return updated clock and coach state iD
      * @throws java.rmi.RemoteException
      */
-    public Tuple<VectorTimestamp, Integer> waitForNextTrial(int team, VectorTimestamp vt) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> waitForNextTrial(int team, int status, VectorTimestamp vt) throws RemoteException;
 
     /**
      * Updates the contestant strength

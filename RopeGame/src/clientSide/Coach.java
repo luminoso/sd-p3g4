@@ -108,7 +108,7 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
             informationRepository.updateCoach(team, state.getId(), vt.clone());
 
             vt.increment();
-            Tuple<VectorTimestamp, Integer> waitForNextTrial = bench.waitForNextTrial(team, vt.clone());
+            Tuple<VectorTimestamp, Integer> waitForNextTrial = bench.waitForNextTrial(team, state.getId(), vt.clone());
             vt.update(waitForNextTrial.getFirst());
             // waitForNextTrial.getSecond() returns the same state the coach is in: WAIT_FOR_REFEE_COMMAND
 
@@ -136,7 +136,7 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
                 }
             }
         } catch (RemoteException ex) {
-            Logger.getLogger(Coach.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
             System.exit(1);
         }
     }
@@ -146,8 +146,6 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
      * selected contestants array at the bench
      */
     private void callContestants() throws RemoteException {
-        //Set<Integer> pickedContestants = this.strategy.pickTeam(bench, refereeSite);
-
         Set<Integer> pickedContestants = this.strategy.pickTeam(
                 ((Supplier<Set<Tuple<Integer, Integer>>>) () -> {
                     Tuple<VectorTimestamp, Set<Tuple<Integer, Integer>>> getbenchres = null;
@@ -234,7 +232,7 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
         }
 
         vt.increment();
-        Tuple<VectorTimestamp, Integer> waitForNextTrial = bench.waitForNextTrial(team, vt.clone());
+        Tuple<VectorTimestamp, Integer> waitForNextTrial = bench.waitForNextTrial(team, state.getId(), vt.clone());
         vt.update(waitForNextTrial.getFirst());
         state = CoachState.getStateById(waitForNextTrial.getSecond());
     }

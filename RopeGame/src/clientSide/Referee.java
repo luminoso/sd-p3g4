@@ -118,11 +118,9 @@ public class Referee extends Thread implements InterfaceReferee {
             bench.interrupt(2);
             informationRepository.close();
         } catch (RemoteException ex) {
-            Logger.getLogger(Referee.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
             System.exit(1);
         }
-        
-        
     }
 
     /**
