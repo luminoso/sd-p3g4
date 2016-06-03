@@ -169,9 +169,6 @@ public class Referee extends Thread implements InterfaceReferee {
 
         vt.increment();
         informationRepository.updateReferee(state.getId(), vt.clone());
-
-        vt.increment();
-        informationRepository.printLineUpdate(vt.clone());
     }
 
     /**
@@ -245,8 +242,6 @@ public class Referee extends Thread implements InterfaceReferee {
 
         vt.increment();
         informationRepository.setFlagPosition(flagPosition, vt.clone());
-        vt.increment();
-        informationRepository.printLineUpdate(vt.clone());
 
         playground.resultAsserted();
     }
@@ -307,8 +302,6 @@ public class Referee extends Thread implements InterfaceReferee {
 
         vt.increment();
         informationRepository.updateReferee(state.getId(), vt.clone());
-        vt.increment();
-        informationRepository.printLineUpdate(vt.clone());
 
         informationRepository.printGameResult(((Supplier<GameScore>) () -> {
             vt.increment();
@@ -359,9 +352,6 @@ public class Referee extends Thread implements InterfaceReferee {
 
         vt.increment();
         informationRepository.updateReferee(state.getId(), vt.clone());
-
-        vt.increment();
-        informationRepository.printLineUpdate(vt.clone());
 
         if (score1 > score2) {
             vt.increment();

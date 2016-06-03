@@ -12,8 +12,10 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
@@ -32,10 +34,6 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
 
     // File writers
     private PrintWriter printer;
-    private PrintWriter reorder;
-
-    // Local clock
-    private VectorTimestamp localTimestamp;
     
     // variables to store current game status and update accordingly to changes
     private final List<Tuple<ContestantState, Integer>[]> teamsState;
@@ -59,7 +57,6 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
 
         try {
             printer = new PrintWriter(Constants.FILE_NAME);
-            reorder = new PrintWriter(Constants.REORDER_FILE_NAME);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(GeneralInformationRepository.class.getName()).log(Level.SEVERE, null, ex);
             printer = null;
@@ -220,10 +217,12 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
 
     @Override
     public void printGameHeader(VectorTimestamp vt) {
+        StringBuilder strb = new StringBuilder();
+        Formatter formatter = new Formatter(strb);
+        
         lock.lock();
 
-        StringBuilder strb = new StringBuilder();
-        strb.append("Game " + gameNumber + "\n");
+        formatter.format("Game %d%n", gameNumber);
         strb.append(printColumnHeader());
         
         updates.add(new LineUpdate(strb.toString(), vt));
@@ -232,36 +231,26 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     }
 
     @Override
-    public void printLineUpdate(VectorTimestamp vt) {
-        lock.lock();
-
-        if (headerPrinted) {
-            printActiveEntitiesStates();
-            printTrialResult(trialNumber, flagPosition);
-        }
-
-        lock.unlock();
-    }
-
-    @Override
     public void printGameResult(GameScore score, VectorTimestamp vt) {
+        StringBuilder strb = new StringBuilder();
+        
         lock.lock();
 
         switch (score) {
             case VICTORY_TEAM_1_BY_KNOCKOUT:
-                printGameWinnerByKnockOut(gameNumber, 1, trialNumber);
+                strb.append(printGameWinnerByKnockOut(gameNumber, 1, trialNumber));
                 break;
             case VICTORY_TEAM_1_BY_POINTS:
-                printGameWinnerByPoints(gameNumber, 1);
+                strb.append(printGameWinnerByPoints(gameNumber, 1));
                 break;
             case VICTORY_TEAM_2_BY_KNOCKOUT:
-                printGameWinnerByKnockOut(gameNumber, 2, trialNumber);
+                strb.append(printGameWinnerByKnockOut(gameNumber, 2, trialNumber));
                 break;
             case VICTORY_TEAM_2_BY_POINTS:
-                printGameWinnerByPoints(gameNumber, 1);
+                strb.append(printGameWinnerByPoints(gameNumber, 1));
                 break;
             case DRAW:
-                printGameDraw(gameNumber);
+                strb.append(printGameDraw(gameNumber));
                 break;
         }
 
@@ -304,13 +293,26 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         lock.lock();
 
         formatter.format("Legend:%n");
-        formatter.format("Ref Sta – state of the referee%n");
-        formatter.format("Coa # Stat - state of the coach of team # (# - 1 .. 2)%n");
-        formatter.format("Cont # Sta – state of the contestant # (# - 1 .. 5) of team whose coach was listed to the immediate left%n");
-        formatter.format("Cont # SG – strength of the contestant # (# - 1 .. 5) of team whose coach was listed to the immediate left%n");
-        formatter.format("TRIAL – ? – contestant identification at the position ? at the end of the rope for present trial (? - 1 .. 3)%n");
-        formatter.format("TRIAL – NB – trial number%n");
-        formatter.format("TRIAL – PS – position of the centre of the rope at the beginning of the trial%n");
+        formatter.format("Ref Sta       – state of the referee%n");
+        formatter.format("Coa # Stat    – state of the coach of team # (# - 1 .. 2)%n");
+        formatter.format("Cont # Sta    – state of the contestant # (# - 1 .. 5) of team whose coach was listed to the immediate left%n");
+        formatter.format("Cont # SG     – strength of the contestant # (# - 1 .. 5) of team whose coach was listed to the immediate left%n");
+        formatter.format("TRIAL – ?     – contestant identification at the position ? at the end of the rope for present trial (? - 1 .. 3)%n");
+        formatter.format("TRIAL – NB    – trial number%n");
+        formatter.format("TRIAL – PS    – position of the centre of the rope at the beginning of the trial%n");
+        formatter.format("VCk  0        – local clock of the referee%n");
+        formatter.format("VCk  1        – local clock of the coach of team 1%n");
+        formatter.format("VCk  2        – local clock of the contestant 1 of team 1%n");
+        formatter.format("VCk  3        – local clock of the contestant 2 of team 1%n");
+        formatter.format("VCk  4        – local clock of the contestant 3 of team 1%n");
+        formatter.format("VCk  5        – local clock of the contestant 4 of team 1%n");
+        formatter.format("VCk  6        – local clock of the contestant 5 of team 1%n");
+        formatter.format("VCk  7        – local clock of the coach of team 2%n");
+        formatter.format("VCk  8        – local clock of the contestant 1 of team 2%n");
+        formatter.format("VCk  9        – local clock of the contestant 2 of team 2%n");
+        formatter.format("VCk 10        – local clock of the contestant 3 of team 2%n");
+        formatter.format("VCk 11        – local clock of the contestant 4 of team 2%n");
+        formatter.format("VCk 12        – local clock of the contestant 5 of team 2%n");
         
         updates.add(new LineUpdate(strb.toString(), vt));
 
@@ -350,6 +352,17 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         return strb.toString();
     }
 
+    private void printLineUpdate(VectorTimestamp vt) {
+        StringBuilder strb = new StringBuilder();
+        Formatter formatter = new Formatter(strb);
+
+        formatter.format(printActiveEntitiesStates());
+        formatter.format(printTrialResult(trialNumber, flagPosition));
+        formatter.format(printVectorTimeStamp(vt));
+
+        updates.add(new LineUpdate(strb.toString(), vt));
+    }
+    
     /**
      * Prints active entities states
      */
@@ -357,7 +370,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         StringBuilder strb = new StringBuilder();
         Formatter formatter = new Formatter(strb);
         
-        formatter.format("%3s", coachesState);
+        formatter.format("%3s", refereeState);
 
         // Printing teams state
         for (int i = 0; i < coachesState.length; i++) {
@@ -411,11 +424,25 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
             }
         }
 
-        formatter.format(" %2d %2d%n", trialNumber, flagPosition);
+        formatter.format(" %2d %2d", trialNumber, flagPosition);
 
         return strb.toString();
     }
 
+    private String printVectorTimeStamp(VectorTimestamp vt) {
+        StringBuilder strb = new StringBuilder();
+        Formatter formatter = new Formatter(strb);
+        
+        int[] vtArray = vt.toIntArray();
+        
+        for(int i = 0; i < vtArray.length; i++)
+            formatter.format(" %2d", vtArray[i]);
+        
+        formatter.format("%n");
+        
+        return strb.toString();
+    }
+    
     /**
      * Prints a game winner by knock out
      *
@@ -465,6 +492,12 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     public void close() {
         lock.lock();
 
+        TreeSet<LineUpdate> tree = new TreeSet<>(updates);
+        Iterator<LineUpdate> it = tree.iterator();
+        
+        while(it.hasNext())
+            printer.print(it.next().getLine());
+        
         printer.flush();
         printer.close();
 

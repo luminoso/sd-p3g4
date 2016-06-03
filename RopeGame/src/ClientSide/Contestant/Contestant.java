@@ -167,9 +167,6 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
 
         vt.increment();
         informationRepository.updateContestant(id, team, state.getId(), strength, vt.clone());
-
-        vt.increment();
-        informationRepository.printLineUpdate(vt.clone());
     }
 
     /**

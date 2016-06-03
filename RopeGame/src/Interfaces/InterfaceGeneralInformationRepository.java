@@ -58,14 +58,6 @@ public interface InterfaceGeneralInformationRepository extends Remote {
     public void updateReferee(int status, VectorTimestamp vt) throws RemoteException;
 
     /**
-     * Prints an line with updated information about game state
-     *
-     * @param vt
-     * @throws java.rmi.RemoteException
-     */
-    public void printLineUpdate(VectorTimestamp vt) throws RemoteException;
-
-    /**
      * Closes log file
      *
      * @throws java.rmi.RemoteException
