@@ -11,6 +11,7 @@ import others.Constants;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Formatter;
 import java.util.Iterator;
@@ -495,14 +496,11 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     public void close() {
         lock.lock();
         
-        updates.sort(new Comparator<LineUpdate>() {
-            @Override
-            public int compare(LineUpdate o1, LineUpdate o2) {
-                return o1.compareTo(o2);
-            }
-        });
+        LineUpdate[] temp = updates.toArray(new LineUpdate[updates.size()]);
         
-        for(LineUpdate up : updates)
+        Arrays.sort(temp);
+        
+        for(LineUpdate up : temp)
             printer.print(up.getLine());
         
         printer.flush();
