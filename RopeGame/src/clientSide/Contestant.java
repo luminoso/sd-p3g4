@@ -150,11 +150,9 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
         bench.getContestant(id, team);
 
         if (!refereeSite.hasMatchEnded()) {
-
             vt.increment();
             Tuple<VectorTimestamp, Integer> addContestant = playground.addContestant(id, team, state.getId(), strength, vt.clone());
             vt.update(addContestant.getFirst());
-
             state = ContestantState.getStateById(addContestant.getSecond());
         }
     }

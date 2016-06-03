@@ -42,7 +42,7 @@ public class Playground implements InterfacePlayground {
     private final List<Triple<Integer, ContestantState, Integer>>[] teams;  // list containing the Contestant in both teams
     private final InterfaceGeneralInformationRepository informationRepository;
 
-    private VectorTimestamp vt;
+    private VectorTimestamp local;
 
     /**
      * Private constructor to be used in the singleton
@@ -69,19 +69,21 @@ public class Playground implements InterfacePlayground {
 
         shutdownVotes = 0;
 
-        vt = new VectorTimestamp(Constants.VECTOR_TIMESTAMP_SIZE, 0);
+        local = new VectorTimestamp(Constants.VECTOR_TIMESTAMP_SIZE, 0);
     }
 
     @Override
     public Tuple<VectorTimestamp, Integer> addContestant(int id, int team, int state, int strength, VectorTimestamp vt) throws RemoteException {
         lock.lock();
 
+        local.update(vt);
+        
         try {
             teams[team - 1].add(new Triple<>(id, ContestantState.STAND_IN_POSITION, strength));
 
-            //informationRepository.updateContestant();
-            //informationRepository.setTeamPlacement();
-            //informationRepository.printLineUpdate();
+            informationRepository.updateContestant(id, team, ContestantState.STAND_IN_POSITION.getId(), strength, local.clone());
+            informationRepository.setTeamPlacement(id, team, local.clone());
+
             if (isTeamInPlace(team)) {
                 teamsInPosition.signalAll();
             }
@@ -92,21 +94,20 @@ public class Playground implements InterfacePlayground {
             return null;
         }
 
-        vt.update(vt);
-
         lock.unlock();
 
         // Contestant changes state
-        return new Tuple<VectorTimestamp, Integer>(vt.clone(), ContestantState.STAND_IN_POSITION.getId());
+        return new Tuple<>(local.clone(), ContestantState.STAND_IN_POSITION.getId());
     }
 
     @Override
     public Tuple<VectorTimestamp, Integer> checkTeamPlacement(int team, VectorTimestamp vt) throws RemoteException {
         lock.lock();
 
-        //coach.setCoachState(CoachState.ASSEMBLE_TEAM);
-        //informationRepository.updateCoach();
-        //informationRepository.printLineUpdate();
+        local.update(vt);
+        
+        informationRepository.updateCoach(team, CoachState.ASSEMBLE_TEAM.getId(), local.clone());
+        
         try {
             while (!isTeamInPlace(team)) {
                 teamsInPosition.await();
@@ -120,16 +121,17 @@ public class Playground implements InterfacePlayground {
 
         lock.unlock();
 
-        return new Tuple<>(vt.clone(), CoachState.ASSEMBLE_TEAM.getId());
+        return new Tuple<>(local.clone(), CoachState.ASSEMBLE_TEAM.getId());
     }
 
     @Override
-    public Tuple<VectorTimestamp, Integer> watchTrial(VectorTimestamp vt) throws RemoteException {
+    public Tuple<VectorTimestamp, Integer> watchTrial(int team, VectorTimestamp vt) throws RemoteException {
         lock.lock();
 
-        //coach.setCoachState(CoachState.WATCH_TRIAL);
-        //informationRepository.updateCoach();
-        //informationRepository.printLineUpdate();
+        local.update(vt);
+        
+        informationRepository.updateCoach(team, CoachState.WATCH_TRIAL.getId(), local.clone());
+        
         try {
             resultAssert.await();
         } catch (InterruptedException ex) {
@@ -137,11 +139,9 @@ public class Playground implements InterfacePlayground {
             return null;
         }
 
-        vt.update(vt);
-
         lock.unlock();
 
-        return new Tuple<>(vt.clone(), CoachState.WATCH_TRIAL.getId());
+        return new Tuple<>(local.clone(), CoachState.WATCH_TRIAL.getId());
     }
 
     @Override
@@ -183,11 +183,12 @@ public class Playground implements InterfacePlayground {
     public Tuple<VectorTimestamp, Integer> startPulling(VectorTimestamp vt) throws RemoteException {
         lock.lock();
 
+        local.update(vt);
+        
         startTrial.signalAll();
 
-        //referee.setRefereeState(RefereeState.WAIT_FOR_TRIAL_CONCLUSION);
-        //informationRepository.updateReferee();
-        //informationRepository.printLineUpdate();
+        informationRepository.updateReferee(RefereeState.WAIT_FOR_TRIAL_CONCLUSION.getId(), local.clone());
+        
         if (pullCounter != 2 * Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND) {
             try {
                 finishedPulling.await();
@@ -197,17 +198,17 @@ public class Playground implements InterfacePlayground {
             }
         }
 
-        vt.update(vt);
-
         lock.unlock();
 
-        return new Tuple<>(vt.clone(), RefereeState.WAIT_FOR_TRIAL_CONCLUSION.getId());
+        return new Tuple<>(local.clone(), RefereeState.WAIT_FOR_TRIAL_CONCLUSION.getId());
     }
 
     @Override
     public VectorTimestamp getContestant(int id, int team, VectorTimestamp vt) throws RemoteException {
         lock.lock();
 
+        local.update(vt);
+        
         Iterator<Triple<Integer, ContestantState, Integer>> it = teams[team - 1].iterator();
 
         while (it.hasNext()) {
@@ -219,13 +220,11 @@ public class Playground implements InterfacePlayground {
             }
         }
 
-        //informationRepository.resetTeamPlacement();
-        //informationRepository.printLineUpdate();
-        vt.update(vt);
+        informationRepository.resetTeamPlacement(id, team, local.clone());
 
         lock.unlock();
 
-        return vt.clone();
+        return local.clone();
     }
 
     @Override
@@ -234,13 +233,13 @@ public class Playground implements InterfacePlayground {
 
         lock.lock();
 
+        local.update(vt);
+        
         result = flagPosition;
-
-        vt.update(vt);
 
         lock.unlock();
 
-        return new Tuple<>(vt.clone(), result);
+        return new Tuple<>(local.clone(), result);
     }
 
     @Override
@@ -249,26 +248,27 @@ public class Playground implements InterfacePlayground {
 
         lock.lock();
 
+        local.update(local);
+        
         result = lastFlagPosition;
 
-        vt.update(vt);
         lock.unlock();
 
-        return new Tuple<>(vt.clone(), result);
+        return new Tuple<>(local.clone(), result);
     }
 
     @Override
     public VectorTimestamp setFlagPosition(int flagPosition, VectorTimestamp vt) throws RemoteException {
         lock.lock();
 
+        local.update(vt);
+        
         this.lastFlagPosition = flagPosition;
         this.flagPosition = flagPosition;
 
-        vt.update(vt);
-
         lock.unlock();
 
-        return vt.clone();
+        return local.clone();
     }
 
     /**
@@ -282,26 +282,6 @@ public class Playground implements InterfacePlayground {
     }
 
     @Override
-    public VectorTimestamp haveAllPulled(VectorTimestamp vt) throws RemoteException {
-
-        //TODO: dead function? no one uses this.
-        lock.lock();
-
-        try {
-            finishedPulling.await();
-        } catch (InterruptedException ex) {
-            lock.unlock();
-            return null;
-        }
-
-        vt.update(vt);
-
-        lock.unlock();
-
-        return vt.clone();
-    }
-
-    @Override
     public boolean checkAllContestantsReady() throws RemoteException {
         boolean result;
 
@@ -312,23 +292,6 @@ public class Playground implements InterfacePlayground {
         lock.unlock();
 
         return result;
-    }
-
-    @Override
-    public Tuple<VectorTimestamp, List<InterfaceContestant>[]> getTeams(VectorTimestamp vt) {
-        List<InterfaceContestant>[] teamslist = new List[2];
-
-        //TODO: dead function? no one uses this.
-        lock.lock();
-
-        //teamslist[0] = new ArrayList<>(this.teams[0]);
-        //teamslist[1] = new ArrayList<>(this.teams[1]);
-
-        vt.update(vt);
-
-        lock.unlock();
-
-        return new Tuple<>(vt.clone(), teamslist);
     }
 
     @Override

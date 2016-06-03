@@ -78,24 +78,6 @@ public interface InterfacePlayground extends Remote {
     public Tuple<VectorTimestamp, Integer> getLastFlagPosition(VectorTimestamp vt) throws RemoteException;
 
     /**
-     * Gets the current teams in the playground
-     *
-     * @param vt
-     * @return list containing both teams Contestants in the playground
-     * @throws java.rmi.RemoteException
-     */
-    public Tuple<VectorTimestamp, List<InterfaceContestant>[]> getTeams(VectorTimestamp vt) throws RemoteException;
-
-    /**
-     * Checks if everyone pulled the rope
-     *
-     * @param vt
-     * @return
-     * @throws java.rmi.RemoteException
-     */
-    public VectorTimestamp haveAllPulled(VectorTimestamp vt) throws RemoteException;
-
-    /**
      * Contestant pulls the rope
      *
      * @throws java.rmi.RemoteException
@@ -135,7 +117,7 @@ public interface InterfacePlayground extends Remote {
      * @return with updated clock and updated coach state id
      * @throws java.rmi.RemoteException
      */
-    public Tuple<VectorTimestamp, Integer> watchTrial(VectorTimestamp vt) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> watchTrial(int team, VectorTimestamp vt) throws RemoteException;
 
     /**
      * Checks if the game should be shut down

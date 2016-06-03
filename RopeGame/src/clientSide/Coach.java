@@ -201,7 +201,7 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
         vt.update(refereeSite.informReferee(vt.clone()));
 
         vt.increment();
-        Tuple<VectorTimestamp, Integer> watchTrial = playground.watchTrial(vt.clone());
+        Tuple<VectorTimestamp, Integer> watchTrial = playground.watchTrial(team, vt.clone());
         vt.update(watchTrial.getFirst());
         state = CoachState.getStateById(watchTrial.getSecond());
 
