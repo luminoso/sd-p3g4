@@ -37,7 +37,10 @@ public class Constants {
     public static final int KNOCK_OUT_FLAG_POSITION = 4;
 
     // file where the game log will be stored
-    public static final String FILE_NAME = "game.log";
+    public static final String FILE_NAME = "unordered_game.log";
+    
+    // file where the reordered game log will be stored
+    public static final String REORDER_FILE_NAME = "game.log";
     
     // 2*team size + 2 coachs + 1 Referee
     public static final int VECTOR_TIMESTAMP_SIZE = 3 + (NUMBER_OF_PLAYERS_IN_THE_BENCH * 2);

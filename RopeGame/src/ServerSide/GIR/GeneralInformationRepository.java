@@ -10,6 +10,8 @@ import Others.VectorTimestamp;
 import RopeGame.Constants;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
@@ -28,8 +30,13 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     // locking condtions
     private final Lock lock;
 
+    // File writers
     private PrintWriter printer;
+    private PrintWriter reorder;
 
+    // Local clock
+    private VectorTimestamp localTimestamp;
+    
     // variables to store current game status and update accordingly to changes
     private final List<Tuple<ContestantState, Integer>[]> teamsState;
     private final CoachState[] coachesState;        // coaches state tracking
@@ -42,6 +49,8 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     private boolean headerPrinted;
     private int shutdownVotes;
 
+    private final List<LineUpdate> updates;
+    
     /**
      * Private constructor for the singleton
      */
@@ -50,6 +59,7 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
 
         try {
             printer = new PrintWriter(Constants.FILE_NAME);
+            reorder = new PrintWriter(Constants.REORDER_FILE_NAME);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(GeneralInformationRepository.class.getName()).log(Level.SEVERE, null, ex);
             printer = null;
@@ -72,6 +82,8 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         flagPosition = 0;
 
         shutdownVotes = 0;
+        
+        updates = new ArrayList<>();
     }
 
     @Override
@@ -80,6 +92,9 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
 
         refereeState = RefereeState.getStateById(status);
 
+        if(headerPrinted)
+            printLineUpdate(vt);
+        
         lock.unlock();
     }
 
@@ -91,6 +106,9 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
                 ContestantState.getStateById(status), 
                 strength);
 
+        if(headerPrinted)
+            printLineUpdate(vt);
+        
         lock.unlock();
     }
 
@@ -101,6 +119,9 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         ContestantState state = teamsState.get(team - 1)[id - 1].getFirst();
 
         this.teamsState.get(team - 1)[id - 1] = new Tuple<>(state, strength);
+        
+        if(headerPrinted)
+            printLineUpdate(vt);
 
         lock.unlock();
     }
@@ -110,6 +131,9 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         lock.lock();
 
         this.coachesState[team-1] = CoachState.getStateById(status);
+        
+        if(headerPrinted)
+            printLineUpdate(vt);
 
         lock.unlock();
     }
@@ -119,6 +143,9 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         lock.lock();
 
         this.gameNumber = gameNumber;
+        
+        if(headerPrinted)
+            printLineUpdate(vt);
 
         lock.unlock();
     }
@@ -128,6 +155,9 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         lock.lock();
 
         this.trialNumber = trialNumber;
+        
+        if(headerPrinted)
+            printLineUpdate(vt);
 
         lock.unlock();
     }
@@ -137,6 +167,9 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         lock.lock();
 
         this.flagPosition = flagPosition;
+        
+        if(headerPrinted)
+            printLineUpdate(vt);
 
         lock.unlock();
     }
@@ -156,6 +189,9 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
                 System.out.println("Error: team number");
                 break;
         }
+        
+        if(headerPrinted)
+            printLineUpdate(vt);
 
         lock.unlock();
     }
@@ -176,6 +212,9 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
                 break;
         }
 
+        if(headerPrinted)
+            printLineUpdate(vt);
+        
         lock.unlock();
     }
 
@@ -183,9 +222,11 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     public void printGameHeader(VectorTimestamp vt) {
         lock.lock();
 
-        printer.printf("Game %1d%n", gameNumber);
-        printColumnHeader();
-        printer.flush();
+        StringBuilder strb = new StringBuilder();
+        strb.append("Game " + gameNumber + "\n");
+        strb.append(printColumnHeader());
+        
+        updates.add(new LineUpdate(strb.toString(), vt));
 
         lock.unlock();
     }
@@ -197,8 +238,6 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         if (headerPrinted) {
             printActiveEntitiesStates();
             printTrialResult(trialNumber, flagPosition);
-
-            printer.flush();
         }
 
         lock.unlock();
@@ -231,100 +270,117 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
 
     @Override
     public void printMatchWinner(int team, int score1, int score2, VectorTimestamp vt) {
+        StringBuilder strb = new StringBuilder();
+        Formatter formatter = new Formatter(strb);
+        
         lock.lock();
 
-        printer.printf("Match was won by team %d (%d-%d).%n", team, score1, score2);
-        printer.flush();
+        formatter.format("Match was won by team %d (%d-%d).%n", team, score1, score2);
+        
+        updates.add(new LineUpdate(strb.toString(), vt));
 
         lock.unlock();
     }
 
     @Override
     public void printMatchDraw(VectorTimestamp vt) {
+        StringBuilder strb = new StringBuilder();
+        Formatter formatter = new Formatter(strb);
+        
         lock.lock();
 
-        printer.printf("Match was a draw.%n");
-        printer.flush();
+        formatter.format("Match was a draw.%n");
+        
+        updates.add(new LineUpdate(strb.toString(), vt));
 
         lock.unlock();
     }
 
     @Override
     public void printLegend(VectorTimestamp vt) {
+        StringBuilder strb = new StringBuilder();
+        Formatter formatter = new Formatter(strb);
+        
         lock.lock();
 
-        printer.printf("Legend:%n");
-        printer.printf("Ref Sta – state of the referee%n");
-        printer.printf("Coa # Stat - state of the coach of team # (# - 1 .. 2)%n");
-        printer.printf("Cont # Sta – state of the contestant # (# - 1 .. 5) of team whose coach was listed to the immediate left%n");
-        printer.printf("Cont # SG – strength of the contestant # (# - 1 .. 5) of team whose coach was listed to the immediate left%n");
-        printer.printf("TRIAL – ? – contestant identification at the position ? at the end of the rope for present trial (? - 1 .. 3)%n");
-        printer.printf("TRIAL – NB – trial number%n");
-        printer.printf("TRIAL – PS – position of the centre of the rope at the beginning of the trial%n");
-        printer.flush();
+        formatter.format("Legend:%n");
+        formatter.format("Ref Sta – state of the referee%n");
+        formatter.format("Coa # Stat - state of the coach of team # (# - 1 .. 2)%n");
+        formatter.format("Cont # Sta – state of the contestant # (# - 1 .. 5) of team whose coach was listed to the immediate left%n");
+        formatter.format("Cont # SG – strength of the contestant # (# - 1 .. 5) of team whose coach was listed to the immediate left%n");
+        formatter.format("TRIAL – ? – contestant identification at the position ? at the end of the rope for present trial (? - 1 .. 3)%n");
+        formatter.format("TRIAL – NB – trial number%n");
+        formatter.format("TRIAL – PS – position of the centre of the rope at the beginning of the trial%n");
+        
+        updates.add(new LineUpdate(strb.toString(), vt));
 
         lock.unlock();
     }
 
     @Override
     public void printHeader(VectorTimestamp vt) {
+        StringBuilder strb = new StringBuilder();
+        Formatter formatter = new Formatter(strb);
+        
         lock.lock();
 
-        printer.printf("Game of the Rope - Description of the internal state%n");
-        printer.printf("%n");
-        printColumnHeader();
-        printActiveEntitiesStates();
-        printEmptyResult();
-        printer.flush();
+        formatter.format("Game of the Rope - Description of the internal state%n");
+        formatter.format("%n");
+        strb.append(printColumnHeader());
+        strb.append(printActiveEntitiesStates());
+        strb.append(printEmptyResult());
 
         headerPrinted = true;
 
+        updates.add(new LineUpdate(strb.toString(), vt));
+        
         lock.unlock();
     }
 
     /**
      * Prints game column header
      */
-    private void printColumnHeader() {
-        lock.lock();
+    private String printColumnHeader() {
+        StringBuilder strb = new StringBuilder();
+        Formatter formatter = new Formatter(strb);
+        
+        formatter.format("Ref Coa 1 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5 Coa 2 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5       Trial                           VCk                 %n");
+        formatter.format("Sta  Stat Sta SG Sta SG Sta SG Sta SG Sta SG  Stat Sta SG Sta SG Sta SG Sta SG Sta SG 3 2 1 . 1 2 3 NB PS  0  1  2  3  4  5  6  7  8  9 10 11 12%n");
 
-        printer.printf("Ref Coa 1 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5 Coa 2 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5 Trial%n");
-        printer.printf("Sta  Stat Sta SG Sta SG Sta SG Sta SG Sta SG  Stat Sta SG Sta SG Sta SG Sta SG Sta SG 3 2 1 . 1 2 3 NB PS%n");
-        printer.flush();
-
-        lock.unlock();
+        return strb.toString();
     }
 
     /**
      * Prints active entities states
      */
-    private void printActiveEntitiesStates() {
-        lock.lock();
-
-        printer.printf("%3s", refereeState);
+    private String printActiveEntitiesStates() {
+        StringBuilder strb = new StringBuilder();
+        Formatter formatter = new Formatter(strb);
+        
+        formatter.format("%3s", coachesState);
 
         // Printing teams state
         for (int i = 0; i < coachesState.length; i++) {
-            printer.printf("  %4s", coachesState[i]);
-
+            formatter.format("  %4s", coachesState[i]);
+            
             for (int j = 0; j < teamsState.get(i).length; j++) {
-                printer.printf(" %3s %2d", teamsState.get(i)[j].getFirst(), teamsState.get(i)[j].getSecond());
+                formatter.format(" %3s %2d", teamsState.get(i)[j].getFirst(), teamsState.get(i)[j].getSecond());
             }
         }
 
-        lock.unlock();
+        return strb.toString();
     }
 
     /**
      * Prints an empty result
      */
-    private void printEmptyResult() {
-        lock.lock();
+    private String printEmptyResult() {
+        StringBuilder strb = new StringBuilder();
+        Formatter formatter = new Formatter(strb);
 
-        printer.printf(" - - - . - - - -- --%n");
-        printer.flush();
+        formatter.format(" - - - . - - - -- --%n");
 
-        lock.unlock();
+        return strb.toString();
     }
 
     /**
@@ -333,29 +389,31 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
      * @param trialNumber number of the trial
      * @param flagPosition position of the flag
      */
-    private void printTrialResult(int trialNumber, int flagPosition) {
-        lock.lock();
+    private String printTrialResult(int trialNumber, int flagPosition) {
+        StringBuilder strb = new StringBuilder();
+        Formatter formatter = new Formatter(strb);
+        
         for (int i = 0; i < Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND; i++) {
             if (i >= team1Placement.size()) {
-                printer.printf(" -");
+                formatter.format(" -");
             } else {
-                printer.printf(" %1d", team1Placement.get(i));
+                formatter.format(" %1d", team1Placement.get(i));
             }
         }
 
-        printer.printf(" .");
+        formatter.format(" .");
 
         for (int i = 0; i < Constants.NUMBER_OF_PLAYERS_AT_PLAYGROUND; i++) {
             if (i >= team2Placement.size()) {
-                printer.printf(" -");
+                formatter.format(" -");
             } else {
-                printer.printf(" %1d", team2Placement.get(i));
+                formatter.format(" %1d", team2Placement.get(i));
             }
         }
 
-        printer.printf(" %2d %2d%n", trialNumber, flagPosition);
+        formatter.format(" %2d %2d%n", trialNumber, flagPosition);
 
-        lock.unlock();
+        return strb.toString();
     }
 
     /**
@@ -365,13 +423,13 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
      * @param team number of the team
      * @param trials in how many trials
      */
-    private void printGameWinnerByKnockOut(int game, int team, int trials) {
-        lock.lock();
+    private String printGameWinnerByKnockOut(int game, int team, int trials) {
+        StringBuilder strb = new StringBuilder();
+        Formatter formatter = new Formatter(strb);
 
-        printer.printf("Game %d was won by team %d by knock out in %d trials.%n", game, team, trials);
-        printer.flush();
+        formatter.format("Game %d was won by team %d by knock out in %d trials.%n", game, team, trials);
 
-        lock.unlock();
+        return strb.toString();
     }
 
     /**
@@ -380,13 +438,13 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
      * @param game number of the game
      * @param team that won the game
      */
-    private void printGameWinnerByPoints(int game, int team) {
-        lock.lock();
+    private String printGameWinnerByPoints(int game, int team) {
+        StringBuilder strb = new StringBuilder();
+        Formatter formatter = new Formatter(strb);
 
-        printer.printf("Game %d was won by team %d by points.%n", game, team);
-        printer.flush();
+        formatter.format("Game %d was won by team %d by points.%n", game, team);
 
-        lock.unlock();
+        return strb.toString();
     }
 
     /**
@@ -394,13 +452,13 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
      *
      * @param game number that was a draw
      */
-    private void printGameDraw(int game) {
-        lock.lock();
+    private String printGameDraw(int game) {
+        StringBuilder strb = new StringBuilder();
+        Formatter formatter = new Formatter(strb);
 
-        printer.printf("Game %d was a draw.%n", game);
-        printer.flush();
+        formatter.format("Game %d was a draw.%n", game);
 
-        lock.unlock();
+        return strb.toString();
     }
 
     @Override
