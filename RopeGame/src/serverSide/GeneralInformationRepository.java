@@ -334,6 +334,8 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
 
         headerPrinted = true;
 
+        System.out.println("Header printed");
+        
         updates.add(new LineUpdate(strb.toString(), vt));
         
         lock.unlock();
@@ -501,6 +503,8 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
         printer.flush();
         printer.close();
 
+        System.out.println("Finished printing");
+        
         lock.unlock();
     }
 
