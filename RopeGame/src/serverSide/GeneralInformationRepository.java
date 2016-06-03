@@ -1,13 +1,6 @@
 package serverSide;
 
 import interfaces.InterfaceGeneralInformationRepository;
-import others.CoachState;
-import others.ContestantState;
-import others.GameScore;
-import others.RefereeState;
-import others.Tuple;
-import others.VectorTimestamp;
-import others.Constants;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -18,6 +11,13 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import others.CoachState;
+import others.Constants;
+import others.ContestantState;
+import others.GameScore;
+import others.RefereeState;
+import others.Tuple;
+import others.VectorTimestamp;
 
 /**
  * This is an passive class that logs entities activity

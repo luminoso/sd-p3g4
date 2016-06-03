@@ -5,8 +5,6 @@ import interfaces.InterfaceGeneralInformationRepository;
 import interfaces.InterfacePlayground;
 import interfaces.InterfaceRefereeSite;
 import java.rmi.RemoteException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import others.Constants;
 import others.ContestantState;
 import others.InterfaceContestant;
@@ -113,7 +111,6 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
     @Override
     public void run() {
         try {
-            vt.increment();
             informationRepository.updateContestant(id, team, state.getId(), strength, vt.clone());
 
             vt.increment();
@@ -163,7 +160,6 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
     private void getReady() throws RemoteException {
         setContestantState(ContestantState.DO_YOUR_BEST);
 
-        vt.increment();
         informationRepository.updateContestant(id, team, state.getId(), strength, vt.clone());
     }
 
