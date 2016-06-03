@@ -11,6 +11,7 @@ import others.Constants;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Formatter;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -494,11 +495,15 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     public void close() {
         lock.lock();
 
-        TreeSet<LineUpdate> tree = new TreeSet<>(updates);
-        Iterator<LineUpdate> it = tree.iterator();
+        updates.sort(new Comparator<LineUpdate>() {
+            @Override
+            public int compare(LineUpdate o1, LineUpdate o2) {
+                return o1.compareTo(o2);
+            }
+        });
         
-        while(it.hasNext())
-            printer.print(it.next().getLine());
+        for(LineUpdate up : updates)
+            printer.print(up.getLine());
         
         printer.flush();
         printer.close();
