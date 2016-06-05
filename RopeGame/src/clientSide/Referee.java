@@ -4,18 +4,18 @@ import interfaces.InterfaceContestantsBench;
 import interfaces.InterfaceGeneralInformationRepository;
 import interfaces.InterfacePlayground;
 import interfaces.InterfaceRefereeSite;
+import java.rmi.RemoteException;
+import java.util.List;
+import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import others.Constants;
 import others.GameScore;
 import others.InterfaceReferee;
 import others.RefereeState;
 import others.TrialScore;
 import others.Tuple;
 import others.VectorTimestamp;
-import others.Constants;
-import java.rmi.RemoteException;
-import java.util.List;
-import java.util.function.Supplier;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This is an active class implements the Referee and his interactions in the
@@ -76,10 +76,8 @@ public class Referee extends Thread implements InterfaceReferee {
     @Override
     public void run() {
         try {
-            vt.increment();
             informationRepository.updateReferee(state.getId(), vt.clone());
 
-            vt.increment();
             informationRepository.printHeader(vt.clone());
 
             while (state != RefereeState.END_OF_THE_MATCH) {

@@ -157,7 +157,6 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
     private void getReady() throws RemoteException {
         setContestantState(ContestantState.DO_YOUR_BEST);
 
-        vt.increment();
         informationRepository.updateContestant(id, team, state.getId(), strength, vt.clone());
     }
 

@@ -4,13 +4,6 @@ import interfaces.InterfaceContestantsBench;
 import interfaces.InterfaceGeneralInformationRepository;
 import interfaces.InterfacePlayground;
 import interfaces.InterfaceRefereeSite;
-import others.CoachState;
-import others.CoachStrategy;
-import others.InterfaceCoach;
-import others.TrialScore;
-import others.Tuple;
-import others.VectorTimestamp;
-import others.Constants;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Set;
@@ -18,6 +11,13 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import others.CoachState;
+import others.CoachStrategy;
+import others.Constants;
+import others.InterfaceCoach;
+import others.TrialScore;
+import others.Tuple;
+import others.VectorTimestamp;
 
 /**
  * This is active class Coach which implements the InterfaceCoach
@@ -110,7 +110,6 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
             waitForNextTrial.getFirst();
 
             while (!((BooleanSupplier) () -> {
-                vt.increment();
                 boolean hasMatchEnded = false;
                 try {
                     refereeSite.hasMatchEnded();
