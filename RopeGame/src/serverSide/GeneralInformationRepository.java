@@ -492,7 +492,19 @@ public class GeneralInformationRepository implements InterfaceGeneralInformation
     public void close() {
         lock.lock();
         
-        for(LineUpdate up : updates)
+        LineUpdate[] tempUpdates = updates.toArray(new LineUpdate[updates.size()]);
+        
+        for(int i = tempUpdates.length-2; i >= 1; i--) {
+            for(int j = 0; j < i; j++) {
+                if(tempUpdates[j].compareTo(tempUpdates[j+1]) > 0) {
+                    LineUpdate temp = tempUpdates[j];
+                    tempUpdates[j] = tempUpdates[j+1];
+                    tempUpdates[j+1] = temp;
+                }
+            }
+        }
+        
+        for(LineUpdate up : tempUpdates)
             printer.print(up.getLine());
         
         printer.flush();

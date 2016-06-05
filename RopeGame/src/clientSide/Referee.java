@@ -77,7 +77,6 @@ public class Referee extends Thread implements InterfaceReferee {
     public void run() {
         try {
             informationRepository.updateReferee(state.getId(), vt.clone());
-
             informationRepository.printHeader(vt.clone());
 
             while (state != RefereeState.END_OF_THE_MATCH) {
