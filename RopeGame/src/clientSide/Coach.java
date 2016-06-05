@@ -106,11 +106,8 @@ public class Coach extends Thread implements Comparable<InterfaceCoach>, Interfa
 
         try {
             informationRepository.updateCoach(team, state.getId(), vt.clone());
-
-            vt.increment();
             Tuple<VectorTimestamp, Integer> waitForNextTrial = bench.waitForNextTrial(team, state.getId(), vt.clone());
-            vt.update(waitForNextTrial.getFirst());
-            // waitForNextTrial.getSecond() returns the same state the coach is in: WAIT_FOR_REFEE_COMMAND
+            waitForNextTrial.getFirst();
 
             while (!((BooleanSupplier) () -> {
                 vt.increment();

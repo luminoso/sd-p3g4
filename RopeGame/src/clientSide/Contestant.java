@@ -5,8 +5,6 @@ import interfaces.InterfaceGeneralInformationRepository;
 import interfaces.InterfacePlayground;
 import interfaces.InterfaceRefereeSite;
 import java.rmi.RemoteException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import others.Constants;
 import others.ContestantState;
 import others.InterfaceContestant;
@@ -113,13 +111,9 @@ public class Contestant extends Thread implements Comparable<InterfaceContestant
     @Override
     public void run() {
         try {
-            vt.increment();
             informationRepository.updateContestant(id, team, state.getId(), strength, vt.clone());
-
-            vt.increment();
             Triple<VectorTimestamp, Integer, Integer> addContestant = bench.addContestant(id, team, state.getId(), strength, vt.clone());
             vt.update(addContestant.getFirst());
-            //addContestant.getSecond() and addContestant.getThird() not needed, since there are no updates
 
             while (!refereeSite.hasMatchEnded()) {
                 switch (state) {
