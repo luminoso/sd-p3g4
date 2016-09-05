@@ -19,9 +19,9 @@ A logging file, which describes the evolution of the internal state of the probl
 
 There are three solutions presented in this repository
 
-1.	Using java’s reentrant locks for managing shared variables and concurrency. (explicit monitors)
-2.	Implemented a client-server approach that active entities trade messages with passive entities (playground, bench, referee site) -  This solution tries to demonstrate a simple simulation how java’s RMI works.
-3.	Implementation of a full java RMI solution where shared areas are registered and players
+1. Using java’s reentrant locks for managing shared variables and concurrency. (explicit monitors) *(branch Monitors)*
+2. Implemented a client-server approach that active entities trade messages with passive entities (playground, bench, referee site) -  This solution tries to demonstrate a simple simulation how java’s RMI works. *(branch Messages)*
+3. Implementation of a full java RMI solution where shared areas are registered and players *(branch RMI-Distributed)*
 
 ## Requirements
 This simulation was tested using Java 8.
