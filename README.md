@@ -30,7 +30,7 @@ This simulation was tested using Java 8.
 
 Each simulation produces a logging file with all the details.
 
-1. You'll need to setup [Java RMI distributed enviroment](luminoso/RMI_back_engine) to run RMI-Distributed branch
+1. You'll need to setup [Java RMI distributed enviroment](https://github.com/luminoso/RMI_back_engine) to run RMI-Distributed branch
 2. After rmiregistry, registry, all passive and active entities deployed game will start automatically
 
 ## Threads life cycle (active entities)
